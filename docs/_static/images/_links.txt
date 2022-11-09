@@ -1,0 +1,15 @@
+https://raw.githubusercontent.com/haofanwang/Score-CAM/master/images/ILSVRC2012_val_00000073.JPEG
+https://raw.githubusercontent.com/haofanwang/Score-CAM/master/images/ILSVRC2012_val_00000091.JPEG
+https://raw.githubusercontent.com/haofanwang/Score-CAM/master/images/ILSVRC2012_val_00000198.JPEG
+https://raw.githubusercontent.com/haofanwang/Score-CAM/master/images/ILSVRC2012_val_00000476.JPEG
+https://raw.githubusercontent.com/haofanwang/Score-CAM/master/images/ILSVRC2012_val_00002193.JPEG
+https://raw.githubusercontent.com/keisen/tf-keras-vis/master/docs/examples/images/goldfish.jpg
+https://raw.githubusercontent.com/keisen/tf-keras-vis/master/docs/examples/images/bear.jpg
+https://raw.githubusercontent.com/keisen/tf-keras-vis/master/docs/examples/images/soldiers.jpg
+https://3.bp.blogspot.com/-W__wiaHUjwI/Vt3Grd8df0I/AAAAAAAAA78/7xqUNj8ujtY/s400/image02.png
+http://www.aviationexplorer.com/Diecast_Airplanes_Aircraft/delta_Airbus_diecast_airplane.jpg
+https://www.petcare.com.au/wp-content/uploads/2017/09/Dalmatian-2.jpg
+http://sites.psu.edu/siowfa15/wp-content/uploads/sites/29639/2015/10/dogcat.jpg
+https://consciouscat.net/wp-content/uploads/2009/08/multiple-cats-300x225.jpg
+https://images2.minutemediacdn.com/image/upload/c_crop,h_843,w_1500,x_0,y_78/f_auto,q_auto,w_1100/v1554995977/shape/mentalfloss/iStock-157312120.jpg
+http://www.reptilefact.com/wp-content/uploads/2016/08/Images-of-San-Francisco-Garter-Snake.jpg
