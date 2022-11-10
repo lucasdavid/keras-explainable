@@ -1,5 +1,5 @@
 =================
-keras-explainable
+keras Explainable
 =================
 
 Efficient explaining AI algorithms for Keras models.

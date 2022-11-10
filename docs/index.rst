@@ -1,4 +1,4 @@
-.. include:: ./readme.rst
+.. include:: ../README.rst
 
 Contents
 ========
@@ -6,7 +6,6 @@ Contents
 .. toctree::
    :maxdepth: 2
 
-   Overview <index>
    Explaining <explaining>
    Methods <methods/index>
    Contributions & Help <contributing>

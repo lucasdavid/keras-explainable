@@ -16,7 +16,7 @@ described in the following article:
 Simonyan, K., Vedaldi, A., & Zisserman, A. (2013).
 Deep inside convolutional networks: Visualising image classification
 models and saliency maps. arXiv preprint arXiv:1312.6034.
-Available at: https://arxiv.org/abs/1312.6034
+Available at: `arxiv/1312.6034 <https://arxiv.org/abs/1312.6034>`_.
 
 Briefly, this can be achieved with the following template snippet:
 
@@ -43,22 +43,13 @@ We describe bellow these lines in detail.
 
   import keras_explainable as ke
 
-  SOURCE_DIRECTORY = '_static/images/'
+  SOURCE_DIRECTORY = 'docs/_static/images/'
   SAMPLES = 8
   SIZES = (299, 299)
 
   file_names = os.listdir(SOURCE_DIRECTORY)
-  image_paths = [os.path.join(SOURCE_DIRECTORY, f)
-                 for f in file_names
-                 if f != '_links.txt']
-
-  images = np.stack([img_to_array(load_img(ip).resize(SIZES)) for ip in image_paths])
-
-  print('Images shape =', images.shape[1:])
-  print('Images avail =', len(images))
-  print('Images used  =', SAMPLES)
-
-  images = images[:SAMPLES]
+  image_paths = [os.path.join(SOURCE_DIRECTORY, f) for f in file_names if f != '_links.txt']
+  images = np.stack([img_to_array(load_img(ip).resize(SIZES)) for ip in image_paths])[:SAMPLES]
 
 Firstly, we employ the :py:class:`ResNet101` network pre-trained over the
 ImageNet dataset:

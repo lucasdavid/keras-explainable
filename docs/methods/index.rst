@@ -13,6 +13,7 @@ Saliency and Gradient-based
 
    Gradient Back-propagation <saliency/gradients>
    Smooth-Grad <saliency/smoothgrad>
+   Full-Grad <saliency/fullgrad>
 
 CAM-Based Techniques
 """"""""""""""""""""

@@ -1,23 +1,20 @@
-===========
-Smooth-Grad
-===========
+==============
+Full Gradients
+==============
 
 In this page, we describe how to obtain *saliency maps* from a trained
 Convolutional Neural Network (CNN) with respect to an input signal (an image,
-in this case) using the Smooth-Grad AI explaining method.
+in this case) using the Full Gradients AI explaining method.
+Said maps can be used to explain the model's predictions, determining regions
+which most contributed to its effective output. 
 
-Smooth-Grad is the variant of the Gradient Backprop algorithm first described
-in the following paper:
+FullGrad (short for Full Gradients) extends Gradient Back-propagation by
+adding the individual biases contributions to the gradient signal,
+forming the "full" explaining maps. This fully described in the paper
 
-Smilkov, D., Thorat, N., Kim, B., Viégas, F., & Wattenberg, M. (2017).
-Smoothgrad: removing noise by adding noise. arXiv preprint arXiv:1706.03825.
-Available at: `arxiv/1706.03825 <https://arxiv.org/abs/1706.03825>`_.
-
-It consists of consecutive repetitions of the Gradient Backprop method,
-each of which is applied over the original sample tempered with
-some gaussian noise.
-Finally, averaging the resulting explaining maps results in cleaner
-visualization results, robust against marginal noise.
+Srinivas, S., & Fleuret, F. (2019). Full-gradient representation for
+neural network visualization. Advances in neural information processing
+systems, 32. `arxiv.org/1905.00780v4 <https://arxiv.org/abs/1905.00780v4>`_.
 
 Briefly, this can be achieved with the following template snippet:
 
@@ -28,16 +25,21 @@ Briefly, this can be achieved with the following template snippet:
   model = build_model(...)
   model.layers[-1].activation = 'linear'  # Usually softmax or sigmoid.
 
-  smoothgrad = ke.methods.meta.smooth(
-    ke.methods.gradient.gradients,
-    repetitions=10,
-    noise=0.1
+  logits = ke.inspection.get_logits_layer(model)
+  inters, biases = ke.inspection.layers_with_biases(model, exclude=[logits])
+  model_exposed = ke.inspection.expose(model, inters, logits)
+
+  x, y = (
+    np.random.rand(self.BATCH, *self.SHAPE),
+    np.random.randint(10, size=(self.BATCH, 1))
   )
 
   logits, maps = ke.explain(
-    smoothgrad, model, x, y,
-    batch_size=32,
-    postprocessing=ke.filters.normalize,
+    ke.methods.gradient.full_gradients,
+    model_exposed,
+    x,
+    y,
+    biases=biases,
   )
 
 We describe bellow these lines in detail.
@@ -102,39 +104,38 @@ which improves performance of the explaining methods.
   probs = tf.nn.softmax(logits).numpy()
   predictions = decode_predictions(probs, top=1)
 
-  explaining_units = indices[:, :1]  # First most likely class.
+  explaining_units = indices[:, :1]  # Firstmost likely classes.
 
-keras-explainable implements the Smooth-Grad with the meta explaining function
-:func:`keras_explainable.methods.meta.smooth`, which means it wraps any
-explaining method and smooths out its outputs. For example:
+The FullGrad algorithm, implemented through the
+:func:`keras_explainable.methods.gradient.full_gradients`,
+expects a model that exposes all layers containing biases (besides the output).
+Thus, we must first expose them. The most efficient way to do so is
+by collecting the layers directly:
 
 .. jupyter-execute::
 
-  smoothgrad = ke.methods.meta.smooth(
-    ke.methods.gradient.gradients,
-    repetitions=40,
-    noise=0.5,
-  )
+  logits = ke.inspection.get_logits_layer(rn101)
+  inters, biases = ke.inspection.layers_with_biases(rn101, exclude=[logits])
+  model_exposed = ke.inspection.expose(rn101, inters, logits)
 
-  _, smoothed_maps = ke.explain(
-    smoothgrad,
-    rn101,
+Now we can obtain FullGrad by simply calling to the :func:`explain` function:
+
+.. jupyter-execute::
+
+  _, maps = ke.explain(
+    ke.methods.gradient.full_gradients,
+    model_exposed,
     inputs,
     explaining_units,
+    biases=biases,
     postprocessing=ke.filters.normalize,
   )
 
-.. tf.function(ke.methods.gradient.gradients, jit_compile=True),
-..  _, smoothed_maps2 = smoothgrad(rn101, inputs, explaining_units)
-.. ke.filters.absolute_normalize()
+  ke.utils.visualize(sum(zip(images.astype(np.uint8), maps), ()), cols=4)
 
-For comparative purposes, we also compute the vanilla gradients method:
+.. note::
 
-.. jupyter-execute::
-
-  _, maps = ke.gradients(rn101, inputs, explaining_units)
-
-  ke.utils.visualize(
-    sum(zip(images.astype(np.uint8), maps, smoothed_maps), ()),
-    cols=3
-  )
+  The parameter ``biases`` is not required, and will be inferred if not passed.
+  Of course, you should pass it to the :func:`full_gradients` function,
+  if it is known, as it avoids unnecessary digging/assumptions over the
+  model's topology.
