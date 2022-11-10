@@ -8,19 +8,19 @@ class MetaTest(tf.test.TestCase):
   SHAPE = [64, 64, 3]
   RUN_EAGERLY = False
 
-  def _build_model(self):
+  def _build_model(self, run_eagerly=RUN_EAGERLY):
     input_tensor = tf.keras.Input([None, None, 3], name='inputs')
     model = tf.keras.applications.ResNet50V2(
       weights=None,
       input_tensor=input_tensor,
       classifier_activation=None,
     )
-    model.run_eagerly = self.RUN_EAGERLY
+    model.run_eagerly = run_eagerly
 
     return model
 
-  def _build_model_with_activations(self):
-    model = self._build_model()
+  def _build_model_with_activations(self, run_eagerly=RUN_EAGERLY):
+    model = self._build_model(run_eagerly)
 
     return tf.keras.Model(
       inputs=model.inputs,
@@ -49,7 +49,7 @@ class MetaTest(tf.test.TestCase):
     self.assertEqual(maps.shape, (self.BATCH, *self.SHAPE[:2], 1))
 
   def test_sanity_smooth_grad(self):
-    model = self._build_model()
+    model = self._build_model(run_eagerly=False)
 
     x, y = map(tf.convert_to_tensor, (
       np.random.rand(self.BATCH, *self.SHAPE),

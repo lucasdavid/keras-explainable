@@ -119,7 +119,7 @@ class ExplainTest(tf.test.TestCase):
     self.assertEqual(maps.shape, (self.BATCH, *self.SHAPE[:2], 1))
 
   def test_explain_smoothgrad(self):
-    model = self._build_model()
+    model = self._build_model(run_eagerly=True)
 
     x, y = (
       np.random.rand(self.BATCH, *self.SHAPE),
