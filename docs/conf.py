@@ -133,7 +133,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", ".venv"]
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
-# add_module_names = True
+add_module_names = False
 
 # If true, sectionauthor and moduleauthor directives will be shown in the
 # output. They are ignored by default.
@@ -160,7 +160,12 @@ html_theme = 'sphinx_book_theme'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-# html_theme_options = {"sidebar_width": "300px", "page_width": "1200px"}
+html_theme_options = {
+  # "sidebar_width": "300px", "page_width": "1200px"
+    "repository_url": "https://github.com/lucasdavid/keras-explainable",
+    "use_repository_button": True,
+}
+
 
 # Add any paths that contain custom themes here, relative to this directory.
 # html_theme_path = []

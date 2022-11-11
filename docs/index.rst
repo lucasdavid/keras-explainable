@@ -1,4 +1,5 @@
-.. include:: ../README.rst
+
+.. include:: readme.rst
 
 Contents
 ========
@@ -6,8 +7,10 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   Overview <readme>
    Explaining <explaining>
    Methods <methods/index>
+   WSSL <wsol>
    Contributions & Help <contributing>
    License <license>
    Authors <authors>

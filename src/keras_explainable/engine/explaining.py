@@ -136,7 +136,6 @@ def make_data_handler(
         steps_per_execution=model._steps_per_execution,
     )
 
-
 def explain(
     method: Callable,
     model: tf.keras.Model,
@@ -151,30 +150,56 @@ def explain(
     use_multiprocessing: bool = False,
     force: bool = True,
     **method_params,
-):
-    """Explain the output with respect to an intermediate signal.
+) -> Tuple[np.ndarray, np.ndarray]:
+    """Explain the outputs of ``model`` with respect to the inputs or an intermediate
+    signal, using an AI explaining method.
 
-    :param method: An AI explaining function, as the ones contained in `methods` module.
-    :param model: The `tf.keras.Model` whose predictions should be explained.
-    :param x: the input data for the model.
-    :param y: the indices in the output tensor that should be explained.
-      If none, an activation map is computed for each unit.
-    :param indices_batch_dims: The dimensions set as `batch` when gathering units
-      described by `indices`. Ignored if `indices` is None.
-    :param indices_axis: The axis from which to gather units described by `indices`.
-      Ignored if `indices` is None.
-    :param spatial_axis: The axes containing the positional visual info. We
-      assume `inputs` to contain 2D images or videos in the shape
-      `(B1, B2, ..., BN, H, W, 3)`. For 3D image data, set
-      `spatial_axis` to `(1, 2, 3)` or `(-4, -3, -2)`.
-    :param postprocessing: A function to process the activation maps before
-      normalization (most commonly adopted being `maximum(x, 0)` and
-      `abs`).
+    Args:
+        method (Callable): An AI explaining function, as the ones contained in
+            `methods` module.
+        model (tf.keras.Model): The model whose predictions should be explained.
+        x (Union[np.ndarray, tf.Tensor, tf.data.Dataset]): the input data for the model.
+        y (Optional[Union[np.ndarray, tf.Tensor]], optional): the indices in the output
+            tensor that should be explained. If none, an activation map is computed
+            for each unit. Defaults to None.
+        batch_size (Optional[int], optional): the batch size used by ``method``.
+            Defaults to 32.
+        verbose (Union[str, int], optional): wether to show a progress bar during
+            the calculation of the explaining maps. Defaults to "auto".
+        steps (Optional[int], optional): the number of steps, if ``x`` is a
+        ``tf.data.Dataset`` of unknown cardinallity. Defaults to None.
+        callbacks (List[Callback], optional): list of callbacks called during the
+            explaining procedure. Defaults to None.
+        max_queue_size (int, optional): the queue size when retrieving inputs.
+            Used if ``x`` is a generator. Defaults to 10.
+        workers (int, optional): the number of workers used when retrieving inputs.
+            Defaults to 1.
+        use_multiprocessing (bool, optional): wether to employ multi-process or
+            multi-threading when retrieving inputs, when ``x`` is a generator.
+            Defaults to False.
+        force (bool, optional): to force the creation of the explaining function.
+            Can be set to False if the same function is always applied to a model,
+            avoiding retracing. Defaults to True.
+    
+    Besides the parameters described above, any named parameters passed to this function
+    will be collected into ``methods_params`` and passed onto the :func:`explain_step`
+    and ``method`` functions. Common ones are:
 
-    :return:
-      Logits: the output signal of the model, collected from `logits_layer`.
-      Maps: the activation maps produced by Grad-CAM that explain the logits
-        with respect to the intermediate positional signal in the model.
+        indices_batch_dims (int): The dimensions marked as ``batch`` when gathering
+            units described by ``y``. Ignore if ``y`` is None.
+        indices_axis: The axes from which to gather units described by ``y``.
+            Ignore if ``y`` is None.
+        spatial_axis: The axes containing the positional visual info. We assume `inputs`
+            to contain 2D images or videos in the shape `(B1, B2, ..., BN, H, W, 3)`.
+            For 3D image data, set `spatial_axis` to `(1, 2, 3)` or `(-4, -3, -2)`.
+        postprocessing: A function to process the activation maps before normalization
+            (most commonly adopted being `maximum(x, 0)` and `abs`).
+
+    Raises:
+        ValueError: the explaining method produced in an unexpected.
+
+    Returns:
+        Tuple[np.ndarray, np.ndarray]: logits and explaining maps tensors.
     """
 
     if not hasattr(model, "_explain_counter"):
@@ -257,7 +282,12 @@ def explain(
     return tf_utils.sync_to_numpy_or_python_type(all_outputs)
 
 
-def partial_explain(method, **default_params):
+def partial_explain(method: Callable, **default_params):
+    """Wrapper for explaining methods.
+
+    Args:
+        method (Callable): the explaining method being wrapped by ``explain``.
+    """
     def _partial_method_explain(*args, **params):
         params = {**default_params, **params}
         return explain(method, *args, **params)

@@ -34,34 +34,26 @@ def smooth(
         *args,
         **params,
     ):
-        outputs = None  # method(model, inputs, *args, **params)
-        shape = tf.shape(inputs)
+        logits, maps = method(model, inputs, *args, **params)
 
-        for step in tf.range(repetitions):
-            noisy_inputs = inputs + tf.random.normal(
-                shape, 0, noise, inputs.dtype
-            )
-            noisy_outputs = method(model, noisy_inputs, *args, **params)
+        with tf.control_dependencies([logits, maps]):
+            shape = tf.shape(inputs)
 
-            # for o, n in zip(outputs, noisy_outputs):
-            #     o += n
-
-            if outputs is None:
-                outputs = tf.nest.map_structure(
-                    lambda batch_output: batch_output / repetitions,
-                    noisy_outputs,
+            for step in tf.range(repetitions):
+                batch_inputs = inputs + tf.random.normal(
+                    shape, 0, noise, inputs.dtype
                 )
-            else:
-                outputs = tf.nest.map_structure(
-                    lambda output, batch_output: output + batch_output / repetitions,
-                    outputs,
-                    noisy_outputs,
+                batch_logits, batch_maps = method(
+                    model, batch_inputs, *args, **params
                 )
 
-        # for o in outputs:
-        #     o /= repetitions
+                logits += batch_logits
+                maps += batch_maps
 
-        return outputs[0], outputs[1]
+        return (
+            logits / repetitions,
+            maps / repetitions,
+        )
 
     apply.__name__ = f"{method.__name__}_smooth"
     return apply

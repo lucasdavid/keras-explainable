@@ -1,16 +1,58 @@
 from typing import Optional
 from typing import Tuple
+from typing import Union
 
 import tensorflow as tf
 from keras.backend import int_shape
+from keras.engine.base_layer import Layer
 
 from keras_explainable.filters import normalize
 from keras_explainable.inspection import KERNEL_AXIS
 from keras_explainable.inspection import SPATIAL_AXIS
 from keras_explainable.inspection import gather_units
 from keras_explainable.inspection import get_logits_layer
+from keras_explainable.methods import autodocs
 
-METHODS = []
+_CAM_DOCS = autodocs.generate(
+    "CAM",
+    more_args="""
+        logits_layer (Callable, optional): filter before
+            channel combining. Defaults to tf.abs.
+    """,
+    references="""
+        - Simonyan, K., Vedaldi, A., & Zisserman, A. (2013).
+            Deep inside convolutional networks: Visualising image classification
+            models and saliency maps. arXiv preprint arXiv:1312.6034.""",
+)
+
+_GRADCAM_DOCS = autodocs.generate(
+    "Grad-CAM",
+    references="""
+        - Selvaraju, R. R., Cogswell, M., Das, A., Vedantam, R., Parikh, D., & Batra, D.
+            (2017). Grad-cam: Visual explanations from deep networks via gradient-based
+            localization. In Proceedings of the IEEE international conference on computer
+            vision (pp. 618-626).""",
+)
+
+_GRADCAMPP_DOCS = autodocs.generate(
+    "Grad-CAM++",
+    references="""
+        - Chattopadhay, A., Sarkar, A., Howlader, P., & Balasubramanian, V. N.
+            (2018, March). Grad-cam++: Generalized gradient-based visual explanations
+            for deep convolutional networks. In 2018 IEEE winter conference on
+            applications of computer vision (WACV) (pp. 839-847). IEEE.
+
+        - Grad-CAM++'s official implementation. Github. Available at:
+            `adityac94/Grad-CAM++ <github.com/adityac94/Grad_CAM_plus_plus>`_.""",
+)
+
+_SCORECAM_DOCS = autodocs.generate(
+    "Score-CAM",
+    references="""
+        - Score-CAM: Score-Weighted Visual Explanations for Convolutional Neural
+            Networks. Available at:
+            `arxiv/1910.01279 <https://arxiv.org/abs/1910.01279>`_.""",
+)
 
 
 def cam(
@@ -20,27 +62,18 @@ def cam(
     indices_axis: int = KERNEL_AXIS,
     indices_batch_dims: int = -1,
     spatial_axis: Tuple[int] = SPATIAL_AXIS,
-    logits_layer: Optional[str] = None,
+    logits_layer: Optional[Union[str, Layer]] = None,
 ):
-    """Computes the CAM Visualization Method.
-
-    This method expects `inputs` to be a batch of positional signals of shape
-    `BHWC`, and will return a tensor of shape `BH'W'L`, where `(H', W')` are
-    the sizes of the visual receptive field in the explained activation layer
-    and `L` is the number of labels represented within the model's output
-    logits.
-
-    If `indices` is passed, the specific logits indexed by elements in this
-    tensor are selected before the gradients are computed, effectivelly
-    reducing the columns in the jacobian, and the size of the output
-    explaining map.
-
-    """
+    f"""{_CAM_DOCS}"""
 
     logits, activations = model(inputs, training=False)
     logits = gather_units(logits, indices, indices_axis, indices_batch_dims)
 
-    weights = get_logits_layer(model, name=logits_layer).kernel
+    if isinstance(logits_layer, str) or logits_layer is None:
+        logits_layer = get_logits_layer(model, name=logits_layer)
+
+    weights = logits_layer.kernel
+    weights = tf.squeeze(weights)
     weights = gather_units(weights, indices, axis=-1, batch_dims=0)
 
     dims = "kc" if indices is None else "kbc"
@@ -57,27 +90,8 @@ def gradcam(
     indices_batch_dims: int = -1,
     spatial_axis: Tuple[int] = SPATIAL_AXIS,
 ):
-    """Computes the Grad-CAM Visualization Method.
+    f"""{_GRADCAM_DOCS}"""
 
-    This method expects `inputs` to be a batch of positional signals of shape
-    `BHWC`, and will return a tensor of shape `BH'W'L`, where `(H', W')` are
-    the sizes of the visual receptive field in the explained activation layer
-    and `L` is the number of labels represented within the model's output
-    logits.
-
-    If `indices` is passed, the specific logits indexed by elements in this
-    tensor are selected before the gradients are computed, effectivelly
-    reducing the columns in the jacobian, and the size of the output
-    explaining map.
-
-    References:
-
-    - Selvaraju, R. R., Cogswell, M., Das, A., Vedantam, R., Parikh, D., & Batra, D.
-      (2017). Grad-cam: Visual explanations from deep networks via gradient-based
-      localization. In Proceedings of the IEEE international conference on computer
-      vision (pp. 618-626).
-
-    """
     with tf.GradientTape(watch_accessed_variables=False) as tape:
         tape.watch(inputs)
         logits, activations = model(inputs, training=False)
@@ -98,30 +112,8 @@ def gradcampp(
     indices_batch_dims: int = -1,
     spatial_axis: Tuple[int] = SPATIAL_AXIS,
 ):
-    """Computes the Grad-CAM++ Visualization Method.
+    f"""{_GRADCAMPP_DOCS}"""
 
-    This method expects `inputs` to be a batch of positional signals of shape
-    `BHWC`, and will return a tensor of shape `BH'W'L`, where `(H', W')` are
-    the sizes of the visual receptive field in the explained activation layer
-    and `L` is the number of labels represented within the model's output
-    logits.
-
-    If `indices` is passed, the specific logits indexed by elements in this
-    tensor are selected before the gradients are computed, effectivelly
-    reducing the columns in the jacobian, and the size of the output
-    explaining map.
-
-    References:
-
-    - Chattopadhay, A., Sarkar, A., Howlader, P., & Balasubramanian, V. N. (2018, March).
-      Grad-cam++: Generalized gradient-based visual explanations for deep convolutional
-      networks. In 2018 IEEE winter conference on applications of computer vision
-      (WACV) (pp. 839-847). IEEE.
-
-    - Grad-CAM++'s official implementation. Github.
-      Available at: [github.com/adityac94/Grad_CAM_plus_plus](https://github.com/adityac94/Grad_CAM_plus_plus).
-
-    """
     with tf.GradientTape(watch_accessed_variables=False) as tape:
         tape.watch(inputs)
         logits, activations = model(inputs, training=False)
@@ -159,26 +151,7 @@ def scorecam(
     indices_batch_dims: int = -1,
     spatial_axis: Tuple[int] = SPATIAL_AXIS,
 ):
-    """Computes the Score-CAM Visualization Method.
-
-    This method expects `inputs` to be a batch of positional signals of shape
-    `BHWC`, and will return a tensor of shape `BH'W'L`, where `(H', W')` are
-    the sizes of the visual receptive field in the explained activation layer
-    and `L` is the number of labels represented within the model's output
-    logits.
-
-    If `indices` is passed, the specific logits indexed by elements in this
-    tensor are selected before the gradients are computed, effectivelly
-    reducing the columns in the jacobian, and the size of the output
-    explaining map.
-
-    References:
-
-    - Score-CAM: Score-Weighted Visual Explanations for Convolutional Neural
-      Networks. Available at:
-      [arxiv/1910.01279](https://arxiv.org/abs/1910.01279).
-
-    """
+    f"""{_SCORECAM_DOCS}"""
 
     scores, activations = model(inputs, training=False)
     scores = gather_units(scores, indices, indices_axis, indices_batch_dims)
@@ -203,4 +176,4 @@ def scorecam(
     return scores, maps
 
 
-METHODS.extend((cam, gradcam, gradcampp, scorecam))
+METHODS = [cam, gradcam, gradcampp, scorecam]

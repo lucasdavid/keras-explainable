@@ -10,11 +10,63 @@ from keras_explainable import filters
 from keras_explainable import inspection
 from keras_explainable.inspection import KERNEL_AXIS
 from keras_explainable.inspection import SPATIAL_AXIS
+from keras_explainable.methods import autodocs
 
-METHODS = []
+_GRAD_DOCS = autodocs.generate(
+    "Gradient Back-propagation",
+    more_args="""
+        gradient_filter (Callable, optional): filter before
+            channel combining. Defaults to tf.abs.
+    """,
+    references="""
+        - Simonyan, K., Vedaldi, A., & Zisserman, A. (2013).
+            Deep inside convolutional networks: Visualising image classification
+            models and saliency maps. arXiv preprint arXiv:1312.6034.""",
+)
+
+_FULLGRAD_DOCS = autodocs.generate(
+    "Full Gradients",
+    description="""
+    As described in the article "Full-Gradient Representation for Neural
+    Network Visualization", Full-Gradient can be summarized in the following
+    equation:
+
+    .. math::
+
+      f(x) = ψ(∇_xf(x)\\odot x) +∑_{l\\in L}∑_{c\\in c_l} ψ(f^b(x)_c)
+
+    This approach main idea is to add to add the individual contributions of
+    each bias factor in the network onto the extracted gradient.
+
+    """,
+    more_args="""
+        psi (Callable, optional): filter operation before combining the intermediate
+            signals. Defaults to ``filters.absolute_normalize``.
+        biases: (List[tf.Tensor], optional): list of biases associated with each
+            intermediate signal exposed by the model. If none is passed, it will
+            be infered from the endpoints (nodes) outputed by the model.
+    """,
+    references="""
+        - Srinivas S, Fleuret F. Full-gradient representation for neural network
+            visualization. `arxiv.org/1905.00780 <https://arxiv.org/pdf/1905.00780.pdf>`_,
+            2019.
+    """,
+)
 
 
-def transpose_jacobian(x, spatial_rank=len(SPATIAL_AXIS)):
+def transpose_jacobian(
+    x: tf.Tensor, spatial_rank: Tuple[int] = len(SPATIAL_AXIS)
+) -> tf.Tensor:
+    """Transpose the Jacobian of shape (bj...) into (b...j).
+
+    Args:
+        x (tf.Tensor): the jacobian tensor.
+        spatial_rank (Tuple[int], optional): the spatial rank of ``x``.
+            Defaults to ``len(SPATIAL_AXIS)``.
+
+    Returns:
+        tf.Tensor: the transposed jacobian.
+    """
     dims = [2 + i for i in range(spatial_rank)]
 
     return tf.transpose(x, [0] + dims + [1])
@@ -28,27 +80,8 @@ def gradients(
     indices_batch_dims: int = -1,
     spatial_axis: Tuple[int] = SPATIAL_AXIS,
     gradient_filter: Callable = tf.abs,
-):
-    """Computes the Grad-CAM Visualization Method.
-
-    This method expects `inputs` to be a batch of positional signals of shape
-    `BHWC`, and will return a tensor of shape `BH'W'L`, where `(H', W')` are
-    the sizes of the visual receptive field in the explained activation layer
-    and `L` is the number of labels represented within the model's output
-    logits.
-
-    If `indices` is passed, the specific logits indexed by elements in this
-    tensor are selected before the gradients are computed, effectivelly
-    reducing the columns in the jacobian, and the size of the output
-    explaining map.
-
-    References:
-
-      - Simonyan, K., Vedaldi, A., & Zisserman, A. (2013).
-        Deep inside convolutional networks: Visualising image classification
-        models and saliency maps. arXiv preprint arXiv:1312.6034.
-
-    """
+) -> Tuple[tf.Tensor, tf.Tensor]:
+    f"""{_GRAD_DOCS}"""
 
     with tf.GradientTape(watch_accessed_variables=False) as tape:
         tape.watch(inputs)
@@ -65,16 +98,27 @@ def gradients(
     return logits, maps
 
 
-METHODS.extend((gradients,))
-
-
 def resized_psi_dfx(
     inputs: tf.Tensor,
     outputs: tf.Tensor,
     sizes: tf.Tensor,
-    psi: callable = filters.absolute_normalize,
+    psi: Callable = filters.absolute_normalize,
     spatial_axis: Tuple[int] = SPATIAL_AXIS,
 ) -> tf.Tensor:
+    """Filter and resize intermediate gradient tensors.
+
+    Args:
+        inputs (tf.Tensor): the input signal.
+        outputs (tf.Tensor): the output signal.
+        sizes (tf.Tensor): the expected sizes.
+        psi (Callable, optional): the filtering function. Defaults to
+            ``filters.absolute_normalize``.
+        spatial_axis (Tuple[int], optional): the spatial axes in the signal.
+            Defaults to ``SPATIAL_AXIS``.
+
+    Returns:
+        tf.Tensor: _description_
+    """
     t = outputs * inputs
     t = psi(t, spatial_axis)
     t = tf.reduce_mean(t, axis=-1, keepdims=True)
@@ -91,40 +135,10 @@ def full_gradients(
     indices_axis: int = KERNEL_AXIS,
     indices_batch_dims: int = -1,
     spatial_axis: Tuple[int] = SPATIAL_AXIS,
-    psi: callable = filters.absolute_normalize,
+    psi: Callable = filters.absolute_normalize,
     biases: Optional[List[tf.Tensor]] = None,
-    node_index: int = 0,
 ):
-    """Computes the Full-Gradient Visualization Method.
-
-    As described in the article "Full-Gradient Representation for Neural
-    Network Visualization", Full-Gradient can be summarized in the following
-    equation:
-
-    ::math::
-
-      f(x) = ψ(∇_xf(x)\\odot x) +∑_{l\\in L}∑_{c\\in c_l} ψ(f^b(x)_c)
-
-    This approach main idea is to add to add the individual contributions of
-    each bias factor in the network onto the extracted gradient.
-
-    This method expects `inputs` to be a batch of positional signals of shape
-    `BHWC`, and will return a tensor of shape `BH'W'L`, where `(H', W')` are
-    the sizes of the visual receptive field in the explained activation layer
-    and `L` is the number of labels represented within the model's output
-    logits.
-
-    If `indices` is passed, the specific logits indexed by elements in this
-    tensor are selected before the gradients are computed, effectivelly
-    reducing the columns in the jacobian, and the size of the output
-    explaining map.
-
-    References:
-
-    - Srinivas S, Fleuret F. Full-gradient representation for neural network visualization.
-      `arxiv.org/1905.00780 <https://arxiv.org/pdf/1905.00780.pdf>`_, 2019.
-
-    """
+    f"""{_FULLGRAD_DOCS}"""
 
     shape = tf.shape(inputs)
     sizes = [shape[a] for a in spatial_axis]
@@ -137,9 +151,8 @@ def full_gradients(
     )
 
     if biases is None:
-        _, biases = inspection.biases(
-            model, node_index=node_index, exclude=tf.keras.layers.Dense
-        )
+        _, *intermediates = (i._keras_history.layer for i in model.outputs)
+        biases = inspection.biases(intermediates)
 
     with tf.GradientTape(watch_accessed_variables=False) as tape:
         tape.watch(inputs)
@@ -148,15 +161,16 @@ def full_gradients(
             logits, indices, indices_axis, indices_batch_dims
         )
 
-    maps, *intermediate_maps = tape.gradient(logits, [inputs, *intermediates])
+    grad_input, *grad_inter = tape.gradient(logits, [inputs, *intermediates])
 
-    maps = resized_psi_dfx_(inputs, maps)
-    for b, i in zip(biases, intermediate_maps):
+    maps = resized_psi_dfx_(inputs, grad_input)
+    for b, i in zip(biases, grad_inter):
         maps += resized_psi_dfx_(b, i)
-    # for idx in tf.range(len(biases)):
-    #   maps += resized_psi_dfx_(biases[idx], intermediate_maps[idx])
 
     return logits, maps
 
 
-METHODS.extend((full_gradients,))
+METHODS = [
+    gradients,
+    full_gradients,
+]

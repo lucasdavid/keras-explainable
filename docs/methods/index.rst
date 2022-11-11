@@ -2,8 +2,8 @@
 AI Explaining Methods
 =====================
 
-In this page, we list the available AI Explaining Methods
-and a few examples on how to work with them.
+We list in this page the AI Explaining Methods implemented in
+``keras-explainable``, as well as a few examples on how to utilize them.
 
 Saliency and Gradient-based
 """""""""""""""""""""""""""

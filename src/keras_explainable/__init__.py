@@ -25,22 +25,46 @@ except PackageNotFoundError:  # pragma: no cover
 finally:
     del version, PackageNotFoundError
 
+_SHORTCUTS_DOCS = """Shortcut for ``{method}``,
+filtering {filter} contributing regions
+"""
+
+f"""{_SHORTCUTS_DOCS.format(method='methods.cams.cam', filter='positively',)}"""
 cam = partial_explain(
     methods.cams.cam, postprocessing=filters.positive_normalize
 )
+
+f"""{_SHORTCUTS_DOCS.format(method='methods.cams.gradcam', filter='positively',)}"""
 gradcam = partial_explain(
     methods.cams.gradcam, postprocessing=filters.positive_normalize
 )
+
+f"""{_SHORTCUTS_DOCS.format(method='methods.cams.gradcampp', filter='positively',)}"""
 gradcampp = partial_explain(
     methods.cams.gradcampp, postprocessing=filters.positive_normalize
 )
+
+f"""{_SHORTCUTS_DOCS.format(method='methods.cams.scorecam', filter='positively',)}"""
 scorecam = partial_explain(
-    methods.cams.scorecam, postprocessing=filters.positive_normalize
+    methods.cams.scorecam,
+    postprocessing=filters.positive_normalize,
+    resizing=False,
 )
 
+f"""{_SHORTCUTS_DOCS.format(method='methods.gradient.gradients', filter='absolutely',)}"""
 gradients = partial_explain(
     methods.gradient.gradients,
     postprocessing=filters.normalize,
+    resizing=False,
+)
+
+f"""{_SHORTCUTS_DOCS.format(
+    method='methods.gradient.full_gradients', filter='absolutely',
+)}"""
+full_gradients = partial_explain(
+    methods.gradient.full_gradients,
+    postprocessing=filters.normalize,
+    resizing=False,
 )
 
 __all__ = [

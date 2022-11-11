@@ -3,6 +3,7 @@ from math import ceil
 from typing import List
 from typing import Optional
 from typing import Tuple
+from typing import Union
 
 import numpy as np
 import tensorflow as tf
@@ -33,9 +34,9 @@ def get_dims(image):
 
 
 def visualize(
-    images,
-    title=None,
-    overlay: Optional[List[np.ndarray]] = None,
+    images: List[Union[tf.Tensor, np.ndarray]],
+    titles: Optional[List[str]] = None,
+    overlays: Optional[List[np.ndarray]] = None,
     overlay_alpha: float = 0.75,
     rows: Optional[int] = None,
     cols: Optional[int] = None,
@@ -83,16 +84,16 @@ def visualize(
             plt.imshow(image, cmap=cmap)
 
             if (
-                overlay is not None
-                and len(overlay) > ix
-                and overlay[ix] is not None
+                overlays is not None
+                and len(overlays) > ix
+                and overlays[ix] is not None
             ):
-                oi = overlay[ix]
+                oi = overlays[ix]
                 if len(oi.shape) > 2 and oi.shape[-1] == 1:
                     oi = oi[..., 0]
                 plt.imshow(oi, overlay_cmap, alpha=overlay_alpha)
-        if title is not None and len(title) > ix:
-            plt.title(title[ix])
+        if titles is not None and len(titles) > ix:
+            plt.title(titles[ix])
         plt.axis("off")
 
     plt.tight_layout()

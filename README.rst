@@ -4,6 +4,9 @@ keras Explainable
 
 Efficient explaining AI algorithms for Keras models.
 
+.. image:: _static/images/cover.jpg
+   :alt: Examples of explaining methods employed to explain outputs from various example images.
+
 Installation
 ------------
 
@@ -27,3 +30,19 @@ example:
   model = ke.inspection.expose(model)
 
   scores, cams = ke.gradcam(model, x, y, batch_size=32)
+
+Implemented Explaining Methods
+------------------------------
+
+Gradient-based Explaining Methods:
+
+- Gradient Back-propagation
+- FullGrad
+- Smooth-Grad
+
+CAM-Based Visualization Methods:
+
+- CAM
+- Grad-CAM
+- Grad-CAM++
+- Score-CAM

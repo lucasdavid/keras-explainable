@@ -51,14 +51,15 @@ def get_nested_layer(
           Nested layers are separated by "."
 
     Example:
-    ```py
-    model = tf.keras.Sequential([
-        tf.keras.applications.ResNet101V2(include_top=False, pooling='avg'),
-        tf.keras.layers.Dense(10, activation='softmax', name='predictions')
-    ])
+    
+    .. code-block:: python
 
-    pooling_layer = get_nested_layer(model, 'resnet101v2.avg_pool')
-    ```
+        model = tf.keras.Sequential([
+            tf.keras.applications.ResNet101V2(include_top=False, pooling='avg'),
+            tf.keras.layers.Dense(10, activation='softmax', name='predictions')
+        ])
+
+        pooling_layer = get_nested_layer(model, 'resnet101v2.avg_pool')
 
     Raises:
         ValueError: if `name` is not a nested member of `model`.
@@ -186,9 +187,9 @@ def endpoints(model: Model, endpoints: List[E]) -> List[KerasTensor]:
 
     for ep in endpoints:
         if isinstance(ep, int):
-            ep = {'layer': model.layers[ep]}
+            ep = {"layer": model.layers[ep]}
         elif isinstance(ep, Layer):
-            ep = {'layer': ep}
+            ep = {"layer": ep}
         elif isinstance(ep, str):
             ep = {"name": ep}
 
@@ -200,8 +201,8 @@ def endpoints(model: Model, endpoints: List[E]) -> List[KerasTensor]:
                 "`name`/`layer`, `link` and `node` keys."
             )
 
-        if 'layer' in ep:
-            layer = ep['layer']
+        if "layer" in ep:
+            layer = ep["layer"]
         else:
             layer = get_nested_layer(model, ep["name"])
 
@@ -247,11 +248,11 @@ def expose(
     """
     if outputs is None:
         outputs = get_logits_layer(model)
-    if arguments is None:
-        arguments = get_global_pooling_layer(model).name
     if isinstance(arguments, str):
-        arguments = {"name": arguments, "link": "input"}
-    
+        arguments = {"name": arguments}
+    if arguments is None:
+        arguments = {"layer": get_global_pooling_layer(model), "link": "input"}
+
     outputs = tolist(outputs)
     arguments = tolist(arguments)
 

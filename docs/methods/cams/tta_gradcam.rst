@@ -38,13 +38,14 @@ We describe bellow these lines in detail.
 
   import keras_explainable as ke
 
-  SOURCE_DIRECTORY = 'docs/_static/images/'
+  SOURCE_DIRECTORY = 'docs/_static/images/singleton/'
   SAMPLES = 8
   SIZES = (299, 299)
 
   file_names = os.listdir(SOURCE_DIRECTORY)
   image_paths = [os.path.join(SOURCE_DIRECTORY, f) for f in file_names if f != '_links.txt']
-  images = np.stack([img_to_array(load_img(ip).resize(SIZES)) for ip in image_paths])[:SAMPLES]
+  images = np.stack([img_to_array(load_img(ip).resize(SIZES)) for ip in image_paths])
+  images = images.astype("uint8")[:SAMPLES]
 
 Firstly, we employ the :py:class:`ResNet101` network pre-trained over the
 ImageNet dataset:
@@ -60,14 +61,6 @@ ImageNet dataset:
     classifier_activation=None,
     weights=WEIGHTS
   )
-  rn101.trainable = False
-  rn101.compile(
-    optimizer='sgd',
-    loss='sparse_categorical_crossentropy',
-  )
-
-  prec = tf.keras.applications.resnet_v2.preprocess_input
-  decode_predictions = tf.keras.applications.resnet_v2.decode_predictions
 
   print(f'ResNet101 with {WEIGHTS} pre-trained weights loaded.')
   print(f"Spatial map sizes: {rn101.get_layer('avg_pool').input.shape}")
@@ -79,19 +72,18 @@ which improves performance of the explaining methods.
 
 .. jupyter-execute::
 
-  inputs = prec(images.copy())
+  prec = tf.keras.applications.resnet_v2.preprocess_input
+
+  inputs = prec(images.astype("float").copy())
   logits = rn101.predict(inputs, verbose=0)
   indices = np.argsort(logits, axis=-1)[:, ::-1]
-
-  probs = tf.nn.softmax(logits).numpy()
-  predictions = decode_predictions(probs, top=1)
 
   explaining_units = indices[:, :1]  # Firstmost likely classes.
 
 .. jupyter-execute::
 
   rn101_exposed = ke.inspection.expose(rn101)
-  
+
   tta_gradcam = ke.methods.meta.tta(
     ke.methods.cams.gradcam,
     scales=[0.5, 1.0, 1.5, 2.],
@@ -100,7 +92,7 @@ which improves performance of the explaining methods.
   _, cams = ke.explain(tta_gradcam, rn101_exposed, inputs, explaining_units)
 
   ke.utils.visualize(
-    images.astype(np.uint8),
-    overlay=cams.clip(0., 1.).transpose((3, 0, 1, 2)).reshape(-1, *SIZES, 1),
+    images,
+    overlays=cams.clip(0., 1.).transpose((3, 0, 1, 2)).reshape(-1, *SIZES, 1),
     cols=4
   )
