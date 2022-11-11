@@ -1,0 +1,673 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>keras_explainable.inspection &#8212; Keras Explainable</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/thebelab-helper.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Keras Explainable</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../readme.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../explaining.html">
+   Explaining
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../methods/index.html">
+   Methods
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../methods/saliency/gradients.html">
+     Gradient Back-propagation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../methods/saliency/smoothgrad.html">
+     Smooth-Grad
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../methods/saliency/fullgrad.html">
+     Full-Grad
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../methods/cams/gradcam.html">
+     Grad-CAM
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../methods/cams/tta_gradcam.html">
+     TTA Grad-CAM
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../wsol.html">
+   WSSL
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../contributing.html">
+   Contributions &amp; Help
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../license.html">
+   License
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../api/modules.html">
+   Module Reference
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../api/keras_explainable.html">
+     keras_explainable package
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/keras_explainable.engine.html">
+       keras_explainable.engine package
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/keras_explainable.methods.html">
+       keras_explainable.methods package
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+<a href="https://github.com/lucasdavid/keras-explainable"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="bottom"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for keras_explainable.inspection</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Inspection utils for models and layers.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">keras.engine.base_layer</span> <span class="kn">import</span> <span class="n">Layer</span>
+<span class="kn">from</span> <span class="nn">keras.engine.keras_tensor</span> <span class="kn">import</span> <span class="n">KerasTensor</span>
+<span class="kn">from</span> <span class="nn">keras.engine.training</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">keras.layers.normalization.batch_normalization</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BatchNormalizationBase</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">keras.layers.normalization.layer_normalization</span> <span class="kn">import</span> <span class="n">LayerNormalization</span>
+<span class="kn">from</span> <span class="nn">keras.layers.pooling.base_global_pooling1d</span> <span class="kn">import</span> <span class="n">GlobalPooling1D</span>
+<span class="kn">from</span> <span class="nn">keras.layers.pooling.base_global_pooling2d</span> <span class="kn">import</span> <span class="n">GlobalPooling2D</span>
+<span class="kn">from</span> <span class="nn">keras.layers.pooling.base_global_pooling3d</span> <span class="kn">import</span> <span class="n">GlobalPooling3D</span>
+
+<span class="kn">from</span> <span class="nn">keras_explainable.utils</span> <span class="kn">import</span> <span class="n">tolist</span>
+
+<span class="n">E</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">KerasTensor</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]</span>
+
+<span class="n">KERNEL_AXIS</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="n">SPATIAL_AXIS</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">NORMALIZATION_LAYERS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">BatchNormalizationBase</span><span class="p">,</span>
+    <span class="n">LayerNormalization</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">POOLING_LAYERS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">GlobalPooling1D</span><span class="p">,</span>
+    <span class="n">GlobalPooling2D</span><span class="p">,</span>
+    <span class="n">GlobalPooling3D</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_nested_layer"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.inspection.get_nested_layer">[docs]</a><span class="k">def</span> <span class="nf">get_nested_layer</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Layer</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Retrieve a nested layer in the model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (Model): the model containing the nested layer.</span>
+<span class="sd">        name (str): the descriptor of the nested layer.</span>
+<span class="sd">          Nested layers are separated by &quot;.&quot;</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        model = tf.keras.Sequential([</span>
+<span class="sd">            tf.keras.applications.ResNet101V2(include_top=False, pooling=&#39;avg&#39;),</span>
+<span class="sd">            tf.keras.layers.Dense(10, activation=&#39;softmax&#39;, name=&#39;predictions&#39;)</span>
+<span class="sd">        ])</span>
+
+<span class="sd">        pooling_layer = get_nested_layer(model, &#39;resnet101v2.avg_pool&#39;)</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: if `name` is not a nested member of `model`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tf.keras.layer.Layer: the retrieved layer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+<div class="viewcode-block" id="get_logits_layer"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.inspection.get_logits_layer">[docs]</a><span class="k">def</span> <span class="nf">get_logits_layer</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Layer</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Retrieve the &quot;logits&quot; layer.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (Model): the model containing the logits layer.</span>
+<span class="sd">        name (str, optional): the name of the layer, if known. Defaults to None.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: if a logits layer cannot be found</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Layer: the retrieved logits layer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">find_layer_with</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;kernel&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="get_global_pooling_layer"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.inspection.get_global_pooling_layer">[docs]</a><span class="k">def</span> <span class="nf">get_global_pooling_layer</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Layer</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Retrieve the last global pooling layer.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (Model): the model containing the pooling layer.</span>
+<span class="sd">        name (str, optional): the name of the layer, if known. Defaults to None.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: if a pooling layer cannot be found</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Layer: the retrieved pooling layer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">find_layer_with</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="n">POOLING_LAYERS</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="find_layer_with"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.inspection.find_layer_with">[docs]</a><span class="k">def</span> <span class="nf">find_layer_with</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">properties</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Layer</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">search_reversed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Layer</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Find a layer within a model that satisfies all required properties.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (Model): the container model.</span>
+<span class="sd">        name (Optional[str], optional): the name of the layer, if known.</span>
+<span class="sd">          Defaults to None.</span>
+<span class="sd">        properties (Optional[Tuple[str]], optional): a list of properties that</span>
+<span class="sd">          should be visible from the searched layer. Defaults to None.</span>
+<span class="sd">        klass (Optional[Tuple[Type[Layer]]], optional): a collection of classes</span>
+<span class="sd">          allowed for the searched layer. Defaults to None.</span>
+<span class="sd">        search_reversed (bool, optional): wether to search from last-to-first.</span>
+<span class="sd">          Defaults to True.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: if no search parameters are passed.</span>
+<span class="sd">        ValueError: if no valid layer can be found with the specified search</span>
+<span class="sd">          parameters.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Layer: the layer satisfying all search parameters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">search_params</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">klass</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">p</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">search_params</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;At least one of the search search parameters must &quot;</span>
+            <span class="s2">&quot;be set when calling `get_layer`, indicating the &quot;</span>
+            <span class="s2">&quot;necessary properties for the layer being retrieved.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">get_nested_layer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="n">layers</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span>
+    <span class="k">if</span> <span class="n">search_reversed</span><span class="p">:</span>
+        <span class="n">layers</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">klass</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">klass</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">properties</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="k">return</span> <span class="n">layer</span>  <span class="c1"># `layer` matches all conditions.</span>
+
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="s2">&quot;A valid layer couldn&#39;t be inferred from the name=`</span><span class="si">{name}</span><span class="s2">`, &quot;</span>
+        <span class="s2">&quot;klass=`</span><span class="si">{klass}</span><span class="s2">` and properties=`</span><span class="si">{properties}</span><span class="s2">`. Make sure these &quot;</span>
+        <span class="s2">&quot;attributes correctly reflect a layer in the model.&quot;</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="endpoints"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.inspection.endpoints">[docs]</a><span class="k">def</span> <span class="nf">endpoints</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span> <span class="n">endpoints</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">E</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">KerasTensor</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Collect intermediate endpoints in a model based on structured descriptors.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (Model): the model containing the endpoints to be collected.</span>
+<span class="sd">        endpoints (List[E]): descriptors of endpoints that should be collected.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: raised whenever one of the endpoint descriptors is invalid</span>
+<span class="sd">          or it does not describe a nested layer in the `model`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[KerasTensor]: a list containing the endpoints of interest.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">endpoints_</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">ep</span> <span class="ow">in</span> <span class="n">endpoints</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">ep</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;layer&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">ep</span><span class="p">]}</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="n">Layer</span><span class="p">):</span>
+            <span class="n">ep</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;layer&quot;</span><span class="p">:</span> <span class="n">ep</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">ep</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">ep</span><span class="p">}</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Illegal type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">ep</span><span class="p">)</span><span class="si">}</span><span class="s2"> for endpoint </span><span class="si">{</span><span class="n">ep</span><span class="si">}</span><span class="s2">. Expected a &quot;</span>
+                <span class="s2">&quot;layer index (`int`), layer name (`str`), a layer &quot;</span>
+                <span class="s2">&quot;(`keras.layers.Layer`) or a dictionary with &quot;</span>
+                <span class="s2">&quot;`name`/`layer`, `link` and `node` keys.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;layer&quot;</span> <span class="ow">in</span> <span class="n">ep</span><span class="p">:</span>
+            <span class="n">layer</span> <span class="o">=</span> <span class="n">ep</span><span class="p">[</span><span class="s2">&quot;layer&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">layer</span> <span class="o">=</span> <span class="n">get_nested_layer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ep</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+
+        <span class="n">link</span> <span class="o">=</span> <span class="n">ep</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;link&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">)</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">ep</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;node&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">layer</span><span class="o">.</span><span class="n">get_input_at</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">link</span> <span class="o">==</span> <span class="s2">&quot;input&quot;</span>
+            <span class="k">else</span> <span class="n">layer</span><span class="o">.</span><span class="n">get_output_at</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">endpoints_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">endpoints_</span></div>
+
+
+<div class="viewcode-block" id="expose"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.inspection.expose">[docs]</a><span class="k">def</span> <span class="nf">expose</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
+    <span class="n">arguments</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">E</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">outputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">E</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Creates a new model that exposes all endpoints described by</span>
+<span class="sd">      `arguments` and `outputs`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (Model): The model being explained.</span>
+<span class="sd">        arguments (Optional[E], optional): Name of the argument layer/tensor in</span>
+<span class="sd">        the model. The jacobian of the output explaining units will be computed</span>
+<span class="sd">        with respect to the input signal of this layer. This argument can also</span>
+<span class="sd">        be an integer, a dictionary representing the intermediate signal or</span>
+<span class="sd">        the pooling layer itself. If None is passed, the penultimate layer</span>
+<span class="sd">        is assumed to be a GAP layer. Defaults to None.</span>
+<span class="sd">        outputs (Optional[E], optional): Name of the output layer in the model.</span>
+<span class="sd">        The jacobian will be computed for the activation signal of units in this</span>
+<span class="sd">        layer. This argument can also be an integer, a dictionary representing</span>
+<span class="sd">        the output signal and the logits layer itself. If None is passed,</span>
+<span class="sd">        the last layer is assumed to be the logits layer.. Defaults to None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Model: the exposed model, whose outputs contain the intermediate</span>
+<span class="sd">          and output tensors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">outputs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="n">get_logits_layer</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arguments</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">arguments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">arguments</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">arguments</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">arguments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;layer&quot;</span><span class="p">:</span> <span class="n">get_global_pooling_layer</span><span class="p">(</span><span class="n">model</span><span class="p">),</span> <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">}</span>
+
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">tolist</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
+    <span class="n">arguments</span> <span class="o">=</span> <span class="n">tolist</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span>
+
+    <span class="n">tensors</span> <span class="o">=</span> <span class="n">endpoints</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">outputs</span> <span class="o">+</span> <span class="n">arguments</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Model</span><span class="p">(</span>
+        <span class="n">inputs</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span>
+        <span class="n">outputs</span><span class="o">=</span><span class="n">tensors</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="gather_units"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.inspection.gather_units">[docs]</a><span class="k">def</span> <span class="nf">gather_units</span><span class="p">(</span>
+    <span class="n">tensor</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">indices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
+    <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">batch_dims</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Gather units (in the last axis) from a tensor.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tensor (tf.Tensor): the input tensor.</span>
+<span class="sd">        indices (tf.Tensor, optional): the indices that should be gathered.</span>
+<span class="sd">        axis (int, optional): the axis from which indices should be taken,</span>
+<span class="sd">          used to fine control gathering. Defaults to -1.</span>
+<span class="sd">        batch_dims (int, optional): the number of batch dimensions, used to</span>
+<span class="sd">          fine control gathering. Defaults to -1.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tf.Tensor: the gathered units</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">indices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tensor</span>
+
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">batch_dims</span><span class="o">=</span><span class="n">batch_dims</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="layers_with_biases"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.inspection.layers_with_biases">[docs]</a><span class="k">def</span> <span class="nf">layers_with_biases</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
+    <span class="n">exclude</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Layer</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">return_biases</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Layer</span><span class="p">]:</span>
+    <span class="n">layers</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">layer</span>
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">_flatten_layers</span><span class="p">(</span><span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">layer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span>
+            <span class="ow">and</span> <span class="p">(</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">NORMALIZATION_LAYERS</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="s2">&quot;bias&quot;</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">layer</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">return_biases</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">layers</span><span class="p">,</span> <span class="n">biases</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">layers</span></div>
+
+
+<div class="viewcode-block" id="biases"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.inspection.biases">[docs]</a><span class="k">def</span> <span class="nf">biases</span><span class="p">(</span>
+    <span class="n">layers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Layer</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Retrieve all biases from a model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (Model): the model being inspected.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[tf.Tensor]: a list of all biases retrieved.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">biases</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">NORMALIZATION_LAYERS</span><span class="p">):</span>
+            <span class="c1"># Batch norm := ((x - m)/s)*w + b</span>
+            <span class="c1"># Hence bias factor is -m*w/s + b.</span>
+            <span class="n">biases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="o">-</span><span class="n">layer</span><span class="o">.</span><span class="n">moving_mean</span>
+                <span class="o">*</span> <span class="n">layer</span><span class="o">.</span><span class="n">gamma</span>
+                <span class="o">/</span> <span class="n">tf</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+                    <span class="n">layer</span><span class="o">.</span><span class="n">moving_variance</span> <span class="o">+</span> <span class="mf">1e-07</span>
+                <span class="p">)</span>  <span class="c1"># might be variance here.</span>
+                <span class="o">+</span> <span class="n">layer</span><span class="o">.</span><span class="n">beta</span>
+            <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="s2">&quot;bias&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">layer</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">biases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">bias</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">biases</span></div>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+      &copy; Copyright 2022, Lucas David.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

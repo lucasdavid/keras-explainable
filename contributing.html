@@ -1,0 +1,771 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Contributing &#8212; Keras Explainable</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/thebelab-helper.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="License" href="license.html" />
+    <link rel="prev" title="Weakly Supervised Object Localization" href="wsol.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Keras Explainable</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="readme.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="explaining.html">
+   Explaining
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="methods/index.html">
+   Methods
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="methods/saliency/gradients.html">
+     Gradient Back-propagation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="methods/saliency/smoothgrad.html">
+     Smooth-Grad
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="methods/saliency/fullgrad.html">
+     Full-Grad
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="methods/cams/gradcam.html">
+     Grad-CAM
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="methods/cams/tta_gradcam.html">
+     TTA Grad-CAM
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="wsol.html">
+   WSSL
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Contributions &amp; Help
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="license.html">
+   License
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="api/modules.html">
+   Module Reference
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="api/keras_explainable.html">
+     keras_explainable package
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="api/keras_explainable.engine.html">
+       keras_explainable.engine package
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="api/keras_explainable.methods.html">
+       keras_explainable.methods package
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+<a href="https://github.com/lucasdavid/keras-explainable"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="bottom"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/contributing.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#issue-reports">
+   Issue Reports
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#documentation-improvements">
+   Documentation Improvements
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#code-contributions">
+   Code Contributions
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#submit-an-issue">
+     Submit an issue
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-an-environment">
+     Create an environment
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#clone-the-repository">
+     Clone the repository
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#implement-your-changes">
+     Implement your changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#submit-your-contribution">
+     Submit your contribution
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#troubleshooting">
+     Troubleshooting
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#maintainer-tasks">
+   Maintainer tasks
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#releases">
+     Releases
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Contributing</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#issue-reports">
+   Issue Reports
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#documentation-improvements">
+   Documentation Improvements
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#code-contributions">
+   Code Contributions
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#submit-an-issue">
+     Submit an issue
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-an-environment">
+     Create an environment
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#clone-the-repository">
+     Clone the repository
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#implement-your-changes">
+     Implement your changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#submit-your-contribution">
+     Submit your contribution
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#troubleshooting">
+     Troubleshooting
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#maintainer-tasks">
+   Maintainer tasks
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#releases">
+     Releases
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="contributing">
+<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">#</a></h1>
+<p>Welcome to <code class="docutils literal notranslate"><span class="pre">keras-explainable</span></code> contributor’s guide.</p>
+<p>This document focuses on getting any potential contributor familiarized
+with the development processes, but <a class="reference external" href="https://opensource.guide/how-to-contribute">other kinds of contributions</a> are also
+appreciated.</p>
+<p>If you are new to using <a class="reference external" href="https://git-scm.com">git</a> or have never collaborated in a project previously,
+please have a look at <a class="reference external" href="https://www.contribution-guide.org/">contribution-guide.org</a>. Other resources are also
+listed in the excellent <a class="reference external" href="https://github.com/FreeCodeCamp/how-to-contribute-to-open-source">guide created by FreeCodeCamp</a> <a class="footnote-reference brackets" href="#contrib1" id="id1">1</a>.</p>
+<p>Please notice, all users and contributors are expected to be <strong>open,
+considerate, reasonable, and respectful</strong>. When in doubt, <a class="reference external" href="https://www.python.org/psf/conduct/">Python Software
+Foundation’s Code of Conduct</a> is a good reference in terms of behavior
+guidelines.</p>
+<section id="issue-reports">
+<h2>Issue Reports<a class="headerlink" href="#issue-reports" title="Permalink to this headline">#</a></h2>
+<p>If you experience bugs or general issues with <code class="docutils literal notranslate"><span class="pre">keras-explainable</span></code>, please have a look
+on the <a class="reference external" href="https://github.com/lucasdavid/keras-explainable/issues">issue tracker</a>. If you don’t see anything useful there, please feel
+free to fire an issue report.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Please don’t forget to include the closed issues in your search.
+Sometimes a solution was already reported, and the problem is considered
+<strong>solved</strong>.</p>
+</div>
+<p>New issue reports should include information about your programming environment
+(e.g., operating system, Python version) and steps to reproduce the problem.
+Please try also to simplify the reproduction steps to a very minimal example
+that still illustrates the problem you are facing. By removing other factors,
+you help us to identify the root cause of the issue.</p>
+</section>
+<section id="documentation-improvements">
+<h2>Documentation Improvements<a class="headerlink" href="#documentation-improvements" title="Permalink to this headline">#</a></h2>
+<p>You can help improve <code class="docutils literal notranslate"><span class="pre">keras-explainable</span></code> docs by making them more readable and coherent, or
+by adding missing information and correcting mistakes.</p>
+<p><code class="docutils literal notranslate"><span class="pre">keras-explainable</span></code> documentation uses <a class="reference external" href="https://www.sphinx-doc.org/en/master/">Sphinx</a> as its main documentation compiler.
+This means that the docs are kept in the same repository as the project code, and
+that any documentation update is done in the same way was a code contribution.</p>
+<p>When working on documentation changes in your local machine, you can
+compile them using <a class="reference external" href="https://tox.wiki/en/stable/"><code class="docutils literal notranslate"><span class="pre">tox</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tox</span> <span class="o">-</span><span class="n">e</span> <span class="n">docs</span>
+</pre></div>
+</div>
+<p>and use Python’s built-in web server for a preview in your web browser
+(<code class="docutils literal notranslate"><span class="pre">http://localhost:8000</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">http</span><span class="o">.</span><span class="n">server</span> <span class="o">--</span><span class="n">directory</span> <span class="s1">&#39;docs/_build/html&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="code-contributions">
+<h2>Code Contributions<a class="headerlink" href="#code-contributions" title="Permalink to this headline">#</a></h2>
+<section id="submit-an-issue">
+<h3>Submit an issue<a class="headerlink" href="#submit-an-issue" title="Permalink to this headline">#</a></h3>
+<p>Before you work on any non-trivial code contribution it’s best to first create
+a report in the <a class="reference external" href="https://github.com/lucasdavid/keras-explainable/issues">issue tracker</a> to start a discussion on the subject.
+This often provides additional considerations and avoids unnecessary work.</p>
+</section>
+<section id="create-an-environment">
+<h3>Create an environment<a class="headerlink" href="#create-an-environment" title="Permalink to this headline">#</a></h3>
+<p>Before you start coding, we recommend creating an isolated <a class="reference external" href="https://realpython.com/python-virtual-environments-a-primer/">virtual
+environment</a> to avoid any problems with your installed Python packages.
+This can easily be done via either <a class="reference external" href="https://virtualenv.pypa.io/en/stable/"><code class="docutils literal notranslate"><span class="pre">virtualenv</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="o">&lt;</span><span class="n">PATH</span> <span class="n">TO</span> <span class="n">VENV</span><span class="o">&gt;</span>
+<span class="n">source</span> <span class="o">&lt;</span><span class="n">PATH</span> <span class="n">TO</span> <span class="n">VENV</span><span class="o">&gt;/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+</pre></div>
+</div>
+<p>or <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">keras</span><span class="o">-</span><span class="n">explainable</span> <span class="n">python</span><span class="o">=</span><span class="mi">3</span> <span class="n">six</span> <span class="n">virtualenv</span> <span class="n">pytest</span> <span class="n">pytest</span><span class="o">-</span><span class="n">cov</span>
+<span class="n">conda</span> <span class="n">activate</span> <span class="n">keras</span><span class="o">-</span><span class="n">explainable</span>
+</pre></div>
+</div>
+</section>
+<section id="clone-the-repository">
+<h3>Clone the repository<a class="headerlink" href="#clone-the-repository" title="Permalink to this headline">#</a></h3>
+<ol class="arabic">
+<li><p>Create an user account on GitHub if you do not already have one.</p></li>
+<li><p>Fork the project <a class="reference external" href="https://github.com/lucasdavid/keras-explainable">repository</a>: click on the <em>Fork</em> button near the top of the
+page. This creates a copy of the code under your account on GitHub.</p></li>
+<li><p>Clone this copy to your local disk:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">YourLogin</span><span class="o">/</span><span class="n">keras</span><span class="o">-</span><span class="n">explainable</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">keras</span><span class="o">-</span><span class="n">explainable</span>
+</pre></div>
+</div>
+</li>
+<li><p>You should run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="n">pip</span> <span class="n">setuptools</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>to be able to import the package under development in the Python REPL.</p>
+</li>
+<li><p>Install <a class="reference external" href="https://pre-commit.com/"><code class="docutils literal notranslate"><span class="pre">pre-commit</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pre</span><span class="o">-</span><span class="n">commit</span>
+<span class="n">pre</span><span class="o">-</span><span class="n">commit</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">keras-explainable</span></code> comes with a lot of hooks configured to automatically help the
+developer to check the code being written.</p>
+</li>
+</ol>
+</section>
+<section id="implement-your-changes">
+<h3>Implement your changes<a class="headerlink" href="#implement-your-changes" title="Permalink to this headline">#</a></h3>
+<ol class="arabic">
+<li><p>Create a branch to hold your changes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">my</span><span class="o">-</span><span class="n">feature</span>
+</pre></div>
+</div>
+<p>and start making changes. Never work on the main branch!</p>
+</li>
+<li><p>Start your work on this branch. Don’t forget to add <a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html">docstrings</a> to new
+functions, modules and classes, especially if they are part of public APIs.</p></li>
+<li><p>Add yourself to the list of contributors in <code class="docutils literal notranslate"><span class="pre">AUTHORS.rst</span></code>.</p></li>
+<li><p>When you’re done editing, do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">add</span> <span class="o">&lt;</span><span class="n">MODIFIED</span> <span class="n">FILES</span><span class="o">&gt;</span>
+<span class="n">git</span> <span class="n">commit</span>
+</pre></div>
+</div>
+<p>to record your changes in <a class="reference external" href="https://git-scm.com">git</a>.</p>
+<p>Please make sure to see the validation messages from <a class="reference external" href="https://pre-commit.com/"><code class="docutils literal notranslate"><span class="pre">pre-commit</span></code></a> and fix
+any eventual issues.
+This should automatically use <a class="reference external" href="https://flake8.pycqa.org/en/stable/">flake8</a>/<a class="reference external" href="https://pypi.org/project/black/">black</a> to check/fix the code style
+in a way that is compatible with the project.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Don’t forget to add unit tests and documentation in case your
+contribution adds an additional feature and is not just a bugfix.</p>
+<p>Moreover, writing a <a class="reference external" href="https://chris.beams.io/posts/git-commit">descriptive commit message</a> is highly recommended.
+In case of doubt, you can check the commit history with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">log</span> <span class="o">--</span><span class="n">graph</span> <span class="o">--</span><span class="n">decorate</span> <span class="o">--</span><span class="n">pretty</span><span class="o">=</span><span class="n">oneline</span> <span class="o">--</span><span class="n">abbrev</span><span class="o">-</span><span class="n">commit</span> <span class="o">--</span><span class="nb">all</span>
+</pre></div>
+</div>
+<p>to look for recurring communication patterns.</p>
+</div>
+</li>
+<li><p>Please check that your changes don’t break any unit tests with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tox</span>
+</pre></div>
+</div>
+<p>(after having installed <a class="reference external" href="https://tox.wiki/en/stable/"><code class="docutils literal notranslate"><span class="pre">tox</span></code></a> with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">tox</span></code> or <code class="docutils literal notranslate"><span class="pre">pipx</span></code>).</p>
+<p>You can also use <a class="reference external" href="https://tox.wiki/en/stable/"><code class="docutils literal notranslate"><span class="pre">tox</span></code></a> to run several other pre-configured tasks in the
+repository. Try <code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-av</span></code> to see a list of the available checks.</p>
+</li>
+</ol>
+</section>
+<section id="submit-your-contribution">
+<h3>Submit your contribution<a class="headerlink" href="#submit-your-contribution" title="Permalink to this headline">#</a></h3>
+<ol class="arabic">
+<li><p>If everything works fine, push your local branch to GitHub with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="o">-</span><span class="n">u</span> <span class="n">origin</span> <span class="n">my</span><span class="o">-</span><span class="n">feature</span>
+</pre></div>
+</div>
+</li>
+<li><p>Go to the web page of your fork and click “Create pull request”
+to send your changes for review.</p>
+</li>
+</ol>
+</section>
+<section id="troubleshooting">
+<h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">#</a></h3>
+<p>The following tips can be used when facing problems to build or test the
+package:</p>
+<ol class="arabic">
+<li><p>Make sure to fetch all the tags from the upstream <a class="reference external" href="https://github.com/lucasdavid/keras-explainable">repository</a>.
+The command <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">describe</span> <span class="pre">--abbrev=0</span> <span class="pre">--tags</span></code> should return the version you
+are expecting. If you are trying to run CI scripts in a fork repository,
+make sure to push all the tags.
+You can also try to remove all the egg files or the complete egg folder, i.e.,
+<code class="docutils literal notranslate"><span class="pre">.eggs</span></code>, as well as the <code class="docutils literal notranslate"><span class="pre">*.egg-info</span></code> folders in the <code class="docutils literal notranslate"><span class="pre">src</span></code> folder or
+potentially in the root of your project.</p></li>
+<li><p>Sometimes <a class="reference external" href="https://tox.wiki/en/stable/"><code class="docutils literal notranslate"><span class="pre">tox</span></code></a> misses out when new dependencies are added, especially to
+<code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> and <code class="docutils literal notranslate"><span class="pre">docs/requirements.txt</span></code>. If you find any problems with
+missing dependencies when running a command with <a class="reference external" href="https://tox.wiki/en/stable/"><code class="docutils literal notranslate"><span class="pre">tox</span></code></a>, try to recreate the
+<code class="docutils literal notranslate"><span class="pre">tox</span></code> environment using the <code class="docutils literal notranslate"><span class="pre">-r</span></code> flag. For example, instead of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tox</span> <span class="o">-</span><span class="n">e</span> <span class="n">docs</span>
+</pre></div>
+</div>
+<p>Try running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tox</span> <span class="o">-</span><span class="n">r</span> <span class="o">-</span><span class="n">e</span> <span class="n">docs</span>
+</pre></div>
+</div>
+</li>
+<li><p>Make sure to have a reliable <a class="reference external" href="https://tox.wiki/en/stable/"><code class="docutils literal notranslate"><span class="pre">tox</span></code></a> installation that uses the correct
+Python version (e.g., 3.7+). When in doubt you can run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tox</span> <span class="o">--</span><span class="n">version</span>
+<span class="c1"># OR</span>
+<span class="n">which</span> <span class="n">tox</span>
+</pre></div>
+</div>
+<p>If you have trouble and are seeing weird errors upon running <a class="reference external" href="https://tox.wiki/en/stable/"><code class="docutils literal notranslate"><span class="pre">tox</span></code></a>, you can
+also try to create a dedicated <a class="reference external" href="https://realpython.com/python-virtual-environments-a-primer/">virtual environment</a> with a <a class="reference external" href="https://tox.wiki/en/stable/"><code class="docutils literal notranslate"><span class="pre">tox</span></code></a> binary
+freshly installed. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="o">.</span><span class="n">venv</span>
+<span class="n">source</span> <span class="o">.</span><span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+<span class="o">.</span><span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">pip</span> <span class="n">install</span> <span class="n">tox</span>
+<span class="o">.</span><span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">tox</span> <span class="o">-</span><span class="n">e</span> <span class="nb">all</span>
+</pre></div>
+</div>
+</li>
+<li><p><a class="reference external" href="https://docs.pytest.org/en/stable/how-to/failures.html#using-python-library-pdb-with-pytest">Pytest can drop you</a> in an interactive session in the case an error occurs.
+In order to do that you need to pass a <code class="docutils literal notranslate"><span class="pre">--pdb</span></code> option (for example by
+running <code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">--</span> <span class="pre">-k</span> <span class="pre">&lt;NAME</span> <span class="pre">OF</span> <span class="pre">THE</span> <span class="pre">FALLING</span> <span class="pre">TEST&gt;</span> <span class="pre">--pdb</span></code>).
+You can also setup breakpoints manually instead of using the <code class="docutils literal notranslate"><span class="pre">--pdb</span></code> option.</p></li>
+</ol>
+</section>
+</section>
+<section id="maintainer-tasks">
+<h2>Maintainer tasks<a class="headerlink" href="#maintainer-tasks" title="Permalink to this headline">#</a></h2>
+<section id="releases">
+<h3>Releases<a class="headerlink" href="#releases" title="Permalink to this headline">#</a></h3>
+<p>If you are part of the group of maintainers and have correct user permissions
+on <a class="reference external" href="https://pypi.org/">PyPI</a>, the following steps can be used to release a new version for
+<code class="docutils literal notranslate"><span class="pre">keras-explainable</span></code>:</p>
+<ol class="arabic simple">
+<li><p>Make sure all unit tests are successful.</p></li>
+<li><p>Tag the current commit on the main branch with a release tag, e.g., <code class="docutils literal notranslate"><span class="pre">v1.2.3</span></code>.</p></li>
+<li><p>Push the new tag to the upstream <a class="reference external" href="https://github.com/lucasdavid/keras-explainable">repository</a>, e.g., <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">upstream</span> <span class="pre">v1.2.3</span></code></p></li>
+<li><p>Clean up the <code class="docutils literal notranslate"><span class="pre">dist</span></code> and <code class="docutils literal notranslate"><span class="pre">build</span></code> folders with <code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">clean</span></code>
+(or <code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-rf</span> <span class="pre">dist</span> <span class="pre">build</span></code>)
+to avoid confusion with old builds and Sphinx docs.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">build</span></code> and check that the files in <code class="docutils literal notranslate"><span class="pre">dist</span></code> have
+the correct version (no <code class="docutils literal notranslate"><span class="pre">.dirty</span></code> or <a class="reference external" href="https://git-scm.com">git</a> hash) according to the <a class="reference external" href="https://git-scm.com">git</a> tag.
+Also check the sizes of the distributions, if they are too big (e.g., &gt;
+500KB), unwanted clutter may have been accidentally included.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">publish</span> <span class="pre">--</span> <span class="pre">--repository</span> <span class="pre">pypi</span></code> and check that everything was
+uploaded to <a class="reference external" href="https://pypi.org/">PyPI</a> correctly.</p></li>
+</ol>
+<dl class="footnote brackets">
+<dt class="label" id="contrib1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Even though, these resources focus on open source projects and
+communities, the general ideas behind collaborating with other developers
+to collectively create software are general and can be applied to all sorts
+of environments, including private companies and proprietary code bases.</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="wsol.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Weakly Supervised Object Localization</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="license.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">License</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+      &copy; Copyright 2022, Lucas David.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,77 @@
+.jupyter_container {
+  background-color: transparent !important;
+  border: none !important;
+  margin: .85rem 0 !important;
+
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.code_cell {
+  border: none !important;
+  background-color: transparent !important;
+  border-radius: 0 !important;
+}
+
+.highlight {
+}
+
+.highlight>pre {
+  background-color: #f7f7f7!important;
+
+  padding: 1.25em !important;
+  margin: .85rem 0 !important;
+
+  border: none !important;
+  border-radius: 0 !important;
+
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.dataframe {
+  border: none !important;
+}
+
+input[type="text"] {
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+input[type="text"]:focus {
+  border-color: #007daf;
+  box-shadow: 0 0 0 3px rgba(54, 198, 255, .25);
+}
+
+.function>dt,
+.method>dt {
+  overflow-x: auto;
+}
+
+table {
+  color: #666;
+  border: #eee 1px solid;
+  width: 100%;
+}
+
+table th {
+  border: 0;
+  padding: 0.2em;
+}
+
+table td {
+  text-align: right;
+  border: #efefef 1px solid;
+  padding: 0.2em;
+}

@@ -1,0 +1,504 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>keras_explainable.methods.gradient &#8212; Keras Explainable</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/thebelab-helper.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Keras Explainable</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../readme.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../explaining.html">
+   Explaining
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../methods/index.html">
+   Methods
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../methods/saliency/gradients.html">
+     Gradient Back-propagation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../methods/saliency/smoothgrad.html">
+     Smooth-Grad
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../methods/saliency/fullgrad.html">
+     Full-Grad
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../methods/cams/gradcam.html">
+     Grad-CAM
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../methods/cams/tta_gradcam.html">
+     TTA Grad-CAM
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../wsol.html">
+   WSSL
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../contributing.html">
+   Contributions &amp; Help
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../license.html">
+   License
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../api/modules.html">
+   Module Reference
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../api/keras_explainable.html">
+     keras_explainable package
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/keras_explainable.engine.html">
+       keras_explainable.engine package
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/keras_explainable.methods.html">
+       keras_explainable.methods package
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+<a href="https://github.com/lucasdavid/keras-explainable"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="bottom"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for keras_explainable.methods.gradient</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+
+<span class="kn">from</span> <span class="nn">keras_explainable</span> <span class="kn">import</span> <span class="n">filters</span>
+<span class="kn">from</span> <span class="nn">keras_explainable</span> <span class="kn">import</span> <span class="n">inspection</span>
+<span class="kn">from</span> <span class="nn">keras_explainable.inspection</span> <span class="kn">import</span> <span class="n">KERNEL_AXIS</span>
+<span class="kn">from</span> <span class="nn">keras_explainable.inspection</span> <span class="kn">import</span> <span class="n">SPATIAL_AXIS</span>
+<span class="kn">from</span> <span class="nn">keras_explainable.methods</span> <span class="kn">import</span> <span class="n">autodocs</span>
+
+<span class="n">_GRAD_DOCS</span> <span class="o">=</span> <span class="n">autodocs</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+    <span class="s2">&quot;Gradient Back-propagation&quot;</span><span class="p">,</span>
+    <span class="n">more_args</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        gradient_filter (Callable, optional): filter before</span>
+<span class="s2">            channel combining. Defaults to tf.abs.</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
+    <span class="n">references</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        - Simonyan, K., Vedaldi, A., &amp; Zisserman, A. (2013).</span>
+<span class="s2">            Deep inside convolutional networks: Visualising image classification</span>
+<span class="s2">            models and saliency maps. arXiv preprint arXiv:1312.6034.&quot;&quot;&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">_FULLGRAD_DOCS</span> <span class="o">=</span> <span class="n">autodocs</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+    <span class="s2">&quot;Full Gradients&quot;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    As described in the article &quot;Full-Gradient Representation for Neural</span>
+<span class="s2">    Network Visualization&quot;, Full-Gradient can be summarized in the following</span>
+<span class="s2">    equation:</span>
+
+<span class="s2">    .. math::</span>
+
+<span class="s2">      f(x) = ψ(∇_xf(x)</span><span class="se">\\</span><span class="s2">odot x) +∑_{l</span><span class="se">\\</span><span class="s2">in L}∑_{c</span><span class="se">\\</span><span class="s2">in c_l} ψ(f^b(x)_c)</span>
+
+<span class="s2">    This approach main idea is to add to add the individual contributions of</span>
+<span class="s2">    each bias factor in the network onto the extracted gradient.</span>
+
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
+    <span class="n">more_args</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        psi (Callable, optional): filter operation before combining the intermediate</span>
+<span class="s2">            signals. Defaults to ``filters.absolute_normalize``.</span>
+<span class="s2">        biases: (List[tf.Tensor], optional): list of biases associated with each</span>
+<span class="s2">            intermediate signal exposed by the model. If none is passed, it will</span>
+<span class="s2">            be infered from the endpoints (nodes) outputed by the model.</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
+    <span class="n">references</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        - Srinivas S, Fleuret F. Full-gradient representation for neural network</span>
+<span class="s2">            visualization. `arxiv.org/1905.00780 &lt;https://arxiv.org/pdf/1905.00780.pdf&gt;`_,</span>
+<span class="s2">            2019.</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="transpose_jacobian"><a class="viewcode-back" href="../../../api/keras_explainable.methods.html#keras_explainable.methods.gradient.transpose_jacobian">[docs]</a><span class="k">def</span> <span class="nf">transpose_jacobian</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">spatial_rank</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">SPATIAL_AXIS</span><span class="p">)</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Transpose the Jacobian of shape (bj...) into (b...j).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (tf.Tensor): the jacobian tensor.</span>
+<span class="sd">        spatial_rank (Tuple[int], optional): the spatial rank of ``x``.</span>
+<span class="sd">            Defaults to ``len(SPATIAL_AXIS)``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tf.Tensor: the transposed jacobian.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span> <span class="o">+</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">spatial_rank</span><span class="p">)]</span>
+
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">dims</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="gradients"><a class="viewcode-back" href="../../../api/keras_explainable.methods.html#keras_explainable.methods.gradient.gradients">[docs]</a><span class="k">def</span> <span class="nf">gradients</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span>
+    <span class="n">inputs</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">indices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">indices_axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">KERNEL_AXIS</span><span class="p">,</span>
+    <span class="n">indices_batch_dims</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">spatial_axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPATIAL_AXIS</span><span class="p">,</span>
+    <span class="n">gradient_filter</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">abs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+    <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{</span><span class="n">_GRAD_DOCS</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">GradientTape</span><span class="p">(</span><span class="n">watch_accessed_variables</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+        <span class="n">tape</span><span class="o">.</span><span class="n">watch</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="n">inspection</span><span class="o">.</span><span class="n">gather_units</span><span class="p">(</span>
+            <span class="n">logits</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">indices_axis</span><span class="p">,</span> <span class="n">indices_batch_dims</span>
+        <span class="p">)</span>
+
+    <span class="n">maps</span> <span class="o">=</span> <span class="n">tape</span><span class="o">.</span><span class="n">batch_jacobian</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+    <span class="n">maps</span> <span class="o">=</span> <span class="n">gradient_filter</span><span class="p">(</span><span class="n">maps</span><span class="p">)</span>
+    <span class="n">maps</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">maps</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">maps</span> <span class="o">=</span> <span class="n">transpose_jacobian</span><span class="p">(</span><span class="n">maps</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">spatial_axis</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">logits</span><span class="p">,</span> <span class="n">maps</span></div>
+
+
+<div class="viewcode-block" id="resized_psi_dfx"><a class="viewcode-back" href="../../../api/keras_explainable.methods.html#keras_explainable.methods.gradient.resized_psi_dfx">[docs]</a><span class="k">def</span> <span class="nf">resized_psi_dfx</span><span class="p">(</span>
+    <span class="n">inputs</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">outputs</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">sizes</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">psi</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">filters</span><span class="o">.</span><span class="n">absolute_normalize</span><span class="p">,</span>
+    <span class="n">spatial_axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPATIAL_AXIS</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Filter and resize intermediate gradient tensors.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        inputs (tf.Tensor): the input signal.</span>
+<span class="sd">        outputs (tf.Tensor): the output signal.</span>
+<span class="sd">        sizes (tf.Tensor): the expected sizes.</span>
+<span class="sd">        psi (Callable, optional): the filtering function. Defaults to</span>
+<span class="sd">            ``filters.absolute_normalize``.</span>
+<span class="sd">        spatial_axis (Tuple[int], optional): the spatial axes in the signal.</span>
+<span class="sd">            Defaults to ``SPATIAL_AXIS``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tf.Tensor: _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">outputs</span> <span class="o">*</span> <span class="n">inputs</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">psi</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">spatial_axis</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># t = transpose_jacobian(t, len(spatial_axis))</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">sizes</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">t</span></div>
+
+
+<div class="viewcode-block" id="full_gradients"><a class="viewcode-back" href="../../../api/keras_explainable.methods.html#keras_explainable.methods.gradient.full_gradients">[docs]</a><span class="k">def</span> <span class="nf">full_gradients</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span>
+    <span class="n">inputs</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">indices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">indices_axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">KERNEL_AXIS</span><span class="p">,</span>
+    <span class="n">indices_batch_dims</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">spatial_axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPATIAL_AXIS</span><span class="p">,</span>
+    <span class="n">psi</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">filters</span><span class="o">.</span><span class="n">absolute_normalize</span><span class="p">,</span>
+    <span class="n">biases</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{</span><span class="n">_FULLGRAD_DOCS</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+
+    <span class="n">shape</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">shape</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">spatial_axis</span><span class="p">]</span>
+
+    <span class="n">resized_psi_dfx_</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+        <span class="n">resized_psi_dfx</span><span class="p">,</span>
+        <span class="n">sizes</span><span class="o">=</span><span class="n">sizes</span><span class="p">,</span>
+        <span class="n">psi</span><span class="o">=</span><span class="n">psi</span><span class="p">,</span>
+        <span class="n">spatial_axis</span><span class="o">=</span><span class="n">spatial_axis</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">biases</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="o">*</span><span class="n">intermediates</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">_keras_history</span><span class="o">.</span><span class="n">layer</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">outputs</span><span class="p">)</span>
+        <span class="n">biases</span> <span class="o">=</span> <span class="n">inspection</span><span class="o">.</span><span class="n">biases</span><span class="p">(</span><span class="n">intermediates</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">GradientTape</span><span class="p">(</span><span class="n">watch_accessed_variables</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+        <span class="n">tape</span><span class="o">.</span><span class="n">watch</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+        <span class="n">logits</span><span class="p">,</span> <span class="o">*</span><span class="n">intermediates</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="n">inspection</span><span class="o">.</span><span class="n">gather_units</span><span class="p">(</span>
+            <span class="n">logits</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">indices_axis</span><span class="p">,</span> <span class="n">indices_batch_dims</span>
+        <span class="p">)</span>
+
+    <span class="n">grad_input</span><span class="p">,</span> <span class="o">*</span><span class="n">grad_inter</span> <span class="o">=</span> <span class="n">tape</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="p">[</span><span class="n">inputs</span><span class="p">,</span> <span class="o">*</span><span class="n">intermediates</span><span class="p">])</span>
+
+    <span class="n">maps</span> <span class="o">=</span> <span class="n">resized_psi_dfx_</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">grad_input</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">b</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">biases</span><span class="p">,</span> <span class="n">grad_inter</span><span class="p">):</span>
+        <span class="n">maps</span> <span class="o">+=</span> <span class="n">resized_psi_dfx_</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">logits</span><span class="p">,</span> <span class="n">maps</span></div>
+
+
+<span class="n">METHODS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">gradients</span><span class="p">,</span>
+    <span class="n">full_gradients</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+      &copy; Copyright 2022, Lucas David.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
