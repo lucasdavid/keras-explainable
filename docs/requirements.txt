@@ -5,3 +5,4 @@ sphinx>=3.2.1
 sphinx-book-theme
 jupyter-sphinx
 keras_explainable
+sphinx-autodoc-typehints

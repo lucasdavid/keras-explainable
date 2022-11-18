@@ -10,21 +10,9 @@ from keras_explainable import filters
 from keras_explainable import inspection
 from keras_explainable.inspection import KERNEL_AXIS
 from keras_explainable.inspection import SPATIAL_AXIS
-from keras_explainable.methods import autodocs
+from keras_explainable.methods import documentation
 
-_GRAD_DOCS = autodocs.generate(
-    "Gradient Back-propagation",
-    more_args="""
-        gradient_filter (Callable, optional): filter before
-            channel combining. Defaults to tf.abs.
-    """,
-    references="""
-        - Simonyan, K., Vedaldi, A., & Zisserman, A. (2013).
-            Deep inside convolutional networks: Visualising image classification
-            models and saliency maps. arXiv preprint arXiv:1312.6034.""",
-)
-
-_FULLGRAD_DOCS = autodocs.generate(
+_FULLGRAD_DOCS = documentation.generate(
     "Full Gradients",
     description="""
     As described in the article "Full-Gradient Representation for Neural
@@ -57,7 +45,7 @@ _FULLGRAD_DOCS = autodocs.generate(
 def transpose_jacobian(
     x: tf.Tensor, spatial_rank: Tuple[int] = len(SPATIAL_AXIS)
 ) -> tf.Tensor:
-    """Transpose the Jacobian of shape (bj...) into (b...j).
+    """Transpose the Jacobian of shape (b,g,...) into (b,...,g).
 
     Args:
         x (tf.Tensor): the jacobian tensor.
@@ -81,8 +69,42 @@ def gradients(
     spatial_axis: Tuple[int] = SPATIAL_AXIS,
     gradient_filter: Callable = tf.abs,
 ) -> Tuple[tf.Tensor, tf.Tensor]:
-    f"""{_GRAD_DOCS}"""
+    """Computes the Gradient Back-propagation Visualization Method.
 
+    This method expects `inputs` to be a batch of positional signals of
+    shape ``BHW...C``, and will return a tensor of shape ``BH'W'...L``,
+    where ``(H', W', ...)`` are the sizes of the visual receptive field
+    in the explained activation layer and `L` is the number of labels
+    represented within the model's output logits.
+
+    If `indices` is passed, the specific logits indexed by elements in this
+    tensor are selected before the gradients are computed, effectivelly
+    reducing the columns in the jacobian, and the size of the output explaining map.
+
+    Args:
+        model (tf.keras.Model): the model being explained
+        inputs (tf.Tensor): the input data
+        indices (Optional[tf.Tensor], optional): indices that should be gathered
+            from ``outputs``. Defaults to None.
+        indices_axis (int, optional): the axis containing the indices to gather.
+            Defaults to ``KERNEL_AXIS``.
+        indices_batch_dims (int, optional): the number of dimensions to broadcast
+            in the ``tf.gather`` operation. Defaults to ``-1``.
+        spatial_axis (Tuple[int], optional): the dimensions containing positional
+            information. Defaults to ``SPATIAL_AXIS``.
+        gradient_filter (Callable, optional): filter before channel combining.
+            Defaults to tf.abs.
+
+    Returns:
+        Tuple[tf.Tensor, tf.Tensor]: the logits and saliency maps.
+
+    References:
+
+        - Simonyan, K., Vedaldi, A., & Zisserman, A. (2013).
+            Deep inside convolutional networks: Visualising image classification
+            models and saliency maps. arXiv preprint arXiv:1312.6034.
+
+    """
     with tf.GradientTape(watch_accessed_variables=False) as tape:
         tape.watch(inputs)
         logits = model(inputs, training=False)

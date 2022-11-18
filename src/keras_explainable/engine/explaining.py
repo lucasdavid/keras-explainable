@@ -136,6 +136,7 @@ def make_data_handler(
         steps_per_execution=model._steps_per_execution,
     )
 
+
 def explain(
     method: Callable,
     model: tf.keras.Model,
@@ -180,7 +181,7 @@ def explain(
         force (bool, optional): to force the creation of the explaining function.
             Can be set to False if the same function is always applied to a model,
             avoiding retracing. Defaults to True.
-    
+
     Besides the parameters described above, any named parameters passed to this function
     will be collected into ``methods_params`` and passed onto the :func:`explain_step`
     and ``method`` functions. Common ones are:
@@ -288,6 +289,7 @@ def partial_explain(method: Callable, **default_params):
     Args:
         method (Callable): the explaining method being wrapped by ``explain``.
     """
+
     def _partial_method_explain(*args, **params):
         params = {**default_params, **params}
         return explain(method, *args, **params)

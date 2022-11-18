@@ -51,7 +51,7 @@ def get_nested_layer(
           Nested layers are separated by "."
 
     Example:
-    
+
     .. code-block:: python
 
         model = tf.keras.Sequential([
@@ -150,10 +150,9 @@ def find_layer_with(
     if name is not None:
         return get_nested_layer(model, name)
 
-    layers = model.layers
+    layers = model._flatten_layers(include_self=False)
     if search_reversed:
-        layers = reversed(layers)
-
+        layers = reversed(list(layers))
     for layer in layers:
         if klass and not isinstance(layer, klass):
             continue

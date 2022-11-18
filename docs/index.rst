@@ -10,7 +10,7 @@ Contents
    Overview <readme>
    Explaining <explaining>
    Methods <methods/index>
-   WSSL <wsol>
+   WSSL & WSSS <wsol>
    Contributions & Help <contributing>
    License <license>
    Authors <authors>

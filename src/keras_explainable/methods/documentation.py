@@ -61,3 +61,31 @@ def generate(
         map_type=map_type,
         **kwargs,
     )
+
+
+def docstring(
+    method,
+    lead="",
+    description="",
+    more_args="",
+    references="",
+    map_type="saliency",
+    inputs_descr=True,
+    **kwargs,
+):
+    docstring = generate(
+        method,
+        lead,
+        description,
+        more_args,
+        references,
+        map_type,
+        inputs_descr,
+        **kwargs,
+    )
+
+    def wrapper(func):
+        func.__doc___ = docstring
+        return func
+
+    return wrapper
