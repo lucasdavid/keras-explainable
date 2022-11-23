@@ -2,6 +2,12 @@
 keras Explainable
 =================
 
+.. |Travis build| image:: https://img.shields.io/travis/lucasdavid/keras-explainable?style=for-the-badge
+  :target: https://app.travis-ci.com/github/lucasdavid/keras-explainable
+
+.. |Documentation| image:: https://img.shields.io/badge/docs-0.0.1-blue
+  :target: https://lucasdavid.github.io/keras-explainable
+
 Efficient explaining AI algorithms for Keras models.
 
 .. image:: _static/images/cover.jpg
@@ -34,15 +40,19 @@ example:
 Implemented Explaining Methods
 ------------------------------
 
-Gradient-based Explaining Methods:
+.. table::
+   :widths: auto
+   :align: left
 
-- Gradient Back-propagation
-- FullGrad
-- Smooth-Grad
-
-CAM-Based Visualization Methods:
-
-- CAM
-- Grad-CAM
-- Grad-CAM++
-- Score-CAM
+   ===========================  =========  ========================================================================================
+   Method                       Kind       Reference                                                                                
+   ===========================  =========  ========================================================================================
+   Gradient Back-propagation    gradient   `paper <https://arxiv.org/abs/1312.6034>`_                                                
+   FullGrad                     gradient   `paper <https://arxiv.org/abs/1905.00780>`_                                               
+   CAM                          CAM        `paper <https://arxiv.org/abs/1512.04150>`_                                               
+   Grad-CAM                     CAM        `paper <https://arxiv.org/abs/1610.02391>`_                                               
+   Grad-CAM++                   CAM        `paper <https://arxiv.org/abs/1710.11063>`_                                               
+   Score-CAM                    CAM        `paper <https://arxiv.org/abs/1910.01279>`_                                               
+   SmoothGrad                   Meta       `paper <https://arxiv.org/abs/1706.03825>`_                                               
+   TTA                          Meta       `paper <https://journalofbigdata.springeropen.com/articles/10.1186/s40537-019-0197-0/>`_  
+   ===========================  =========  ========================================================================================

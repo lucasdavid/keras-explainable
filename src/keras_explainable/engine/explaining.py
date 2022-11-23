@@ -168,7 +168,7 @@ def explain(
         verbose (Union[str, int], optional): wether to show a progress bar during
             the calculation of the explaining maps. Defaults to "auto".
         steps (Optional[int], optional): the number of steps, if ``x`` is a
-        ``tf.data.Dataset`` of unknown cardinallity. Defaults to None.
+          ``tf.data.Dataset`` of unknown cardinallity. Defaults to None.
         callbacks (List[Callback], optional): list of callbacks called during the
             explaining procedure. Defaults to None.
         max_queue_size (int, optional): the queue size when retrieving inputs.
@@ -186,15 +186,15 @@ def explain(
     will be collected into ``methods_params`` and passed onto the :func:`explain_step`
     and ``method`` functions. Common ones are:
 
-        indices_batch_dims (int): The dimensions marked as ``batch`` when gathering
-            units described by ``y``. Ignore if ``y`` is None.
-        indices_axis: The axes from which to gather units described by ``y``.
-            Ignore if ``y`` is None.
-        spatial_axis: The axes containing the positional visual info. We assume `inputs`
-            to contain 2D images or videos in the shape `(B1, B2, ..., BN, H, W, 3)`.
-            For 3D image data, set `spatial_axis` to `(1, 2, 3)` or `(-4, -3, -2)`.
-        postprocessing: A function to process the activation maps before normalization
-            (most commonly adopted being `maximum(x, 0)` and `abs`).
+    - indices_batch_dims (int): The dimensions marked as ``batch`` when gathering
+      units described by ``y``. Ignore if ``y`` is None.
+    - indices_axis: The axes from which to gather units described by ``y``.
+      Ignore if ``y`` is None.
+    - spatial_axis: The axes containing the positional visual info. We assume `inputs`
+      to contain 2D images or videos in the shape `(B1, B2, ..., BN, H, W, 3)`.
+      For 3D image data, set `spatial_axis` to `(1, 2, 3)` or `(-4, -3, -2)`.
+    - postprocessing: A function to process the activation maps before normalization
+      (most commonly adopted being `maximum(x, 0)` and `abs`).
 
     Raises:
         ValueError: the explaining method produced in an unexpected.

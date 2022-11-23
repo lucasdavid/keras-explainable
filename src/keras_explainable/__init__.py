@@ -1,3 +1,8 @@
+"""Keras Explainable Library.
+
+Efficient explaining AI algorithms for Keras models.
+"""
+
 import sys
 
 from keras_explainable import filters
@@ -25,47 +30,47 @@ except PackageNotFoundError:  # pragma: no cover
 finally:
     del version, PackageNotFoundError
 
-_SHORTCUTS_DOCS = """Shortcut for ``{method}``,
-filtering {filter} contributing regions
-"""
-
-f"""{_SHORTCUTS_DOCS.format(method='methods.cams.cam', filter='positively',)}"""
 cam = partial_explain(
     methods.cams.cam, postprocessing=filters.positive_normalize
 )
+"""Shortcut for :py:func:`methods.cams.cam`,
+filtering positively contributing regions"""
 
-f"""{_SHORTCUTS_DOCS.format(method='methods.cams.gradcam', filter='positively',)}"""
 gradcam = partial_explain(
     methods.cams.gradcam, postprocessing=filters.positive_normalize
 )
+"""Shortcut for :py:func:`methods.cams.gradcam`,
+filtering positively contributing regions"""
 
-f"""{_SHORTCUTS_DOCS.format(method='methods.cams.gradcampp', filter='positively',)}"""
 gradcampp = partial_explain(
     methods.cams.gradcampp, postprocessing=filters.positive_normalize
 )
+"""Shortcut for :py:func:`methods.cams.gradcampp`,
+filtering positively contributing regions"""
 
-f"""{_SHORTCUTS_DOCS.format(method='methods.cams.scorecam', filter='positively',)}"""
 scorecam = partial_explain(
     methods.cams.scorecam,
     postprocessing=filters.positive_normalize,
     resizing=False,
 )
+"""Shortcut for :py:func:`methods.cams.scorecam`,
+filtering positively contributing regions"""
 
-f"""{_SHORTCUTS_DOCS.format(method='methods.gradient.gradients', filter='absolutely',)}"""
 gradients = partial_explain(
     methods.gradient.gradients,
     postprocessing=filters.normalize,
     resizing=False,
 )
+"""Shortcut for :py:func:`methods.gradient.gradients`,
+filtering absolutely contributing regions"""
 
-f"""{_SHORTCUTS_DOCS.format(
-    method='methods.gradient.full_gradients', filter='absolutely',
-)}"""
 full_gradients = partial_explain(
     methods.gradient.full_gradients,
     postprocessing=filters.normalize,
     resizing=False,
 )
+"""Shortcut for :py:func:`methods.gradient.full_gradients`,
+filtering absolutely contributing regions"""
 
 __all__ = [
     "methods",

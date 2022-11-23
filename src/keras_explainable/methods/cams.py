@@ -34,7 +34,7 @@ def cam(
 
     If ``indices`` is passed, the specific logits indexed by elements in
     this tensor are selected before the gradients are computed,
-    effectivelly reducing the columns in the jacobian, and the size of
+    effectively reducing the columns in the jacobian, and the size of
     the output explaining map.
 
     Usage:
@@ -74,10 +74,10 @@ def cam(
 
     References:
         - Zhou, B., Khosla, A., Lapedriza, A., Oliva, A., & Torralba, A. (2016).
-            Learning deep features for discriminative localization. In Proceedings
-            of the IEEE conference on computer vision and pattern
-            recognition (pp. 2921-2929). Available at:
-            `arxiv/1512.04150 <https://arxiv.org/pdf/1512.04150.pdf>`_.
+          Learning deep features for discriminative localization. In Proceedings
+          of the IEEE conference on computer vision and pattern
+          recognition (pp. 2921-2929). Available at:
+          `arxiv/1512.04150 <https://arxiv.org/pdf/1512.04150.pdf>`_.
 
     """
     logits, activations = model(inputs, training=False)
@@ -113,7 +113,7 @@ def gradcam(
     represented within the model's output logits.
 
     If `indices` is passed, the specific logits indexed by elements in this
-    tensor are selected before the gradients are computed, effectivelly
+    tensor are selected before the gradients are computed, effectively
     reducing the columns in the jacobian, and the size of the output explaining map.
 
     Args:
@@ -133,9 +133,10 @@ def gradcam(
 
     References:
         - Selvaraju, R. R., Cogswell, M., Das, A., Vedantam, R., Parikh, D., & Batra, D.
-            (2017). Grad-cam: Visual explanations from deep networks via gradient-based
-            localization. In Proceedings of the IEEE international conference on computer
-            vision (pp. 618-626).
+          (2017). Grad-CAM: Visual explanations from deep networks via gradient-based
+          localization. In Proceedings of the IEEE international conference on computer
+          vision (pp. 618-626).
+          Available at: `arxiv/1610.02391 <https://arxiv.org/abs/1610.02391>`_.
 
     """
     with tf.GradientTape(watch_accessed_variables=False) as tape:
@@ -167,7 +168,7 @@ def gradcampp(
     represented within the model's output logits.
 
     If `indices` is passed, the specific logits indexed by elements in this
-    tensor are selected before the gradients are computed, effectivelly
+    tensor are selected before the gradients are computed, effectively
     reducing the columns in the jacobian, and the size of the output explaining map.
 
     Args:
@@ -187,11 +188,11 @@ def gradcampp(
 
     References:
         - Chattopadhay, A., Sarkar, A., Howlader, P., & Balasubramanian, V. N.
-            (2018, March). Grad-cam++: Generalized gradient-based visual explanations
-            for deep convolutional networks. In 2018 IEEE winter conference on
-            applications of computer vision (WACV) (pp. 839-847). IEEE.
+          (2018, March). Grad-cam++: Generalized gradient-based visual explanations
+          for deep convolutional networks. In 2018 IEEE winter conference on
+          applications of computer vision (WACV) (pp. 839-847). IEEE.
         - Grad-CAM++'s official implementation. Github. Available at:
-            `adityac94/Grad-CAM++ <github.com/adityac94/Grad_CAM_plus_plus>`_
+          `adityac94/Grad-CAM++ <github.com/adityac94/Grad_CAM_plus_plus>`_
 
     """
     with tf.GradientTape(watch_accessed_variables=False) as tape:
@@ -240,7 +241,7 @@ def scorecam(
     represented within the model's output logits.
 
     If `indices` is passed, the specific logits indexed by elements in this
-    tensor are selected before the gradients are computed, effectivelly
+    tensor are selected before the gradients are computed, effectively
     reducing the columns in the jacobian, and the size of the output explaining map.
 
     Args:
@@ -259,8 +260,9 @@ def scorecam(
         Tuple[tf.Tensor, tf.Tensor]: the logits and Class Activation Maps (CAMs).
 
     References:
-        - Score-CAM: Score-Weighted Visual Explanations for Convolutional Neural Networks.
-            Available at: `arxiv/1910.01279 <https://arxiv.org/abs/1910.01279>`_
+        - Score-CAM: Score-Weighted Visual Explanations for Convolutional
+          Neural Networks. Available at:
+          `arxiv/1910.01279 <https://arxiv.org/abs/1910.01279>`_
 
     """
     scores, activations = model(inputs, training=False)
@@ -286,7 +288,12 @@ def scorecam(
     return scores, maps
 
 
-METHODS = [cam, gradcam, gradcampp, scorecam]
+METHODS = [
+    cam,
+    gradcam,
+    gradcampp,
+    scorecam,
+]
 """Available CAM-based AI Explaining methods.
 
 This list contains all available methods implemented in this module,

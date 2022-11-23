@@ -9,6 +9,7 @@ Contents
 
    Overview <readme>
    Explaining <explaining>
+   Exposure <exposure>
    Methods <methods/index>
    WSSL & WSSS <wsol>
    Contributions & Help <contributing>

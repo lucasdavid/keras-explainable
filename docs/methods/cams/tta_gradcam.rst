@@ -24,8 +24,6 @@ template snippet:
   )
   _, cams = ke.explain(tta_gradcam, model, inputs)
 
-We describe bellow these lines in detail.
-
 .. jupyter-execute::
   :hide-code:
   :hide-output:
@@ -40,56 +38,58 @@ We describe bellow these lines in detail.
 
   SOURCE_DIRECTORY = 'docs/_static/images/singleton/'
   SAMPLES = 8
-  SIZES = (299, 299)
+  SIZES = (224, 224)
 
   file_names = os.listdir(SOURCE_DIRECTORY)
   image_paths = [os.path.join(SOURCE_DIRECTORY, f) for f in file_names if f != '_links.txt']
   images = np.stack([img_to_array(load_img(ip).resize(SIZES)) for ip in image_paths])
   images = images.astype("uint8")[:SAMPLES]
 
-Firstly, we employ the :py:class:`ResNet101` network pre-trained over the
+We describe bellow these lines in detail.
+
+Firstly, we employ the :class:`ResNet50V2` network pre-trained over the
 ImageNet dataset:
 
 .. jupyter-execute::
 
-  WEIGHTS = 'imagenet'
+  input_tensor = tf.keras.Input(shape=(None, None, 3), name='inputs')
 
-  input_tensor = tf.keras.Input(shape=(*SIZES, 3), name='inputs')
-
-  rn101 = tf.keras.applications.ResNet101V2(
+  rn50 = tf.keras.applications.ResNet50V2(
     input_tensor=input_tensor,
     classifier_activation=None,
-    weights=WEIGHTS
+    weights='imagenet',
   )
 
-  print(f'ResNet101 with {WEIGHTS} pre-trained weights loaded.')
-  print(f"Spatial map sizes: {rn101.get_layer('avg_pool').input.shape}")
+  print(f'ResNet50 pretrained over ImageNet was loaded.')
+  print(f"Spatial map sizes: {rn50.get_layer('avg_pool').input.shape}")
 
-We can feed-foward the samples once and get the predicted classes for each sample.
-Besides making sure the model is outputing the expected classes, this step is
-required in order to determine the most activating units in the *logits* layer,
-which improves performance of the explaining methods.
+We can feed-forward the samples once and get the predicted classes for each
+sample. Besides making sure the model is outputting the expected classes,
+this step is required in order to determine the most activating units in the
+*logits* layer, which improves performance of the explaining methods.
 
 .. jupyter-execute::
 
-  prec = tf.keras.applications.resnet_v2.preprocess_input
+  from tensorflow.keras.applications.imagenet_utils import preprocess_input
 
-  inputs = prec(images.astype("float").copy())
-  logits = rn101.predict(inputs, verbose=0)
+  inputs = preprocess_input(images.astype("float").copy(), mode="torch")
+  logits = rn50.predict(inputs, verbose=0)
   indices = np.argsort(logits, axis=-1)[:, ::-1]
 
-  explaining_units = indices[:, :1]  # Firstmost likely classes.
+  explaining_units = indices[:, :1]  # First-most likely classes.
 
 .. jupyter-execute::
 
-  rn101_exposed = ke.inspection.expose(rn101)
+  rn50 = ke.inspection.expose(rn50)
 
   tta_gradcam = ke.methods.meta.tta(
     ke.methods.cams.gradcam,
     scales=[0.5, 1.0, 1.5, 2.],
     hflip=True
   )
-  _, cams = ke.explain(tta_gradcam, rn101_exposed, inputs, explaining_units)
+  _, cams = ke.explain(
+    tta_gradcam, rn50, inputs, explaining_units, batch_size=1
+  )
 
   ke.utils.visualize(
     images,

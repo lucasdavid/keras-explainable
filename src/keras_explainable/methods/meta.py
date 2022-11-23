@@ -35,14 +35,15 @@ def smooth(
         **params,
     ):
         logits, maps = method(model, inputs, *args, **params)
+        shape = tf.concat(([repetitions-1], tf.shape(inputs)), axis=0)
+
+        noisy_inputs = inputs + tf.random.normal(
+            shape, 0, noise, dtype=inputs.dtype
+        )
 
         with tf.control_dependencies([logits, maps]):
-            shape = tf.shape(inputs)
-
-            for step in tf.range(repetitions):
-                batch_inputs = inputs + tf.random.normal(
-                    shape, 0, noise, inputs.dtype
-                )
+            for step in tf.range(repetitions - 1):
+                batch_inputs = noisy_inputs[step]
                 batch_logits, batch_maps = method(
                     model, batch_inputs, *args, **params
                 )

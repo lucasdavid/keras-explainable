@@ -19,6 +19,7 @@ from keras.layers.normalization.layer_normalization import LayerNormalization
 from keras.layers.pooling.base_global_pooling1d import GlobalPooling1D
 from keras.layers.pooling.base_global_pooling2d import GlobalPooling2D
 from keras.layers.pooling.base_global_pooling3d import GlobalPooling3D
+from keras.layers.reshaping.flatten import Flatten
 
 from keras_explainable.utils import tolist
 
@@ -33,6 +34,7 @@ NORMALIZATION_LAYERS = (
 )
 
 POOLING_LAYERS = (
+    Flatten,
     GlobalPooling1D,
     GlobalPooling2D,
     GlobalPooling3D,
@@ -41,14 +43,15 @@ POOLING_LAYERS = (
 
 def get_nested_layer(
     model: Model,
-    name: str,
+    name: Union[str, List[str]],
 ) -> Layer:
     """Retrieve a nested layer in the model.
 
     Args:
         model (Model): the model containing the nested layer.
-        name (str): the descriptor of the nested layer.
-          Nested layers are separated by "."
+        name (Union[str, List[str]]): a string (or list of string) containing
+            the name of the layer (or a list of names, each of which references
+            a recursively nested module up to the layer of interest).
 
     Example:
 
@@ -59,15 +62,15 @@ def get_nested_layer(
             tf.keras.layers.Dense(10, activation='softmax', name='predictions')
         ])
 
-        pooling_layer = get_nested_layer(model, 'resnet101v2.avg_pool')
+        pooling_layer = get_nested_layer(model, ('resnet101v2', 'avg_pool'))
 
     Raises:
-        ValueError: if `name` is not a nested member of `model`.
+        ValueError: if ``name`` is not a nested member of ``model``.
 
     Returns:
         tf.keras.layer.Layer: the retrieved layer.
     """
-    for n in name.split("."):
+    for n in tolist(name):
         model = model.get_layer(n)
 
     return model
@@ -162,9 +165,9 @@ def find_layer_with(
         return layer  # `layer` matches all conditions.
 
     raise ValueError(
-        "A valid layer couldn't be inferred from the name=`{name}`, "
-        "klass=`{klass}` and properties=`{properties}`. Make sure these "
-        "attributes correctly reflect a layer in the model."
+        f"A valid layer couldn't be inferred from the name=`{name}`, "
+        f"klass=`{klass}` and properties=`{properties}`. Make sure these "
+        f"attributes correctly reflect a layer in the model."
     )
 
 
@@ -206,7 +209,10 @@ def endpoints(model: Model, endpoints: List[E]) -> List[KerasTensor]:
             layer = get_nested_layer(model, ep["name"])
 
         link = ep.get("link", "output")
-        node = ep.get("node", 0)
+        node = ep.get("node", "last")
+
+        if node == "last":
+            node = len(layer._inbound_nodes) - 1
 
         endpoint = (
             layer.get_input_at(node)
@@ -230,27 +236,28 @@ def expose(
     Args:
         model (Model): The model being explained.
         arguments (Optional[E], optional): Name of the argument layer/tensor in
-        the model. The jacobian of the output explaining units will be computed
-        with respect to the input signal of this layer. This argument can also
-        be an integer, a dictionary representing the intermediate signal or
-        the pooling layer itself. If None is passed, the penultimate layer
-        is assumed to be a GAP layer. Defaults to None.
+            the model. The jacobian of the output explaining units will be computed
+            with respect to the input signal of this layer. This argument can also
+            be an integer, a dictionary representing the intermediate signal or
+            the pooling layer itself. If None is passed, the penultimate layer
+            is assumed to be a GAP layer. Defaults to None.
         outputs (Optional[E], optional): Name of the output layer in the model.
-        The jacobian will be computed for the activation signal of units in this
-        layer. This argument can also be an integer, a dictionary representing
-        the output signal and the logits layer itself. If None is passed,
-        the last layer is assumed to be the logits layer.. Defaults to None.
+            The jacobian will be computed for the activation signal of units in this
+            layer. This argument can also be an integer, a dictionary representing
+            the output signal and the logits layer itself. If None is passed,
+            the last layer is assumed to be the logits layer. Defaults to None.
 
     Returns:
-        Model: the exposed model, whose outputs contain the intermediate
-          and output tensors.
+        Model: the exposed model, whose outputs contain the intermediate and
+        output tensors.
     """
     if outputs is None:
         outputs = get_logits_layer(model)
-    if isinstance(arguments, str):
+    if isinstance(arguments, (str, tuple)):
         arguments = {"name": arguments}
     if arguments is None:
-        arguments = {"layer": get_global_pooling_layer(model), "link": "input"}
+        gpl = get_global_pooling_layer(model)
+        arguments = {"layer": gpl, "link": "input"}
 
     outputs = tolist(outputs)
     arguments = tolist(arguments)
@@ -293,6 +300,18 @@ def layers_with_biases(
     exclude: Tuple[Layer] = (),
     return_biases: bool = True,
 ) -> List[Layer]:
+    """Extract layers containing biases from a model.
+
+    Args:
+        model (Model): the model inspected.
+        exclude (Tuple[Layer], optional): a list of layers to ignore. Defaults to ().
+        return_biases (bool, optional): wether or not to return the biases as well.
+            Defaults to True.
+
+    Returns:
+        List[Layer]: a list of layers.
+        List[Layer], List[tf.Tensor]: a list of layers and biases.
+    """
     layers = [
         layer
         for layer in model._flatten_layers(include_self=False)
@@ -315,10 +334,19 @@ def layers_with_biases(
 def biases(
     layers: List[Layer],
 ) -> List[tf.Tensor]:
-    """Retrieve all biases from a model.
+    """Recursively retrieve the biases from layers.
+
+    Layers containing implicit bias are unrolled before returned. For
+    instance, the Batch Normalization layer, whose equation is defined by
+    :math:`y(x) = \\frac{x - \\mu}{\\sigma} w + b`, will have bias equals to:
+
+    .. math::
+
+        \\frac{-\\mu w}{s} + b
 
     Args:
-        model (Model): the model being inspected.
+        layers (List[Layer]): a list of layers from which
+            biases should be extracted.
 
     Returns:
         List[tf.Tensor]: a list of all biases retrieved.

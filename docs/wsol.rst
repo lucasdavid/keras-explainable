@@ -37,26 +37,40 @@ trained over multi-label datasets in a weakly supervised setup.
       "dog horse motorbike person pottedplant sheep sofa train tvmonitor"
     ).split())
 
-  def pascal_voc_colors(classes):
-    colormap = np.zeros((256, 3), dtype=int)
-    ind = np.arange(256, dtype=int)
-    for shift in reversed(range(8)):
-      for channel in range(3):
-        colormap[:, channel] |= ((ind >> channel) & 1) << shift
-      ind >>= 3
+  def pascal_voc_colors():
+    return np.asarray([
+        [0, 0, 0],  # background
+        [128, 0, 0],
+        [0, 128, 0],
+        [128, 128, 0],
+        [0, 0, 128],
+        [128, 0, 128],
+        [0, 128, 128],
+        [128, 128, 128],
+        [64, 0, 0],
+        [192, 0, 0],
+        [64, 128, 0],
+        [192, 128, 0],
+        [64, 0, 128],
+        [192, 0, 128],
+        [64, 128, 128],
+        [192, 128, 128],
+        [0, 64, 0],
+        [128, 64, 0],
+        [0, 192, 0],
+        [128, 192, 0],
+        [0, 64, 128],
+        [224, 224, 192]  # void (contours, outline and padded regions)
+    ])
 
-    return np.concatenate((
-      colormap[:classes], colormap[255:]
-    ))
-
-Firstly, we employ the :py:class:`ResNet38-d` network pre-trained over the
+Firstly, we employ the :class:`ResNet38-d` network pre-trained over the
 Pascal VOC 2012 dataset:
 
 .. jupyter-execute::
 
-  WEIGHTS = 'voc2012'
+  COLORS = pascal_voc_colors()
   CLASSES = pascal_voc_classes()
-  COLORS = pascal_voc_colors(classes=len(CLASSES) + 1)
+  WEIGHTS = '/home/ldavid/workspace/models/rn38d-occse.h5'
 
   ! wget -q -nc https://raw.githubusercontent.com/lucasdavid/resnet38d-tf/main/resnet38d.py
 
@@ -87,7 +101,12 @@ Finally, we can simply run all available explaining methods:
 .. jupyter-execute::
 
   rn38d = ke.inspection.expose(rn38d, "s5/ac", 'avg_pool')
-  _, maps = ke.cam(rn38d, inputs)
+  tta_cam = ke.methods.meta.tta(
+    ke.methods.cams.cam,
+    scales=[0.5, 1.0, 1.5, 2.],
+    hflip=True
+  )
+  _, maps = ke.explain(tta_cam, rn38d, inputs, batch_size=1)
 
 Explaining maps can be converted into color maps,
 respecting the conventional Pascal color mapping:
@@ -107,6 +126,6 @@ respecting the conventional Pascal color mapping:
 
     return overlays
 
-  overlays = cams_to_colors(labels, maps, COLORS[:20])
+  overlays = cams_to_colors(labels, maps, COLORS[1:21])
 
   ke.utils.visualize(images, overlays=overlays, rows=2)

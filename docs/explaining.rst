@@ -2,25 +2,27 @@
 Explaining Model's Predictions
 ==============================
 
-This library has the function :py:func:`keras_explainable.explain` as core
+This library has the function :func:`~keras_explainable.explain` as core
 component, which is used to execute any AI explaining method and technique.
-
-Think of it as the :py:meth:`keras.Model#fit` or :py:meth:`keras.Model#predict`
+Think of it as the :meth:`keras.Model.fit` or :meth:`keras.Model.predict`
 loops of Keras' models, in which the execution graph of the operations
-contained in a model is compiled (conditioned to :py:attr:`Model.run_eagerly`
-and :py:attr:`Model.jit_compile`) and the explaining maps are computed
+contained in a model is compiled (conditioned to :attr:`Model.run_eagerly`
+and :attr:`Model.jit_compile`) and the explaining maps are computed
 according to the method's strategy.
 
-Just like in :py:meth:`keras.model#predict`, :py:func:`keras_explainable.explain`
+Just like in :meth:`keras.model.predict`, :func:`~keras_explainable.explain`
 allows various types of input data and retrieves the Model's associated
 distribute strategy in order to distribute the workload across multiple
 GPUs and/or workers.
+
 
 .. jupyter-execute::
   :hide-code:
   :hide-output:
 
   import os
+  os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
   import numpy as np
   import pandas as pd
   import tensorflow as tf
@@ -30,32 +32,27 @@ GPUs and/or workers.
 
   SOURCE_DIRECTORY = 'docs/_static/images/singleton/'
   SAMPLES = 8
-  SIZES = (299, 299)
+  SIZES = (224, 224)
 
   file_names = os.listdir(SOURCE_DIRECTORY)
   image_paths = [os.path.join(SOURCE_DIRECTORY, f) for f in file_names if f != '_links.txt']
   images = np.stack([img_to_array(load_img(ip).resize(SIZES)) for ip in image_paths])
   images = images.astype("uint8")[:SAMPLES]
 
-Firstly, we employ the :py:class:`ResNet101` network pre-trained over the
-ImageNet dataset:
+We demonstrate bellow how predictions can be explained using the
+ResNet101 network trained over ImageNet, using a few image samples.
+Firstly, we load the network:
 
 .. jupyter-execute::
 
-  WEIGHTS = 'imagenet'
-
-  input_tensor = tf.keras.Input(shape=(*SIZES, 3), name='inputs')
-
   rn101 = tf.keras.applications.ResNet101V2(
-    input_tensor=input_tensor,
     classifier_activation=None,
-    weights=WEIGHTS
+    weights='imagenet',
   )
 
   prec = tf.keras.applications.resnet_v2.preprocess_input
   decode_predictions = tf.keras.applications.resnet_v2.decode_predictions
 
-  print(f'ResNet101 with {WEIGHTS} pre-trained weights loaded.')
   print(f"Spatial map sizes: {rn101.get_layer('avg_pool').input.shape}")
 
 We can feed-foward the samples once and get the predicted classes for each sample.
