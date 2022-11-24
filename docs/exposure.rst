@@ -86,7 +86,7 @@ Grad-CAM (or Grad-CAM++) can be called immediately after that:
 .. jupyter-execute::
 
   inputs = np.random.normal(size=(4, 224, 224, 3))
-  indices = np.asarray([[13], [9], [32], [164]])
+  indices = np.asarray([[4], [9], [0], [2]])
 
   scores, cams = ke.gradcam(model, inputs, indices)
 

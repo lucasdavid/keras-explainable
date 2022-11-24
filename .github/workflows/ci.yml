@@ -23,7 +23,7 @@ jobs:
           echo "Installing dependencies and caching them."
           python -m pip install --upgrade pip
           pip install numpy pandas matplotlib
-          pip install https://files.pythonhosted.org/packages/04/ea/49fd026ac36fdd79bf072294b139170aefc118e487ccb39af019946797e9/tensorflow-2.10.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+          pip install https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-2.11.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
           pip install setuptools pytest pytest-cov parameterized
           pip install .
       - name:
