@@ -12,9 +12,7 @@ import tensorflow as tf
 from keras.engine.base_layer import Layer
 from keras.engine.keras_tensor import KerasTensor
 from keras.engine.training import Model
-from keras.layers.normalization.batch_normalization import (
-    BatchNormalizationBase,
-)
+from keras.layers.normalization.batch_normalization import BatchNormalizationBase
 from keras.layers.normalization.layer_normalization import LayerNormalization
 from keras.layers.pooling.base_global_pooling1d import GlobalPooling1D
 from keras.layers.pooling.base_global_pooling2d import GlobalPooling2D
@@ -167,7 +165,7 @@ def find_layer_with(
     raise ValueError(
         f"A valid layer couldn't be inferred from the name=`{name}`, "
         f"klass=`{klass}` and properties=`{properties}`. Make sure these "
-        f"attributes correctly reflect a layer in the model."
+        "attributes correctly reflect a layer in the model."
     )
 
 
@@ -215,9 +213,7 @@ def endpoints(model: Model, endpoints: List[E]) -> List[KerasTensor]:
             node = len(layer._inbound_nodes) - 1
 
         endpoint = (
-            layer.get_input_at(node)
-            if link == "input"
-            else layer.get_output_at(node)
+            layer.get_input_at(node) if link == "input" else layer.get_output_at(node)
         )
 
         endpoints_.append(endpoint)
@@ -360,9 +356,7 @@ def biases(
             biases.append(
                 -layer.moving_mean
                 * layer.gamma
-                / tf.sqrt(
-                    layer.moving_variance + 1e-07
-                )  # might be variance here.
+                / tf.sqrt(layer.moving_variance + 1e-07)  # might be variance here.
                 + layer.beta
             )
 

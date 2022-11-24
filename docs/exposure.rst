@@ -177,11 +177,6 @@ composition, we get a ``ValueError: Graph disconnected``:
   print(f"scores:{scores.shape} in [{scores.min()}, {scores.max()}]")
   print(f"cams:{cams.shape} in [{cams.min()}, {cams.max()}]")
 
-.. .. note::
-..   Simply calling ``ke.inspection.expose(rn50_clf)`` would still work
-..   in this case, as this function recursively inspects layers of the
-..   model being explained.
-
 This problem occurs because the identifier ``"ResNet50V2"`` passed
 in the function parameter ``arguments`` will be expanded into
 ``{"name": "ResNet50V2", "link": "output", "node": 0}``, and
@@ -200,6 +195,18 @@ By exposing the first :class:`Node` associated with the *ResNet50V2* layer and
 the first :class:`Node` associated with the *logits* layer, we redefined the
 model to output an :class:`KerasTensor` which is not connected to the input
 ``rn50_clf.input``. Thus, the exception is raised.
+
+.. warning::
+
+  Since TensorFlow 2, nodes are no longer being stacked in ``_inbound_nodes``
+  for layers in nested models, which obstructs the access to intermediate
+  signals contained in a nested model, and makes the remaining of this
+  document obsolete.
+  To avoid this problem, it is recommended to "flat out" the model before
+  explaining it, or avoiding nesting models altogether.
+  
+  For more information, see the GitHub issue
+  `#16123 <https://github.com/keras-team/keras/issues/16123>`_.
 
 To solve this problem, we must collect the second node:
 

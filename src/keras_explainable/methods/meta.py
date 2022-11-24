@@ -35,18 +35,14 @@ def smooth(
         **params,
     ):
         logits, maps = method(model, inputs, *args, **params)
-        shape = tf.concat(([repetitions-1], tf.shape(inputs)), axis=0)
+        shape = tf.concat(([repetitions - 1], tf.shape(inputs)), axis=0)
 
-        noisy_inputs = inputs + tf.random.normal(
-            shape, 0, noise, dtype=inputs.dtype
-        )
+        noisy_inputs = inputs + tf.random.normal(shape, 0, noise, dtype=inputs.dtype)
 
         with tf.control_dependencies([logits, maps]):
             for step in tf.range(repetitions - 1):
                 batch_inputs = noisy_inputs[step]
-                batch_logits, batch_maps = method(
-                    model, batch_inputs, *args, **params
-                )
+                batch_logits, batch_maps = method(model, batch_inputs, *args, **params)
 
                 logits += batch_logits
                 maps += batch_maps
@@ -80,9 +76,7 @@ def tta(
         shapes = tf.shape(inputs)
         sizes = shapes[1:-1]
 
-        logits, maps = _forward(
-            method_, model, inputs, sizes, None, False, resize_method
-        )
+        logits, maps = _forward(method_, model, inputs, sizes, None, False, resize_method)
 
         if hflip:
             with tf.control_dependencies([logits, maps]):

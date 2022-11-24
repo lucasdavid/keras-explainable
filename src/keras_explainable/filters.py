@@ -72,9 +72,7 @@ def negative(x: tf.Tensor, axis: Tuple[int] = SPATIAL_AXIS) -> tf.Tensor:
     return tf.maximum(x, 0)
 
 
-def positive_normalize(
-    x: tf.Tensor, axis: Tuple[int] = SPATIAL_AXIS
-) -> tf.Tensor:
+def positive_normalize(x: tf.Tensor, axis: Tuple[int] = SPATIAL_AXIS) -> tf.Tensor:
     """Retain only positive values of the input signal and normalize it between 0 and 1.
 
     Args:
@@ -88,9 +86,7 @@ def positive_normalize(
     return normalize(positive(x, axis=axis), axis=axis)
 
 
-def absolute_normalize(
-    x: tf.Tensor, axis: Tuple[int] = SPATIAL_AXIS
-) -> tf.Tensor:
+def absolute_normalize(x: tf.Tensor, axis: Tuple[int] = SPATIAL_AXIS) -> tf.Tensor:
     """Absolute values of the input signal and normalize it between 0 and 1.
 
     Args:
@@ -104,9 +100,7 @@ def absolute_normalize(
     return normalize(tf.abs(x), axis=axis)
 
 
-def negative_normalize(
-    x: tf.Tensor, axis: Tuple[int] = SPATIAL_AXIS
-) -> tf.Tensor:
+def negative_normalize(x: tf.Tensor, axis: Tuple[int] = SPATIAL_AXIS) -> tf.Tensor:
     """Retain only negative values of the input signal and normalize it between 0 and 1.
 
     Args:

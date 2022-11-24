@@ -2,10 +2,12 @@
 keras Explainable
 =================
 
-.. |Travis build| image:: https://img.shields.io/travis/lucasdavid/keras-explainable?style=for-the-badge
-  :target: https://app.travis-ci.com/github/lucasdavid/keras-explainable
+.. image:: https://github.com/lucasdavid/keras-explainable/actions/workflows/ci.yml/badge.svg?branch=release
+  :alt: Travis build status
+  :target: https://github.com/lucasdavid/keras-explainable/actions/workflows/ci.yml
 
-.. |Documentation| image:: https://img.shields.io/badge/docs-0.0.1-blue
+.. image:: https://img.shields.io/badge/docs-0.0.1-blue
+  :alt: Documentation status
   :target: https://lucasdavid.github.io/keras-explainable
 
 Efficient explaining AI algorithms for Keras models.
@@ -48,7 +50,7 @@ Implemented Explaining Methods
    Method                       Kind       Reference                                                                                
    ===========================  =========  ========================================================================================
    Gradient Back-propagation    gradient   `paper <https://arxiv.org/abs/1312.6034>`_                                                
-   FullGrad                     gradient   `paper <https://arxiv.org/abs/1905.00780>`_                                               
+   Full-Gradient                gradient   `paper <https://arxiv.org/abs/1905.00780>`_                                               
    CAM                          CAM        `paper <https://arxiv.org/abs/1512.04150>`_                                               
    Grad-CAM                     CAM        `paper <https://arxiv.org/abs/1610.02391>`_                                               
    Grad-CAM++                   CAM        `paper <https://arxiv.org/abs/1710.11063>`_                                               

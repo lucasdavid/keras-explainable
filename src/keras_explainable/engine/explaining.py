@@ -73,9 +73,7 @@ def make_explain_function(
             return outputs
 
         if model._jit_compile:
-            run_step = tf.function(
-                run_step, jit_compile=True, reduce_retracing=True
-            )
+            run_step = tf.function(run_step, jit_compile=True, reduce_retracing=True)
 
         data = next(iterator)
         outputs = model.distribute_strategy.run(run_step, args=(data,))
@@ -104,8 +102,7 @@ def make_data_handler(
 ):
     dataset_types = (tf.compat.v1.data.Dataset, tf.data.Dataset)
     if (
-        model._in_multi_worker_mode()
-        or _is_tpu_multi_host(model.distribute_strategy)
+        model._in_multi_worker_mode() or _is_tpu_multi_host(model.distribute_strategy)
     ) and isinstance(x, dataset_types):
         try:
             opts = tf.data.Options()
@@ -233,9 +230,7 @@ def explain(
                 steps=data_handler.inferred_steps,
             )
 
-        explain_function = make_explain_function(
-            model, method, method_params, force
-        )
+        explain_function = make_explain_function(model, method, method_params, force)
         model._explain_counter.assign(0)
         callbacks.on_predict_begin()
         batch_outputs = None
@@ -246,9 +241,7 @@ def explain(
                     tmp_batch_outputs = explain_function(iterator)
                     if data_handler.should_sync:
                         context.async_wait()
-                    batch_outputs = (
-                        tmp_batch_outputs  # No error, now safe to assign.
-                    )
+                    batch_outputs = tmp_batch_outputs  # No error, now safe to assign.
                     if outputs is None:
                         outputs = tf.nest.map_structure(
                             lambda batch_output: [batch_output],
@@ -257,16 +250,12 @@ def explain(
                     else:
                         tf.__internal__.nest.map_structure_up_to(
                             batch_outputs,
-                            lambda output, batch_output: output.append(
-                                batch_output
-                            ),
+                            lambda output, batch_output: output.append(batch_output),
                             outputs,
                             batch_outputs,
                         )
                     end_step = step + data_handler.step_increment
-                    callbacks.on_predict_batch_end(
-                        end_step, {"outputs": batch_outputs}
-                    )
+                    callbacks.on_predict_batch_end(end_step, {"outputs": batch_outputs})
         if batch_outputs is None:
             raise ValueError(
                 "Unexpected result of `explain_function` "

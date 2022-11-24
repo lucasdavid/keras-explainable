@@ -30,15 +30,11 @@ except PackageNotFoundError:  # pragma: no cover
 finally:
     del version, PackageNotFoundError
 
-cam = partial_explain(
-    methods.cams.cam, postprocessing=filters.positive_normalize
-)
+cam = partial_explain(methods.cams.cam, postprocessing=filters.positive_normalize)
 """Shortcut for :py:func:`methods.cams.cam`,
 filtering positively contributing regions"""
 
-gradcam = partial_explain(
-    methods.cams.gradcam, postprocessing=filters.positive_normalize
-)
+gradcam = partial_explain(methods.cams.gradcam, postprocessing=filters.positive_normalize)
 """Shortcut for :py:func:`methods.cams.gradcam`,
 filtering positively contributing regions"""
 

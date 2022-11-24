@@ -83,11 +83,7 @@ def visualize(
 
             plt.imshow(image, cmap=cmap)
 
-            if (
-                overlays is not None
-                and len(overlays) > ix
-                and overlays[ix] is not None
-            ):
+            if overlays is not None and len(overlays) > ix and overlays[ix] is not None:
                 oi = overlays[ix]
                 if len(oi.shape) > 2 and oi.shape[-1] == 1:
                     oi = oi[..., 0]

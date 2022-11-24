@@ -2,8 +2,14 @@
 Changelog
 =========
 
-Version 0.1
-===========
+Version 0.0.2
+=============
+
+- Improve Documentation
+- Add CI GitHub actions
+
+Version 0.0.1
+=============
 
 - Start project with scaffolding and add schematics
 - Add CAM explaining method

@@ -208,8 +208,7 @@ def gradcampp(
     aab = tf.reduce_sum(activations, axis=spatial_axis)  # (BK)
     akc = tf.math.divide_no_nan(
         d2,
-        2.0 * d2
-        + tf.einsum("bk,bc...k->bc...k", aab, d3),  # (2*(BUHWK) + (BK)*BUHWK)
+        2.0 * d2 + tf.einsum("bk,bc...k->bc...k", aab, d3),  # (2*(BUHWK) + (BK)*BUHWK)
     )
 
     # Tensorflow has a glitch that doesn't allow this form:
@@ -217,9 +216,7 @@ def gradcampp(
     # So we use this one instead:
     weights = tf.reduce_sum(akc * tf.nn.relu(dyda), axis=spatial_axis)
 
-    maps = tf.einsum(
-        "bck,b...k->b...c", weights, activations
-    )  # a: bhwk, m: buhw
+    maps = tf.einsum("bck,b...k->b...c", weights, activations)  # a: bhwk, m: buhw
 
     return logits, maps
 
