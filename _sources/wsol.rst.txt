@@ -1,9 +1,18 @@
-=====================================
-Weakly Supervised Object Localization
-=====================================
+===============================================================
+Weakly Supervised Object Localization and Semantic Segmentation
+===============================================================
 
-Object localization cues can be extracted from models trained over
-multi-label datasets in a weakly supervised setup.
+Object localization and segmentation cues can be extracted from models
+trained over multi-label datasets in a weakly supervised setup.
+
+An example of this technique is OC-CSE, which was first described in
+the paper "Unlocking the potential of ordinary classifier: Class-specific
+adversarial erasing framework for weakly supervised semantic segmentation.",
+by Kweon et al. (2021) [`link <https://openaccess.thecvf.com/content/ICCV2021/html/Kweon_Unlocking_the_Potential_of_Ordinary_Classifier_Class-Specific_Adversarial_Erasing_Framework_ICCV_2021_paper.html>`_].
+Its original code (written in PyTorch) is available at
+`KAIST-vilab/OC-CSE <https://github.com/KAIST-vilab/OC-CSE>`_, but
+we will actually load its TensorFlow alternative, available at
+`lucasdavid/resnet38d-tf <https://github.com/lucasdavid/resnet38d-tf>`_:
 
 .. jupyter-execute::
   :hide-code:
@@ -19,45 +28,63 @@ multi-label datasets in a weakly supervised setup.
 
   SOURCE_DIRECTORY = 'docs/_static/images/voc12/'
   SAMPLES = 8
-  SIZES = (299, 299)
+  SIZES = (384, 384)
 
-  file_names = os.listdir(SOURCE_DIRECTORY)
+  file_names = sorted(os.listdir(SOURCE_DIRECTORY))
   image_paths = [os.path.join(SOURCE_DIRECTORY, f) for f in file_names if f != '_links.txt']
   images = np.stack([img_to_array(load_img(ip).resize(SIZES)) for ip in image_paths])
   images = images.astype("uint8")[:SAMPLES]
-
-  def pascal_voc_colors(classes):
-    colormap = np.zeros((256, 3), dtype=int)
-    ind = np.arange(256, dtype=int)
-    for shift in reversed(range(8)):
-      for channel in range(3):
-        colormap[:, channel] |= ((ind >> channel) & 1) << shift
-      ind >>= 3
-
-    return np.concatenate((
-      colormap[:classes], colormap[255:]
-    ))
+  label_indices = [[8, 11], [2], [1, 14], [4, 14], [16], [2], [0, 14], [13, 14]]
+  labels = np.zeros((len(label_indices), 20))
+  for i, l in enumerate(label_indices):
+    labels[i, l] = 1.
 
   def pascal_voc_classes():
     return np.asarray((
-      "aeroplane bicycle bird boat bottle bus car cat chair cow diningtable"
+      "aeroplane bicycle bird boat bottle bus car cat chair cow diningtable "
       "dog horse motorbike person pottedplant sheep sofa train tvmonitor"
     ).split())
 
-Firstly, we employ the :py:class:`ResNet38-d` network pre-trained over the
-Pascal VOC 2012 dataset:
+  def pascal_voc_colors():
+    return np.asarray([
+        [0, 0, 0],  # background
+        [128, 0, 0],
+        [0, 128, 0],
+        [128, 128, 0],
+        [0, 0, 128],
+        [128, 0, 128],
+        [0, 128, 128],
+        [128, 128, 128],
+        [64, 0, 0],
+        [192, 0, 0],
+        [64, 128, 0],
+        [192, 128, 0],
+        [64, 0, 128],
+        [192, 0, 128],
+        [64, 128, 128],
+        [192, 128, 128],
+        [0, 64, 0],
+        [128, 64, 0],
+        [0, 192, 0],
+        [128, 192, 0],
+        [0, 64, 128],
+        [224, 224, 192]  # void (contours, outline and padded regions)
+    ]) / 255.
+
 
 .. jupyter-execute::
 
-  WEIGHTS = 'voc2012'
+  COLORS = pascal_voc_colors()
   CLASSES = pascal_voc_classes()
-  COLORS = pascal_voc_colors(classes=len(CLASSES) + 1)
+  WEIGHTS = 'docs/_build/data/resnet38d_voc2012_occse.h5'
 
-  ! wget -nc https://raw.githubusercontent.com/lucasdavid/resnet38d-tf/main/resnet38d.py
+  ! mkdir -p docs/_build/data
+  ! wget -q -nc https://raw.githubusercontent.com/lucasdavid/resnet38d-tf/main/resnet38d.py
+  ! wget -qnc https://github.com/lucasdavid/resnet38d-tf/releases/download/0.0.1/resnet38d_voc2012_occse.h5 -P docs/_build/data/
 
   from resnet38d import ResNet38d
 
-  input_tensor = tf.keras.Input(shape=(*SIZES, 3), name="inputs")
+  input_tensor = tf.keras.Input(shape=(None, None, 3), name="inputs")
   rn38d = ResNet38d(input_tensor=input_tensor, weights=WEIGHTS)
 
   print(f"ResNet38-d with {WEIGHTS} pre-trained weights loaded.")
@@ -82,19 +109,47 @@ Finally, we can simply run all available explaining methods:
 .. jupyter-execute::
 
   rn38d = ke.inspection.expose(rn38d, "s5/ac", 'avg_pool')
-  _, maps = ke.cam(rn38d, inputs)
+  
+  # Vanilla CAM
+  _, cams = ke.cam(rn38d, inputs, batch_size=4)
+
+  # TTA-CAM
+  tta_cam_method = ke.methods.meta.tta(
+    ke.methods.cams.cam,
+    scales=[0.5, 1.0, 1.5, 2.],
+    hflip=True,
+  )
+  _, tta_cams = ke.explain(
+    tta_cam_method,
+    rn38d,
+    inputs,
+    batch_size=4,
+    postprocessing=ke.filters.positive_normalize,
+  )
 
 Explaining maps can be converted into color maps,
 respecting the conventional Pascal color mapping:
 
 .. jupyter-execute::
 
-  @tf.function(reduce_retracing=True, jit_compile=True)
-  def cams_to_colors(maps, probabilities, threshold=0.5):
-    detected = tf.cast(probabilities > threshold, maps.dtype)
+  def cams_to_colors(labels, maps, colors):
+    overlays = []
+    labels = labels.astype(bool)
 
-    return tf.einsum('bhwl,bl,lc->bwhc', maps, detected, COLORS[:20])
+    for i in range(8):
+      l = labels[i]
+      c = colors[l]
+      m = maps[i][..., l]
+      o = np.einsum('dc,hwd->hwc', c, m).clip(0, 1)
+      overlays.append(o)
 
-  overlays = cams_to_colors(maps, probs)
+    return overlays
 
-  ke.utils.visualize(images, overlays=overlays)
+  cam_overlays = cams_to_colors(labels, cams, COLORS[1:21])
+  tta_overlays = cams_to_colors(labels, tta_cams, COLORS[1:21])
+
+  ke.utils.visualize(
+    images=sum(zip(images, cam_overlays, tta_overlays), ()),
+    titles=['Original', 'CAM', 'TTA CAM'],
+    cols=3,
+  )

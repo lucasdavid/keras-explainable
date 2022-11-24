@@ -95,6 +95,11 @@
    Explaining
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../exposure.html">
+   Exposure
+  </a>
+ </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../methods/index.html">
    Methods
@@ -112,12 +117,12 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../methods/saliency/smoothgrad.html">
-     Smooth-Grad
+     SmoothGrad
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../methods/saliency/fullgrad.html">
-     Full-Grad
+     Full-Gradient
     </a>
    </li>
    <li class="toctree-l2">
@@ -134,7 +139,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../wsol.html">
-   WSSL
+   WSSL &amp; WSSS
   </a>
  </li>
  <li class="toctree-l1">
@@ -378,11 +383,7 @@ title="Source repository"
 
             <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="p">(</span>
-                <span class="n">overlays</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-                <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">overlays</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">ix</span>
-                <span class="ow">and</span> <span class="n">overlays</span><span class="p">[</span><span class="n">ix</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-            <span class="p">):</span>
+            <span class="k">if</span> <span class="n">overlays</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">overlays</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">ix</span> <span class="ow">and</span> <span class="n">overlays</span><span class="p">[</span><span class="n">ix</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">oi</span> <span class="o">=</span> <span class="n">overlays</span><span class="p">[</span><span class="n">ix</span><span class="p">]</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">oi</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">oi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">oi</span> <span class="o">=</span> <span class="n">oi</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>

@@ -1,0 +1,1202 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Exposing Intermediate Signals &#8212; Keras Explainable</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/thebelab-helper.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="AI Explaining Methods" href="methods/index.html" />
+    <link rel="prev" title="Explaining Model’s Predictions" href="explaining.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Keras Explainable</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="readme.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="explaining.html">
+   Explaining
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Exposure
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="methods/index.html">
+   Methods
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="methods/saliency/gradients.html">
+     Gradient Back-propagation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="methods/saliency/smoothgrad.html">
+     SmoothGrad
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="methods/saliency/fullgrad.html">
+     Full-Gradient
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="methods/cams/gradcam.html">
+     Grad-CAM
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="methods/cams/tta_gradcam.html">
+     TTA Grad-CAM
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="wsol.html">
+   WSSL &amp; WSSS
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contributing.html">
+   Contributions &amp; Help
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="license.html">
+   License
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="api/modules.html">
+   Module Reference
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="api/keras_explainable.html">
+     keras_explainable package
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="api/keras_explainable.engine.html">
+       keras_explainable.engine package
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="api/keras_explainable.methods.html">
+       keras_explainable.methods package
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+<a href="https://github.com/lucasdavid/keras-explainable"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="bottom"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/exposure.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#simple-exposition-examples">
+   Simple Exposition Examples
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exposing-nested-models">
+   Exposing Nested Models
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#empty-activation-and-explaining-maps">
+     Empty Activation and Explaining Maps
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#access-nested-layer-signals">
+     Access Nested Layer Signals
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Exposing Intermediate Signals</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#simple-exposition-examples">
+   Simple Exposition Examples
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exposing-nested-models">
+   Exposing Nested Models
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#empty-activation-and-explaining-maps">
+     Empty Activation and Explaining Maps
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#access-nested-layer-signals">
+     Access Nested Layer Signals
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="exposing-intermediate-signals">
+<h1>Exposing Intermediate Signals<a class="headerlink" href="#exposing-intermediate-signals" title="Permalink to this headline">#</a></h1>
+<p>This page details the exposure procedure, necessary for most AI explaining
+methods, and which can be easened with the help of the
+<a class="reference internal" href="api/keras_explainable.html#keras_explainable.inspection.expose" title="keras_explainable.inspection.expose"><code class="xref py py-func docutils literal notranslate"><span class="pre">expose()</span></code></a> function.</p>
+<section id="simple-exposition-examples">
+<h2>Simple Exposition Examples<a class="headerlink" href="#simple-exposition-examples" title="Permalink to this headline">#</a></h2>
+<p>Many explaining techniques require us to expose the intermediate tensors
+so their respective signals can be used, or so the gradient of the output
+can be computed with respect to their signals.
+For example, Grad-CAM computes the gradient of an output unit with respect
+to the activation signal advent from the last positional layer in the model:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">GradientTape</span><span class="p">()</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+  <span class="n">logits</span><span class="p">,</span> <span class="n">activations</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">gradients</span> <span class="o">=</span> <span class="n">tape</span><span class="o">.</span><span class="n">batch_jacobian</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">activations</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Which evidently means the <code class="docutils literal notranslate"><span class="pre">activations</span></code> signal, a tensor of
+shape <code class="docutils literal notranslate"><span class="pre">(batch,</span> <span class="pre">height,</span> <span class="pre">width,</span> <span class="pre">...,</span> <span class="pre">kernels)</span></code> must be available at runtime.
+For that to happen, we must redefine the model, setting its outputs
+to contain the <code class="xref py py-class docutils literal notranslate"><span class="pre">KerasTensor</span></code>’s objects that reference both
+<code class="docutils literal notranslate"><span class="pre">logits</span></code> and <code class="docutils literal notranslate"><span class="pre">activations</span></code> tensors:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Model</span><span class="p">,</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">keras.applications</span> <span class="kn">import</span> <span class="n">ResNet50V2</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Activation</span><span class="p">,</span> <span class="n">Dense</span><span class="p">,</span> <span class="n">GlobalAveragePooling2D</span>
+
+<span class="kn">import</span> <span class="nn">keras_explainable</span> <span class="k">as</span> <span class="nn">ke</span>
+
+<span class="n">rn50</span> <span class="o">=</span> <span class="n">ResNet50V2</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">classifier_activation</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="c1"># activations_tensor = rn50.get_layer(&quot;avg_pool&quot;).input  # or...</span>
+<span class="n">activations_tensor</span> <span class="o">=</span> <span class="n">rn50</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s2">&quot;post_relu&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">output</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">rn50</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="p">[</span><span class="n">rn50</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">activations_tensor</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Network&#39;s outputs:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">o</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Network&#39;s outputs:
+  KerasTensor(type_spec=TensorSpec(shape=(None, 1000), dtype=tf.float32, name=None), name=&#39;predictions/BiasAdd:0&#39;, description=&quot;created by layer &#39;predictions&#39;&quot;)
+  KerasTensor(type_spec=TensorSpec(shape=(None, 7, 7, 2048), dtype=tf.float32, name=None), name=&#39;post_relu/Relu:0&#39;, description=&quot;created by layer &#39;post_relu&#39;&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Which can be simplified with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">rn50</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="api/keras_explainable.html#keras_explainable.inspection.expose" title="keras_explainable.inspection.expose"><code class="xref py py-func docutils literal notranslate"><span class="pre">expose()</span></code></a> function inspects the model,
+seeking for the <em>logits</em> layer (the last containing a kernel property) and the
+<em>global pooling</em> layer, an instance of a <code class="xref py py-class docutils literal notranslate"><span class="pre">GlobalPooling</span></code> or
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Flatten</span></code> layer classes. The output of the former and the input of the
+latter are collected and a new model is defined.</p>
+<p>You can also manually indicate the name of the argument and output layers.
+All options bellow are equivalent:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">rn50</span><span class="p">,</span> <span class="s2">&quot;post_relu&quot;</span><span class="p">,</span> <span class="s2">&quot;predictions&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span>
+  <span class="n">rn50</span><span class="p">,</span>
+  <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;post_relu&quot;</span><span class="p">,</span> <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;output&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;predictions&quot;</span><span class="p">},</span>
+<span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span>
+  <span class="n">rn50</span><span class="p">,</span>
+  <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;post_relu&quot;</span><span class="p">,</span> <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;output&quot;</span><span class="p">,</span> <span class="s2">&quot;node&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;predictions&quot;</span><span class="p">,</span> <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;output&quot;</span><span class="p">,</span> <span class="s2">&quot;node&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+<span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span>
+  <span class="n">rn50</span><span class="p">,</span>
+  <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;avg_pool&quot;</span><span class="p">,</span> <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">},</span>
+  <span class="s2">&quot;predictions&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Grad-CAM (or Grad-CAM++) can be called immediately after that:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
+
+<span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">gradcam</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scores:</span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> in [</span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cams:</span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> in [</span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>scores:(4, 1) in [-0.040453389286994934, 0.1415247917175293]
+cams:(4, 224, 224, 1) in [0.0, 1.0]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exposing-nested-models">
+<h2>Exposing Nested Models<a class="headerlink" href="#exposing-nested-models" title="Permalink to this headline">#</a></h2>
+<p>Unfortunately, some model’s topologies can make exposition a little tricky.</p>
+<section id="empty-activation-and-explaining-maps">
+<h3>Empty Activation and Explaining Maps<a class="headerlink" href="#empty-activation-and-explaining-maps" title="Permalink to this headline">#</a></h3>
+<p>Collecting loose endpoints from nested models can inadvertently result in
+constant being used as arguments, producing in a zero gradient signal:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rn50</span> <span class="o">=</span> <span class="n">ResNet50V2</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_top</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">Input</span><span class="p">([</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;input_images&quot;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">rn50</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">GlobalAveragePooling2D</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;avg_pool&quot;</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;logits&quot;</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Activation</span><span class="p">(</span><span class="s2">&quot;softmax&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;predictions&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">rn50_clf</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;resnet50v2_clf&#39;</span><span class="p">)</span>
+<span class="n">rn50_clf</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">rn50_clf</span><span class="p">,</span> <span class="s2">&quot;resnet50v2&quot;</span><span class="p">,</span> <span class="s2">&quot;predictions&quot;</span><span class="p">)</span>
+<span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">gradcam</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scores:</span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> in [</span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cams:</span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> in [</span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Model: &quot;resnet50v2_clf&quot;
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>_________________________________________________________________
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> Layer (type)                Output Shape              Param #   
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>=================================================================
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> input_images (InputLayer)   [(None, 224, 224, 3)]     0         
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>                                                                 
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> resnet50v2 (Functional)     (None, None, None, 2048)  23564800  
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>                                                                 
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> avg_pool (GlobalAveragePool  (None, 2048)             0         
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> ing2D)                                                          
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>                                                                 
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> logits (Dense)              (None, 10)                20490     
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>                                                                 
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> predictions (Activation)    (None, 10)                0         
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>                                                                 
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>=================================================================
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Total params: 23,585,290
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Trainable params: 23,539,850
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Non-trainable params: 45,440
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>_________________________________________________________________
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>scores:(4, 1) in [0.09638042002916336, 0.1123436838388443]
+cams:(4, 224, 224, 1) in [0.0, 1.0]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice all pixels in the <code class="docutils literal notranslate"><span class="pre">cams</span></code> variable are equal to zero. This can be
+fixed by accessing the actual input node from the global pooling layer:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span>
+  <span class="n">rn50_clf</span><span class="p">,</span>
+  <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;avg_pool&quot;</span><span class="p">,</span> <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">},</span>
+  <span class="s2">&quot;predictions&quot;</span>
+<span class="p">)</span>
+<span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">gradcam</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scores:</span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> in [</span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cams:</span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> in [</span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>scores:(4, 1) in [0.09638042002916336, 0.1123436838388443]
+cams:(4, 224, 224, 1) in [0.0, 1.0]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="jupyter_cell docutils container">
+<div class="cell_output docutils container">
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Looking for the <em>input</em> the <em>Global Pooling</em> layer is the default
+behavior of the <a class="reference internal" href="api/keras_explainable.html#keras_explainable.inspection.expose" title="keras_explainable.inspection.expose"><code class="xref py py-func docutils literal notranslate"><span class="pre">expose()</span></code></a> function.</p>
+</div>
+</section>
+<section id="access-nested-layer-signals">
+<h3>Access Nested Layer Signals<a class="headerlink" href="#access-nested-layer-signals" title="Permalink to this headline">#</a></h3>
+<p>Another problem occurs when the global pooling layer is not part of layers set
+of the out-most model. While you can still collect its output using a name
+composition, we get a <code class="docutils literal notranslate"><span class="pre">ValueError:</span> <span class="pre">Graph</span> <span class="pre">disconnected</span></code>:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rn50</span> <span class="o">=</span> <span class="n">ResNet50V2</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_top</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pooling</span><span class="o">=</span><span class="s2">&quot;avg&quot;</span><span class="p">)</span>
+<span class="n">rn50_clf</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">([</span>
+  <span class="n">Input</span><span class="p">([</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;input_images&quot;</span><span class="p">),</span>
+  <span class="n">rn50</span><span class="p">,</span>
+  <span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;logits&quot;</span><span class="p">),</span>
+  <span class="n">Activation</span><span class="p">(</span><span class="s2">&quot;softmax&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;predictions&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span>
+<span class="p">])</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span>
+  <span class="n">rn50_clf</span><span class="p">,</span>
+  <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;resnet50v2&quot;</span><span class="p">,</span> <span class="s2">&quot;avg_pool&quot;</span><span class="p">),</span> <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">},</span>
+  <span class="s2">&quot;predictions&quot;</span>
+<span class="p">)</span>
+<span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">gradcam</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scores:</span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> in [</span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cams:</span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> in [</span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">9</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">rn50</span> <span class="o">=</span> <span class="n">ResNet50V2</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_top</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pooling</span><span class="o">=</span><span class="s2">&quot;avg&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">rn50_clf</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">([</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>   <span class="n">Input</span><span class="p">([</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;input_images&quot;</span><span class="p">),</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>   <span class="n">rn50</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span>   <span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;logits&quot;</span><span class="p">),</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>   <span class="n">Activation</span><span class="p">(</span><span class="s2">&quot;softmax&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;predictions&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="p">])</span>
+<span class="ne">----&gt; </span><span class="mi">9</span> <span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span>   <span class="n">rn50_clf</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span>   <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;resnet50v2&quot;</span><span class="p">,</span> <span class="s2">&quot;avg_pool&quot;</span><span class="p">),</span> <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">},</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span>   <span class="s2">&quot;predictions&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">gradcam</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+<span class="nn">     16 print(f&quot;scores:{scores.shape}</span> in <span class="ni">[{scores.min()}, {scores.max</span><span class="nt">()}]&quot;)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/keras_explainable/inspection.py:263,</span> in <span class="ni">expose</span><span class="nt">(model, arguments, outputs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">259</span> <span class="n">arguments</span> <span class="o">=</span> <span class="n">tolist</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">261</span> <span class="n">tensors</span> <span class="o">=</span> <span class="n">endpoints</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">outputs</span> <span class="o">+</span> <span class="n">arguments</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">263</span> <span class="k">return</span> <span class="n">Model</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">264</span>     <span class="n">inputs</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">265</span>     <span class="n">outputs</span><span class="o">=</span><span class="n">tensors</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">266</span> <span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/tensorflow/python/trackable/base.py:205,</span> in <span class="ni">no_automatic_dependency_tracking.&lt;locals&gt;._method_wrapper</span><span class="nt">(self, *args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">203</span> <span class="bp">self</span><span class="o">.</span><span class="n">_self_setattr_tracking</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># pylint: disable=protected-access</span>
+<span class="g g-Whitespace">    </span><span class="mi">204</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">205</span>   <span class="n">result</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span> <span class="k">finally</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">207</span>   <span class="bp">self</span><span class="o">.</span><span class="n">_self_setattr_tracking</span> <span class="o">=</span> <span class="n">previous_value</span>  <span class="c1"># pylint: disable=protected-access</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/keras/engine/functional.py:165,</span> in <span class="ni">Functional.__init__</span><span class="nt">(self, inputs, outputs, name, trainable, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">156</span>     <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">157</span>         <span class="p">[</span>
+<span class="g g-Whitespace">    </span><span class="mi">158</span>             <span class="n">functional_utils</span><span class="o">.</span><span class="n">is_input_keras_tensor</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="nn">    159             for t</span> in <span class="ni">tf.nest.flatten</span><span class="nt">(inputs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">160</span>         <span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">161</span>     <span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">162</span>         <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span> <span class="o">=</span> <span class="n">functional_utils</span><span class="o">.</span><span class="n">clone_graph_nodes</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">163</span>             <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span>
+<span class="g g-Whitespace">    </span><span class="mi">164</span>         <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">165</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_graph_network</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/tensorflow/python/trackable/base.py:205,</span> in <span class="ni">no_automatic_dependency_tracking.&lt;locals&gt;._method_wrapper</span><span class="nt">(self, *args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">203</span> <span class="bp">self</span><span class="o">.</span><span class="n">_self_setattr_tracking</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># pylint: disable=protected-access</span>
+<span class="g g-Whitespace">    </span><span class="mi">204</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">205</span>   <span class="n">result</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span> <span class="k">finally</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">207</span>   <span class="bp">self</span><span class="o">.</span><span class="n">_self_setattr_tracking</span> <span class="o">=</span> <span class="n">previous_value</span>  <span class="c1"># pylint: disable=protected-access</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/keras/engine/functional.py:264,</span> in <span class="ni">Functional._init_graph_network</span><span class="nt">(self, inputs, outputs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">261</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_input_coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">layer</span><span class="p">,</span> <span class="n">node_index</span><span class="p">,</span> <span class="n">tensor_index</span><span class="p">))</span>
+<span class="g g-Whitespace">    </span><span class="mi">263</span> <span class="c1"># Keep track of the network&#39;s nodes and layers.</span>
+<span class="ne">--&gt; </span><span class="mi">264</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">nodes_by_depth</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_map_graph_network</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">265</span>     <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span>
+<span class="g g-Whitespace">    </span><span class="mi">266</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">267</span> <span class="bp">self</span><span class="o">.</span><span class="n">_network_nodes</span> <span class="o">=</span> <span class="n">nodes</span>
+<span class="g g-Whitespace">    </span><span class="mi">268</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes_by_depth</span> <span class="o">=</span> <span class="n">nodes_by_depth</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/keras/engine/functional.py:1128,</span> in <span class="ni">_map_graph_network</span><span class="nt">(inputs, outputs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1126</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">tf</span><span class="o">.</span><span class="n">nest</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">keras_inputs</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1127</span>     <span class="k">if</span> <span class="nb">id</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">computable_tensors</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1128</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1129</span>             <span class="sa">f</span><span class="s2">&quot;Graph disconnected: cannot obtain value for &quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1130</span>             <span class="sa">f</span><span class="s1">&#39;tensor </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s1"> at layer &quot;</span><span class="si">{</span><span class="n">layer</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;. &#39;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1131</span>             <span class="s2">&quot;The following previous layers were accessed &quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1132</span>             <span class="sa">f</span><span class="s2">&quot;without issue: </span><span class="si">{</span><span class="n">layers_with_complete_input</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1133</span>         <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1134</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">tf</span><span class="o">.</span><span class="n">nest</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1135</span>     <span class="n">computable_tensors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="ne">ValueError</span>: Graph disconnected: cannot obtain value for tensor KerasTensor(type_spec=TensorSpec(shape=(None, None, None, 3), dtype=tf.float32, name=&#39;input_3&#39;), name=&#39;input_3&#39;, description=&quot;created by layer &#39;input_3&#39;&quot;) at layer &quot;conv1_pad&quot;. The following previous layers were accessed without issue: []
+</pre></div>
+</div>
+</div>
+</div>
+<p>This problem occurs because the identifier <code class="docutils literal notranslate"><span class="pre">&quot;ResNet50V2&quot;</span></code> passed
+in the function parameter <code class="docutils literal notranslate"><span class="pre">arguments</span></code> will be expanded into
+<code class="docutils literal notranslate"><span class="pre">{&quot;name&quot;:</span> <span class="pre">&quot;ResNet50V2&quot;,</span> <span class="pre">&quot;link&quot;:</span> <span class="pre">&quot;output&quot;,</span> <span class="pre">&quot;node&quot;:</span> <span class="pre">0}</span></code>, and
+result in the collection of the <code class="xref py py-class docutils literal notranslate"><span class="pre">KerasTensor</span></code>
+<code class="docutils literal notranslate"><span class="pre">rn50_clf.get_layer(&quot;resnet50v2&quot;).get_output_at(0)</span></code>, or, equivalently,
+<code class="docutils literal notranslate"><span class="pre">rn50_clf.get_layer(&quot;resnet50v2&quot;).output</span></code>.</p>
+<p>As <code class="docutils literal notranslate"><span class="pre">rn50_clf</span></code>’s layers are associated to two execution graphs at once
+(the one created when invoking <code class="docutils literal notranslate"><span class="pre">ResNet50V2(...)</span></code>, and the other created
+when instantiating <code class="docutils literal notranslate"><span class="pre">Sequential([...])</span></code>), they contain two output nodes. At
+the same time, the GAP, Dense and Activation layers are associated with
+exactly one <code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code> (these layers did not appear in the first model, and
+thus, are not included in the first execution graph).</p>
+<p>By exposing the first <code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code> associated with the <em>ResNet50V2</em> layer and
+the first <code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code> associated with the <em>logits</em> layer, we redefined the
+model to output an <code class="xref py py-class docutils literal notranslate"><span class="pre">KerasTensor</span></code> which is not connected to the input
+<code class="docutils literal notranslate"><span class="pre">rn50_clf.input</span></code>. Thus, the exception is raised.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Since TensorFlow 2, nodes are no longer being stacked in <code class="docutils literal notranslate"><span class="pre">_inbound_nodes</span></code>
+for layers in nested models, which obstructs the access to intermediate
+signals contained in a nested model, and makes the remaining of this
+document obsolete.
+To avoid this problem, it is recommended to “flat out” the model before
+explaining it, or avoiding nesting models altogether.</p>
+<p>For more information, see the GitHub issue
+<a class="reference external" href="https://github.com/keras-team/keras/issues/16123">#16123</a>.</p>
+</div>
+<p>To solve this problem, we must collect the second node:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span>
+  <span class="n">rn50_clf</span><span class="p">,</span>
+  <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;resnet50v2&quot;</span><span class="p">,</span> <span class="s2">&quot;avg_pool&quot;</span><span class="p">),</span> <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;node&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+  <span class="s2">&quot;predictions&quot;</span>
+<span class="p">)</span>
+<span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">gradcam</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scores:</span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> in [</span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cams:</span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> in [</span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>   <span class="n">rn50_clf</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>   <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;resnet50v2&quot;</span><span class="p">,</span> <span class="s2">&quot;avg_pool&quot;</span><span class="p">),</span> <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;node&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>   <span class="s2">&quot;predictions&quot;</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">gradcam</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+<span class="nn">      8 print(f&quot;scores:{scores.shape}</span> in <span class="ni">[{scores.min()}, {scores.max</span><span class="nt">()}]&quot;)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/keras_explainable/inspection.py:261,</span> in <span class="ni">expose</span><span class="nt">(model, arguments, outputs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">258</span> <span class="n">outputs</span> <span class="o">=</span> <span class="n">tolist</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">259</span> <span class="n">arguments</span> <span class="o">=</span> <span class="n">tolist</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">261</span> <span class="n">tensors</span> <span class="o">=</span> <span class="n">endpoints</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">outputs</span> <span class="o">+</span> <span class="n">arguments</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">263</span> <span class="k">return</span> <span class="n">Model</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">264</span>     <span class="n">inputs</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">265</span>     <span class="n">outputs</span><span class="o">=</span><span class="n">tensors</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">266</span> <span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/keras_explainable/inspection.py:216,</span> in <span class="ni">endpoints</span><span class="nt">(model, endpoints)</span>
+<span class="g g-Whitespace">    </span><span class="mi">212</span>     <span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="s2">&quot;last&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">213</span>         <span class="n">node</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">_inbound_nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="g g-Whitespace">    </span><span class="mi">215</span>     <span class="n">endpoint</span> <span class="o">=</span> <span class="p">(</span>
+<span class="ne">--&gt; </span><span class="mi">216</span>         <span class="n">layer</span><span class="o">.</span><span class="n">get_input_at</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="k">if</span> <span class="n">link</span> <span class="o">==</span> <span class="s2">&quot;input&quot;</span> <span class="k">else</span> <span class="n">layer</span><span class="o">.</span><span class="n">get_output_at</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">217</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">219</span>     <span class="n">endpoints_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">221</span> <span class="k">return</span> <span class="n">endpoints_</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/keras/engine/base_layer.py:1985,</span> in <span class="ni">Layer.get_input_at</span><span class="nt">(self, node_index)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1969</span> <span class="nd">@doc_controls</span><span class="o">.</span><span class="n">do_not_doc_inheritable</span>
+<span class="g g-Whitespace">   </span><span class="mi">1970</span> <span class="k">def</span> <span class="nf">get_input_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_index</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1971</span>     <span class="sd">&quot;&quot;&quot;Retrieves the input tensor(s) of a layer at a given node.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1972</span><span class="sd"> </span>
+<span class="g g-Whitespace">   </span><span class="mi">1973</span><span class="sd">     Args:</span>
+<span class="sd">   (...)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1983</span><span class="sd">       RuntimeError: If called in Eager mode.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1984</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">-&gt; </span><span class="mi">1985</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_node_attribute_at_index</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1986</span>         <span class="n">node_index</span><span class="p">,</span> <span class="s2">&quot;input_tensors&quot;</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1987</span>     <span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/keras/engine/base_layer.py:2905,</span> in <span class="ni">Layer._get_node_attribute_at_index</span><span class="nt">(self, node_index, attr, attr_name)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2900</span>     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">2901</span>         <span class="sa">f</span><span class="s2">&quot;The layer </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> has never been called &quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">2902</span>         <span class="sa">f</span><span class="s2">&quot;and thus has no defined </span><span class="si">{</span><span class="n">attr_name</span><span class="si">}</span><span class="s2">.&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">2903</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2904</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inbound_nodes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">node_index</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">2905</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">2906</span>         <span class="sa">f</span><span class="s2">&quot;Asked to get </span><span class="si">{</span><span class="n">attr_name</span><span class="si">}</span><span class="s2"> at node &quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">2907</span>         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node_index</span><span class="si">}</span><span class="s2">, but the layer has only &quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">2908</span>         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inbound_nodes</span><span class="p">)</span><span class="si">}</span><span class="s2"> inbound nodes.&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">2909</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2910</span> <span class="n">values</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inbound_nodes</span><span class="p">[</span><span class="n">node_index</span><span class="p">],</span> <span class="n">attr</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2911</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+<span class="ne">ValueError</span>: Asked to get input at node 1, but the layer has only 1 inbound nodes.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Another example, this time using the functional API:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rn50</span> <span class="o">=</span> <span class="n">ResNet50V2</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_top</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pooling</span><span class="o">=</span><span class="s2">&quot;avg&quot;</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">Input</span><span class="p">([</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;input_images&quot;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">rn50</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;logits&quot;</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Activation</span><span class="p">(</span><span class="s2">&quot;softmax&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;predictions&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">rn50_clf</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;resnet50v2_clf&#39;</span><span class="p">)</span>
+<span class="n">rn50_clf</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">rn50_clf</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;resnet50v2&quot;</span><span class="p">,</span> <span class="s2">&quot;post_relu&quot;</span><span class="p">),</span> <span class="s2">&quot;predictions&quot;</span><span class="p">)</span>
+<span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">gradcam</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scores:</span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> in [</span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cams:</span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> in [</span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Model: &quot;resnet50v2_clf&quot;
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>_________________________________________________________________
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> Layer (type)                Output Shape              Param #   
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>=================================================================
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> input_images (InputLayer)   [(None, 224, 224, 3)]     0         
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>                                                                 
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> resnet50v2 (Functional)     (None, 2048)              23564800  
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>                                                                 
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> logits (Dense)              (None, 10)                20490     
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>                                                                 
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> predictions (Activation)    (None, 10)                0         
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>                                                                 
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>=================================================================
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Total params: 23,585,290
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Trainable params: 23,539,850
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Non-trainable params: 45,440
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>_________________________________________________________________
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">11</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">rn50_clf</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;resnet50v2_clf&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">rn50_clf</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+<span class="ne">---&gt; </span><span class="mi">11</span> <span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">rn50_clf</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;resnet50v2&quot;</span><span class="p">,</span> <span class="s2">&quot;post_relu&quot;</span><span class="p">),</span> <span class="s2">&quot;predictions&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">gradcam</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+<span class="nn">     14 print(f&quot;scores:{scores.shape}</span> in <span class="ni">[{scores.min()}, {scores.max</span><span class="nt">()}]&quot;)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/keras_explainable/inspection.py:263,</span> in <span class="ni">expose</span><span class="nt">(model, arguments, outputs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">259</span> <span class="n">arguments</span> <span class="o">=</span> <span class="n">tolist</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">261</span> <span class="n">tensors</span> <span class="o">=</span> <span class="n">endpoints</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">outputs</span> <span class="o">+</span> <span class="n">arguments</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">263</span> <span class="k">return</span> <span class="n">Model</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">264</span>     <span class="n">inputs</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">265</span>     <span class="n">outputs</span><span class="o">=</span><span class="n">tensors</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">266</span> <span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/tensorflow/python/trackable/base.py:205,</span> in <span class="ni">no_automatic_dependency_tracking.&lt;locals&gt;._method_wrapper</span><span class="nt">(self, *args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">203</span> <span class="bp">self</span><span class="o">.</span><span class="n">_self_setattr_tracking</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># pylint: disable=protected-access</span>
+<span class="g g-Whitespace">    </span><span class="mi">204</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">205</span>   <span class="n">result</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span> <span class="k">finally</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">207</span>   <span class="bp">self</span><span class="o">.</span><span class="n">_self_setattr_tracking</span> <span class="o">=</span> <span class="n">previous_value</span>  <span class="c1"># pylint: disable=protected-access</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/keras/engine/functional.py:165,</span> in <span class="ni">Functional.__init__</span><span class="nt">(self, inputs, outputs, name, trainable, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">156</span>     <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">157</span>         <span class="p">[</span>
+<span class="g g-Whitespace">    </span><span class="mi">158</span>             <span class="n">functional_utils</span><span class="o">.</span><span class="n">is_input_keras_tensor</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="nn">    159             for t</span> in <span class="ni">tf.nest.flatten</span><span class="nt">(inputs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">160</span>         <span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">161</span>     <span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">162</span>         <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span> <span class="o">=</span> <span class="n">functional_utils</span><span class="o">.</span><span class="n">clone_graph_nodes</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">163</span>             <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span>
+<span class="g g-Whitespace">    </span><span class="mi">164</span>         <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">165</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_graph_network</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/tensorflow/python/trackable/base.py:205,</span> in <span class="ni">no_automatic_dependency_tracking.&lt;locals&gt;._method_wrapper</span><span class="nt">(self, *args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">203</span> <span class="bp">self</span><span class="o">.</span><span class="n">_self_setattr_tracking</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># pylint: disable=protected-access</span>
+<span class="g g-Whitespace">    </span><span class="mi">204</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">205</span>   <span class="n">result</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span> <span class="k">finally</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">207</span>   <span class="bp">self</span><span class="o">.</span><span class="n">_self_setattr_tracking</span> <span class="o">=</span> <span class="n">previous_value</span>  <span class="c1"># pylint: disable=protected-access</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/keras/engine/functional.py:264,</span> in <span class="ni">Functional._init_graph_network</span><span class="nt">(self, inputs, outputs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">261</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_input_coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">layer</span><span class="p">,</span> <span class="n">node_index</span><span class="p">,</span> <span class="n">tensor_index</span><span class="p">))</span>
+<span class="g g-Whitespace">    </span><span class="mi">263</span> <span class="c1"># Keep track of the network&#39;s nodes and layers.</span>
+<span class="ne">--&gt; </span><span class="mi">264</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">nodes_by_depth</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_map_graph_network</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">265</span>     <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span>
+<span class="g g-Whitespace">    </span><span class="mi">266</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">267</span> <span class="bp">self</span><span class="o">.</span><span class="n">_network_nodes</span> <span class="o">=</span> <span class="n">nodes</span>
+<span class="g g-Whitespace">    </span><span class="mi">268</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes_by_depth</span> <span class="o">=</span> <span class="n">nodes_by_depth</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/keras/engine/functional.py:1128,</span> in <span class="ni">_map_graph_network</span><span class="nt">(inputs, outputs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1126</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">tf</span><span class="o">.</span><span class="n">nest</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">keras_inputs</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1127</span>     <span class="k">if</span> <span class="nb">id</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">computable_tensors</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1128</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1129</span>             <span class="sa">f</span><span class="s2">&quot;Graph disconnected: cannot obtain value for &quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1130</span>             <span class="sa">f</span><span class="s1">&#39;tensor </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s1"> at layer &quot;</span><span class="si">{</span><span class="n">layer</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;. &#39;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1131</span>             <span class="s2">&quot;The following previous layers were accessed &quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1132</span>             <span class="sa">f</span><span class="s2">&quot;without issue: </span><span class="si">{</span><span class="n">layers_with_complete_input</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1133</span>         <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1134</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">tf</span><span class="o">.</span><span class="n">nest</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1135</span>     <span class="n">computable_tensors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="ne">ValueError</span>: Graph disconnected: cannot obtain value for tensor KerasTensor(type_spec=TensorSpec(shape=(None, None, None, 3), dtype=tf.float32, name=&#39;input_4&#39;), name=&#39;input_4&#39;, description=&quot;created by layer &#39;input_4&#39;&quot;) at layer &quot;conv1_pad&quot;. The following previous layers were accessed without issue: []
+</pre></div>
+</div>
+</div>
+</div>
+<p>Which can be correctly accessed with:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rn50</span> <span class="o">=</span> <span class="n">ResNet50V2</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_top</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pooling</span><span class="o">=</span><span class="s2">&quot;avg&quot;</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">Input</span><span class="p">([</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;input_images&quot;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">rn50</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;logits&quot;</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Activation</span><span class="p">(</span><span class="s2">&quot;softmax&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;predictions&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">rn50_clf</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;resnet50v2_clf&#39;</span><span class="p">)</span>
+<span class="n">rn50_clf</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span>
+  <span class="n">rn50_clf</span><span class="p">,</span>
+  <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;resnet50v2&quot;</span><span class="p">,</span> <span class="s2">&quot;post_relu&quot;</span><span class="p">),</span> <span class="s2">&quot;node&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+  <span class="s2">&quot;predictions&quot;</span>
+<span class="p">)</span>
+<span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">gradcam</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scores:</span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> in [</span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cams:</span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> in [</span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">cams</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Model: &quot;resnet50v2_clf&quot;
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>_________________________________________________________________
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> Layer (type)                Output Shape              Param #   
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>=================================================================
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> input_images (InputLayer)   [(None, 224, 224, 3)]     0         
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>                                                                 
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> resnet50v2 (Functional)     (None, 2048)              23564800  
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>                                                                 
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> logits (Dense)              (None, 10)                20490     
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>                                                                 
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span> predictions (Activation)    (None, 10)                0         
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>                                                                 
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>=================================================================
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Total params: 23,585,290
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Trainable params: 23,539,850
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Non-trainable params: 45,440
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>_________________________________________________________________
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">11</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">rn50_clf</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;resnet50v2_clf&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">rn50_clf</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+<span class="ne">---&gt; </span><span class="mi">11</span> <span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span>   <span class="n">rn50_clf</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span>   <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;resnet50v2&quot;</span><span class="p">,</span> <span class="s2">&quot;post_relu&quot;</span><span class="p">),</span> <span class="s2">&quot;node&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span>   <span class="s2">&quot;predictions&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">15</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">16</span> <span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">gradcam</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+<span class="nn">     18 print(f&quot;scores:{scores.shape}</span> in <span class="ni">[{scores.min()}, {scores.max</span><span class="nt">()}]&quot;)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/keras_explainable/inspection.py:261,</span> in <span class="ni">expose</span><span class="nt">(model, arguments, outputs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">258</span> <span class="n">outputs</span> <span class="o">=</span> <span class="n">tolist</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">259</span> <span class="n">arguments</span> <span class="o">=</span> <span class="n">tolist</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">261</span> <span class="n">tensors</span> <span class="o">=</span> <span class="n">endpoints</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">outputs</span> <span class="o">+</span> <span class="n">arguments</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">263</span> <span class="k">return</span> <span class="n">Model</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">264</span>     <span class="n">inputs</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">265</span>     <span class="n">outputs</span><span class="o">=</span><span class="n">tensors</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">266</span> <span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/keras_explainable/inspection.py:216,</span> in <span class="ni">endpoints</span><span class="nt">(model, endpoints)</span>
+<span class="g g-Whitespace">    </span><span class="mi">212</span>     <span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="s2">&quot;last&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">213</span>         <span class="n">node</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">_inbound_nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="g g-Whitespace">    </span><span class="mi">215</span>     <span class="n">endpoint</span> <span class="o">=</span> <span class="p">(</span>
+<span class="ne">--&gt; </span><span class="mi">216</span>         <span class="n">layer</span><span class="o">.</span><span class="n">get_input_at</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="k">if</span> <span class="n">link</span> <span class="o">==</span> <span class="s2">&quot;input&quot;</span> <span class="k">else</span> <span class="n">layer</span><span class="o">.</span><span class="n">get_output_at</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">217</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">219</span>     <span class="n">endpoints_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">221</span> <span class="k">return</span> <span class="n">endpoints_</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/keras/engine/base_layer.py:2005,</span> in <span class="ni">Layer.get_output_at</span><span class="nt">(self, node_index)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1989</span> <span class="nd">@doc_controls</span><span class="o">.</span><span class="n">do_not_doc_inheritable</span>
+<span class="g g-Whitespace">   </span><span class="mi">1990</span> <span class="k">def</span> <span class="nf">get_output_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_index</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1991</span>     <span class="sd">&quot;&quot;&quot;Retrieves the output tensor(s) of a layer at a given node.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1992</span><span class="sd"> </span>
+<span class="g g-Whitespace">   </span><span class="mi">1993</span><span class="sd">     Args:</span>
+<span class="sd">   (...)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2003</span><span class="sd">       RuntimeError: If called in Eager mode.</span>
+<span class="g g-Whitespace">   </span><span class="mi">2004</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">-&gt; </span><span class="mi">2005</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_node_attribute_at_index</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">2006</span>         <span class="n">node_index</span><span class="p">,</span> <span class="s2">&quot;output_tensors&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">2007</span>     <span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/keras/engine/base_layer.py:2905,</span> in <span class="ni">Layer._get_node_attribute_at_index</span><span class="nt">(self, node_index, attr, attr_name)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2900</span>     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">2901</span>         <span class="sa">f</span><span class="s2">&quot;The layer </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> has never been called &quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">2902</span>         <span class="sa">f</span><span class="s2">&quot;and thus has no defined </span><span class="si">{</span><span class="n">attr_name</span><span class="si">}</span><span class="s2">.&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">2903</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2904</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inbound_nodes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">node_index</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">2905</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">2906</span>         <span class="sa">f</span><span class="s2">&quot;Asked to get </span><span class="si">{</span><span class="n">attr_name</span><span class="si">}</span><span class="s2"> at node &quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">2907</span>         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node_index</span><span class="si">}</span><span class="s2">, but the layer has only &quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">2908</span>         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inbound_nodes</span><span class="p">)</span><span class="si">}</span><span class="s2"> inbound nodes.&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">2909</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2910</span> <span class="n">values</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inbound_nodes</span><span class="p">[</span><span class="n">node_index</span><span class="p">],</span> <span class="n">attr</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2911</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+<span class="ne">ValueError</span>: Asked to get output at node 1, but the layer has only 1 inbound nodes.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following would also have worked:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span>
+  <span class="n">rn50_clf</span><span class="p">,</span>
+  <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;resnet50v2&quot;</span><span class="p">,</span> <span class="s2">&quot;avg_pool&quot;</span><span class="p">),</span> <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;node&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+  <span class="s2">&quot;predictions&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="explaining.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Explaining Model’s Predictions</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="methods/index.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">AI Explaining Methods</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+      &copy; Copyright 2022, Lucas David.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

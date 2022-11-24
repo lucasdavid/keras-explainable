@@ -37,6 +37,7 @@
     <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="keras_explainable.engine package" href="keras_explainable.engine.html" />
@@ -98,6 +99,11 @@
    Explaining
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../exposure.html">
+   Exposure
+  </a>
+ </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../methods/index.html">
    Methods
@@ -115,12 +121,12 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../methods/saliency/smoothgrad.html">
-     Smooth-Grad
+     SmoothGrad
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../methods/saliency/fullgrad.html">
-     Full-Grad
+     Full-Gradient
     </a>
    </li>
    <li class="toctree-l2">
@@ -137,7 +143,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../wsol.html">
-   WSSL
+   WSSL &amp; WSSS
   </a>
  </li>
  <li class="toctree-l1">
@@ -442,7 +448,6 @@ title="Print to PDF"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="keras_explainable.methods.html">keras_explainable.methods package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="keras_explainable.methods.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="keras_explainable.methods.html#module-keras_explainable.methods.autodocs">keras_explainable.methods.autodocs module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="keras_explainable.methods.html#module-keras_explainable.methods.cams">keras_explainable.methods.cams module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="keras_explainable.methods.html#module-keras_explainable.methods.gradient">keras_explainable.methods.gradient module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="keras_explainable.methods.html#module-keras_explainable.methods.meta">keras_explainable.methods.meta module</a></li>
@@ -457,36 +462,154 @@ title="Print to PDF"
 </section>
 <section id="module-keras_explainable.filters">
 <span id="keras-explainable-filters-module"></span><h2>keras_explainable.filters module<a class="headerlink" href="#module-keras_explainable.filters" title="Permalink to this headline">#</a></h2>
+<p>Shortcuts for commonly used signal filters used in literature.</p>
+<p>These filters can be used as post or mid processing for explaining
+methods and techniques. For example, to account for the absolute
+pixel contribution, when computing the gradient of a score unit
+with respect to the input image:</p>
+<div class="jupyter_cell docutils container">
+<div class="cell_output docutils container">
+</div>
+</div>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">absolute_normalize</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">] -&gt; [</span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[-16.783103309391393, 16.71996528372701] -&gt; [0.0, 1.0]
+</pre></div>
+</div>
+</div>
+</div>
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.filters.absolute_normalize">
 <span class="sig-name descname"><span class="pre">absolute_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">3,</span> <span class="pre">-</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#absolute_normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.absolute_normalize" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Absolute values of the input signal and normalize it between 0 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>tf.Tensor</em>) – the input signal.</p></li>
+<li><p><strong>axis</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the dimensions containing positional
+information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the filtered signal.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tf.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.filters.negative">
 <span class="sig-name descname"><span class="pre">negative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">3,</span> <span class="pre">-</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#negative"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.negative" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Retain only negative values of the input signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>tf.Tensor</em>) – the input</p></li>
+<li><p><strong>axis</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the dimensions containing positional
+information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the filtered signal.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tf.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.filters.negative_normalize">
 <span class="sig-name descname"><span class="pre">negative_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">3,</span> <span class="pre">-</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#negative_normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.negative_normalize" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Retain only negative values of the input signal and normalize it between 0 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>tf.Tensor</em>) – the input signal.</p></li>
+<li><p><strong>axis</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the dimensions containing positional
+information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the filtered signal.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tf.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.filters.normalize">
 <span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">3,</span> <span class="pre">-</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.normalize" title="Permalink to this definition">#</a></dt>
-<dd><p>Normalize a positional signal between 0 and 1.</p>
+<dd><p>Normalize the signal into the interval [0, 1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>tf.Tensor</em>) – the input signal to be normalized.</p></li>
+<li><p><strong>axis</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the dimensions containing positional
+information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the normalized signal.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tf.Tensor</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.filters.positive">
 <span class="sig-name descname"><span class="pre">positive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">3,</span> <span class="pre">-</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#positive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.positive" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Retain only positive values of the input signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>tf.Tensor</em>) – the input signal.</p></li>
+<li><p><strong>axis</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the dimensions containing positional
+information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the filtered signal.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tf.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.filters.positive_normalize">
 <span class="sig-name descname"><span class="pre">positive_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">3,</span> <span class="pre">-</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#positive_normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.positive_normalize" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Retain only positive values of the input signal and normalize it between 0 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>tf.Tensor</em>) – the input signal.</p></li>
+<li><p><strong>axis</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the dimensions containing positional
+information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the filtered signal.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tf.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-keras_explainable.inspection">
@@ -494,11 +617,17 @@ title="Print to PDF"
 <p>Inspection utils for models and layers.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.biases">
-<span class="sig-name descname"><span class="pre">biases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">keras.engine.base_layer.Layer</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">tensorflow.python.framework.ops.Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#biases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.biases" title="Permalink to this definition">#</a></dt>
-<dd><p>Retrieve all biases from a model.</p>
+<span class="sig-name descname"><span class="pre">biases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layers</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#biases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.biases" title="Permalink to this definition">#</a></dt>
+<dd><p>Recursively retrieve the biases from layers.</p>
+<p>Layers containing implicit bias are unrolled before returned. For
+instance, the Batch Normalization layer, whose equation is defined by
+<span class="math notranslate nohighlight">\(y(x) = \frac{x - \mu}{\sigma} w + b\)</span>, will have bias equals to:</p>
+<div class="math notranslate nohighlight">
+\[\frac{-\mu w}{s} + b\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>model</strong> (<em>Model</em>) – the model being inspected.</p>
+<dd class="field-odd"><p><strong>layers</strong> (<em>List</em><em>[</em><em>Layer</em><em>]</em>) – a list of layers from which
+biases should be extracted.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a list of all biases retrieved.</p>
@@ -511,7 +640,7 @@ title="Print to PDF"
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.endpoints">
-<span class="sig-name descname"><span class="pre">endpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">keras.engine.training.Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tensorflow.python.framework.ops.Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">keras.engine.keras_tensor.KerasTensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Dict" title="(in Python v3.10)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">keras.engine.keras_tensor.KerasTensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#endpoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.endpoints" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">endpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#endpoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.endpoints" title="Permalink to this definition">#</a></dt>
 <dd><p>Collect intermediate endpoints in a model based on structured descriptors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -535,7 +664,7 @@ title="Print to PDF"
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.expose">
-<span class="sig-name descname"><span class="pre">expose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">keras.engine.training.Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tensorflow.python.framework.ops.Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">keras.engine.keras_tensor.KerasTensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Dict" title="(in Python v3.10)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tensorflow.python.framework.ops.Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">keras.engine.keras_tensor.KerasTensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Dict" title="(in Python v3.10)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">keras.engine.training.Model</span></span></span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#expose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.expose" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">expose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#expose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.expose" title="Permalink to this definition">#</a></dt>
 <dd><dl class="simple">
 <dt>Creates a new model that exposes all endpoints described by</dt><dd><p><cite>arguments</cite> and <cite>outputs</cite>.</p>
 </dd>
@@ -544,41 +673,32 @@ title="Print to PDF"
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>Model</em>) – The model being explained.</p></li>
-<li><p><strong>arguments</strong> (<em>Optional</em><em>[</em><em>E</em><em>]</em><em>, </em><em>optional</em>) – Name of the argument layer/tensor in</p></li>
-<li><p><strong>computed</strong> (<em>the model. The jacobian of the output explaining units will be</em>) – </p></li>
-<li><p><strong>also</strong> (<em>with respect to the input signal of this layer. This argument can</em>) – </p></li>
-<li><p><strong>integer</strong> (<em>layer. This argument can also be an</em>) – </p></li>
-<li><p><strong>or</strong> (<em>a dictionary representing the intermediate signal</em>) – </p></li>
-<li><p><strong>passed</strong> (<em>the output signal and the logits layer itself. If None is</em>) – </p></li>
-<li><p><strong>layer</strong> (<em>the penultimate</em>) – </p></li>
-<li><p><strong>None.</strong> (<em>is assumed to be a GAP layer. Defaults to</em>) – </p></li>
-<li><p><strong>outputs</strong> (<em>Optional</em><em>[</em><em>E</em><em>]</em><em>, </em><em>optional</em>) – Name of the output layer in the model.</p></li>
-<li><p><strong>this</strong> (<em>The jacobian will be computed for the activation signal of units in</em>) – </p></li>
-<li><p><strong>integer</strong> – </p></li>
-<li><p><strong>representing</strong> (<em>a dictionary</em>) – </p></li>
-<li><p><strong>passed</strong> – </p></li>
+<li><p><strong>arguments</strong> (<em>Optional</em><em>[</em><em>E</em><em>]</em><em>, </em><em>optional</em>) – Name of the argument layer/tensor in
+the model. The jacobian of the output explaining units will be computed
+with respect to the input signal of this layer. This argument can also
+be an integer, a dictionary representing the intermediate signal or
+the pooling layer itself. If None is passed, the penultimate layer
+is assumed to be a GAP layer. Defaults to None.</p></li>
+<li><p><strong>outputs</strong> (<em>Optional</em><em>[</em><em>E</em><em>]</em><em>, </em><em>optional</em>) – Name of the output layer in the model.
+The jacobian will be computed for the activation signal of units in this
+layer. This argument can also be an integer, a dictionary representing
+the output signal and the logits layer itself. If None is passed,
+the last layer is assumed to be the logits layer. Defaults to None.</p></li>
 </ul>
 </dd>
-</dl>
-<p>:param :
-:param the last layer is assumed to be the logits layer.. Defaults to None.:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><dl class="simple">
-<dt>the exposed model, whose outputs contain the intermediate</dt><dd><p>and output tensors.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the exposed model, whose outputs contain the intermediate and
+output tensors.</p>
 </dd>
-</dl>
-</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>Model</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Model</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.find_layer_with">
-<span class="sig-name descname"><span class="pre">find_layer_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">keras.engine.training.Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">klass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Type" title="(in Python v3.10)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><span class="pre">keras.engine.base_layer.Layer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_reversed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">keras.engine.base_layer.Layer</span></span></span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#find_layer_with"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.find_layer_with" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">find_layer_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">klass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_reversed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#find_layer_with"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.find_layer_with" title="Permalink to this definition">#</a></dt>
 <dd><p>Find a layer within a model that satisfies all required properties.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -612,7 +732,7 @@ Defaults to True.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.gather_units">
-<span class="sig-name descname"><span class="pre">gather_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tensorflow.python.framework.ops.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><span class="pre">tensorflow.python.framework.ops.Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_dims</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tensorflow.python.framework.ops.Tensor</span></span></span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#gather_units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.gather_units" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">gather_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#gather_units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.gather_units" title="Permalink to this definition">#</a></dt>
 <dd><p>Gather units (in the last axis) from a tensor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -636,7 +756,7 @@ fine control gathering. Defaults to -1.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.get_global_pooling_layer">
-<span class="sig-name descname"><span class="pre">get_global_pooling_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">keras.engine.training.Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">keras.engine.base_layer.Layer</span></span></span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#get_global_pooling_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.get_global_pooling_layer" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_global_pooling_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#get_global_pooling_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.get_global_pooling_layer" title="Permalink to this definition">#</a></dt>
 <dd><p>Retrieve the last global pooling layer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -659,7 +779,7 @@ fine control gathering. Defaults to -1.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.get_logits_layer">
-<span class="sig-name descname"><span class="pre">get_logits_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">keras.engine.training.Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">keras.engine.base_layer.Layer</span></span></span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#get_logits_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.get_logits_layer" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_logits_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#get_logits_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.get_logits_layer" title="Permalink to this definition">#</a></dt>
 <dd><p>Retrieve the “logits” layer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -682,14 +802,15 @@ fine control gathering. Defaults to -1.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.get_nested_layer">
-<span class="sig-name descname"><span class="pre">get_nested_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">keras.engine.training.Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">keras.engine.base_layer.Layer</span></span></span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#get_nested_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.get_nested_layer" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_nested_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#get_nested_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.get_nested_layer" title="Permalink to this definition">#</a></dt>
 <dd><p>Retrieve a nested layer in the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>Model</em>) – the model containing the nested layer.</p></li>
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the descriptor of the nested layer.
-Nested layers are separated by “.”</p></li>
+<li><p><strong>name</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em><em>]</em>) – a string (or list of string) containing
+the name of the layer (or a list of names, each of which references
+a recursively nested module up to the layer of interest).</p></li>
 </ul>
 </dd>
 </dl>
@@ -699,12 +820,12 @@ Nested layers are separated by “.”</p></li>
     <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;predictions&#39;</span><span class="p">)</span>
 <span class="p">])</span>
 
-<span class="n">pooling_layer</span> <span class="o">=</span> <span class="n">get_nested_layer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;resnet101v2.avg_pool&#39;</span><span class="p">)</span>
+<span class="n">pooling_layer</span> <span class="o">=</span> <span class="n">get_nested_layer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;resnet101v2&#39;</span><span class="p">,</span> <span class="s1">&#39;avg_pool&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.10/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if <cite>name</cite> is not a nested member of <cite>model</cite>.</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.10/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if <code class="docutils literal notranslate"><span class="pre">name</span></code> is not a nested member of <code class="docutils literal notranslate"><span class="pre">model</span></code>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>the retrieved layer.</p>
@@ -717,8 +838,26 @@ Nested layers are separated by “.”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.layers_with_biases">
-<span class="sig-name descname"><span class="pre">layers_with_biases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">keras.engine.training.Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><span class="pre">keras.engine.base_layer.Layer</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_biases</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">keras.engine.base_layer.Layer</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#layers_with_biases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.layers_with_biases" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">layers_with_biases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_biases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#layers_with_biases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.layers_with_biases" title="Permalink to this definition">#</a></dt>
+<dd><p>Extract layers containing biases from a model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>Model</em>) – the model inspected.</p></li>
+<li><p><strong>exclude</strong> (<em>Tuple</em><em>[</em><em>Layer</em><em>]</em><em>, </em><em>optional</em>) – a list of layers to ignore. Defaults to ().</p></li>
+<li><p><strong>return_biases</strong> (<a class="reference external" href="https://docs.python.org/3.10/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – wether or not to return the biases as well.
+Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of layers.
+List[Layer], List[tf.Tensor]: a list of layers and biases.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Layer]</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-keras_explainable.utils">
@@ -735,20 +874,24 @@ Nested layers are separated by “.”</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.utils.visualize">
-<span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><span class="pre">tensorflow.python.framework.ops.Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlays</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay_alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay_cmap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><span class="pre">_io.BytesIO</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplots_ws</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplots_hs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/utils.html#visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.utils.visualize" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay_cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_buffer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplots_ws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplots_hs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/utils.html#visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.utils.visualize" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </section>
 <section id="module-keras_explainable">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-keras_explainable" title="Permalink to this headline">#</a></h2>
+<p>Keras Explainable Library.</p>
+<p>Efficient explaining AI algorithms for Keras models.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.cam">
 <span class="sig-name descname"><span class="pre">cam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keras_explainable.cam" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Shortcut for <a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.cams.cam" title="keras_explainable.methods.cams.cam"><code class="xref py py-func docutils literal notranslate"><span class="pre">methods.cams.cam()</span></code></a>,
+filtering positively contributing regions</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.explain">
-<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Callable" title="(in Python v3.10)"><span class="pre">Callable</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">keras.engine.training.Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tensorflow.python.framework.ops.Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tensorflow.python.data.ops.dataset_ops.DatasetV2</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tensorflow.python.framework.ops.Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">keras.callbacks.Callback</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_queue_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiprocessing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">method_params</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/keras_explainable/engine/explaining.html#explain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.explain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_queue_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiprocessing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">method_params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/engine/explaining.html#explain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.explain" title="Permalink to this definition">#</a></dt>
 <dd><p>Explain the outputs of <code class="docutils literal notranslate"><span class="pre">model</span></code> with respect to the inputs or an intermediate
 signal, using an AI explaining method.</p>
 <dl class="field-list simple">
@@ -765,8 +908,8 @@ for each unit. Defaults to None.</p></li>
 Defaults to 32.</p></li>
 <li><p><strong>verbose</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – wether to show a progress bar during
 the calculation of the explaining maps. Defaults to “auto”.</p></li>
-<li><p><strong>steps</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the number of steps, if <code class="docutils literal notranslate"><span class="pre">x</span></code> is a</p></li>
-<li><p><strong>None.</strong> (<em>tf.data.Dataset of unknown cardinallity. Defaults to</em>) – </p></li>
+<li><p><strong>steps</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the number of steps, if <code class="docutils literal notranslate"><span class="pre">x</span></code> is a
+<code class="docutils literal notranslate"><span class="pre">tf.data.Dataset</span></code> of unknown cardinallity. Defaults to None.</p></li>
 <li><p><strong>callbacks</strong> (<em>List</em><em>[</em><em>Callback</em><em>]</em><em>, </em><em>optional</em>) – list of callbacks called during the
 explaining procedure. Defaults to None.</p></li>
 <li><p><strong>max_queue_size</strong> (<a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – the queue size when retrieving inputs.
@@ -784,20 +927,18 @@ avoiding retracing. Defaults to True.</p></li>
 </dl>
 <p>Besides the parameters described above, any named parameters passed to this function
 will be collected into <code class="docutils literal notranslate"><span class="pre">methods_params</span></code> and passed onto the <code class="xref py py-func docutils literal notranslate"><span class="pre">explain_step()</span></code>
-and <code class="docutils literal notranslate"><span class="pre">method</span></code> functions. Common ones are:</p>
-<blockquote>
-<div><dl class="simple">
-<dt>indices_batch_dims (int): The dimensions marked as <code class="docutils literal notranslate"><span class="pre">batch</span></code> when gathering</dt><dd><p>units described by <code class="docutils literal notranslate"><span class="pre">y</span></code>. Ignore if <code class="docutils literal notranslate"><span class="pre">y</span></code> is None.</p>
-</dd>
-<dt>indices_axis: The axes from which to gather units described by <code class="docutils literal notranslate"><span class="pre">y</span></code>.</dt><dd><p>Ignore if <code class="docutils literal notranslate"><span class="pre">y</span></code> is None.</p>
-</dd>
-<dt>spatial_axis: The axes containing the positional visual info. We assume <cite>inputs</cite></dt><dd><p>to contain 2D images or videos in the shape <cite>(B1, B2, …, BN, H, W, 3)</cite>.
-For 3D image data, set <cite>spatial_axis</cite> to <cite>(1, 2, 3)</cite> or <cite>(-4, -3, -2)</cite>.</p>
-</dd>
-<dt>postprocessing: A function to process the activation maps before normalization</dt><dd><p>(most commonly adopted being <cite>maximum(x, 0)</cite> and <cite>abs</cite>).</p>
-</dd>
-</dl>
-</div></blockquote>
+and <code class="docutils literal notranslate"><span class="pre">method</span></code> functions. The most common ones are:</p>
+<ul class="simple">
+<li><p>indices_batch_dims (int): The dimensions marked as <code class="docutils literal notranslate"><span class="pre">batch</span></code> when gathering
+units described by <code class="docutils literal notranslate"><span class="pre">y</span></code>. Ignore if <code class="docutils literal notranslate"><span class="pre">y</span></code> is None.</p></li>
+<li><p>indices_axis: The axes from which to gather units described by <code class="docutils literal notranslate"><span class="pre">y</span></code>.
+Ignore if <code class="docutils literal notranslate"><span class="pre">y</span></code> is None.</p></li>
+<li><p>spatial_axis: The axes containing the positional visual info. We assume <cite>inputs</cite>
+to contain 2D images or videos in the shape <cite>(B1, B2, …, BN, H, W, 3)</cite>.
+For 3D image data, set <cite>spatial_axis</cite> to <cite>(1, 2, 3)</cite> or <cite>(-4, -3, -2)</cite>.</p></li>
+<li><p>postprocessing: A function to process the activation maps before normalization
+(most commonly adopted being <cite>maximum(x, 0)</cite> and <cite>abs</cite>).</p></li>
+</ul>
 <dl class="field-list simple">
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.10/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – the explaining method produced in an unexpected.</p>
@@ -814,22 +955,30 @@ For 3D image data, set <cite>spatial_axis</cite> to <cite>(1, 2, 3)</cite> or <c
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.gradcam">
 <span class="sig-name descname"><span class="pre">gradcam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keras_explainable.gradcam" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Shortcut for <a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.cams.gradcam" title="keras_explainable.methods.cams.gradcam"><code class="xref py py-func docutils literal notranslate"><span class="pre">methods.cams.gradcam()</span></code></a>,
+filtering positively contributing regions</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.gradcampp">
 <span class="sig-name descname"><span class="pre">gradcampp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keras_explainable.gradcampp" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Shortcut for <a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.cams.gradcampp" title="keras_explainable.methods.cams.gradcampp"><code class="xref py py-func docutils literal notranslate"><span class="pre">methods.cams.gradcampp()</span></code></a>,
+filtering positively contributing regions</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.gradients">
 <span class="sig-name descname"><span class="pre">gradients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keras_explainable.gradients" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Shortcut for <a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.gradient.gradients" title="keras_explainable.methods.gradient.gradients"><code class="xref py py-func docutils literal notranslate"><span class="pre">methods.gradient.gradients()</span></code></a>,
+filtering absolutely contributing regions</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.scorecam">
 <span class="sig-name descname"><span class="pre">scorecam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keras_explainable.scorecam" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Shortcut for <a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.cams.scorecam" title="keras_explainable.methods.cams.scorecam"><code class="xref py py-func docutils literal notranslate"><span class="pre">methods.cams.scorecam()</span></code></a>,
+filtering positively contributing regions</p>
+</dd></dl>
 
 </section>
 </section>

@@ -99,6 +99,11 @@
    Explaining
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../exposure.html">
+   Exposure
+  </a>
+ </li>
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="../index.html">
    Methods
@@ -116,12 +121,12 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../saliency/smoothgrad.html">
-     Smooth-Grad
+     SmoothGrad
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../saliency/fullgrad.html">
-     Full-Grad
+     Full-Gradient
     </a>
    </li>
    <li class="toctree-l2 current active">
@@ -138,7 +143,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../wsol.html">
-   WSSL
+   WSSL &amp; WSSS
   </a>
  </li>
  <li class="toctree-l1">
@@ -417,28 +422,23 @@ vision (pp. 618-626).</p>
 <div class="cell_output docutils container">
 </div>
 </div>
-<p>Firstly, we employ the <code class="xref py py-class docutils literal notranslate"><span class="pre">ResNet101</span></code> network pre-trained over the
+<p>Firstly, we employ the <code class="xref py py-class docutils literal notranslate"><span class="pre">ResNet50</span></code> network pre-trained over the
 ImageNet dataset:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">WEIGHTS</span> <span class="o">=</span> <span class="s1">&#39;imagenet&#39;</span>
-
-<span class="n">input_tensor</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="o">*</span><span class="n">SIZES</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;inputs&#39;</span><span class="p">)</span>
-
-<span class="n">rn101</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">ResNet101V2</span><span class="p">(</span>
-  <span class="n">input_tensor</span><span class="o">=</span><span class="n">input_tensor</span><span class="p">,</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rn50</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">ResNet50V2</span><span class="p">(</span>
   <span class="n">classifier_activation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-  <span class="n">weights</span><span class="o">=</span><span class="n">WEIGHTS</span>
+  <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;imagenet&#39;</span>
 <span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;ResNet101 with </span><span class="si">{</span><span class="n">WEIGHTS</span><span class="si">}</span><span class="s1"> pre-trained weights loaded.&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spatial map sizes: </span><span class="si">{</span><span class="n">rn101</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s1">&#39;avg_pool&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;ResNet50 pretrained over ImageNet was loaded.&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spatial map sizes: </span><span class="si">{</span><span class="n">rn50</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s1">&#39;avg_pool&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>ResNet101 with imagenet pre-trained weights loaded.
-Spatial map sizes: (None, 10, 10, 2048)
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>ResNet50 pretrained over ImageNet was loaded.
+Spatial map sizes: (None, 7, 7, 2048)
 </pre></div>
 </div>
 </div>
@@ -449,10 +449,10 @@ required in order to determine the most activating units in the <em>logits</em> 
 which improves performance of the explaining methods.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prec</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">resnet_v2</span><span class="o">.</span><span class="n">preprocess_input</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tensorflow.keras.applications.imagenet_utils</span> <span class="kn">import</span> <span class="n">preprocess_input</span>
 
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">prec</span><span class="p">(</span><span class="n">images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
-<span class="n">logits</span> <span class="o">=</span> <span class="n">rn101</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">images</span> <span class="o">/</span> <span class="mf">127.5</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">logits</span> <span class="o">=</span> <span class="n">rn50</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
 <span class="n">explaining_units</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># First most likely class of each sample.</span>
@@ -469,11 +469,11 @@ signal (oftentimes advent from the last convolutional layer).</p>
 <p>CAM-based methods implemented here expect the model to output both logits and
 activation signal, so their respective representative tensors are exposed and
 the jacobian can be computed from the former with respect to the latter.
-Hence, we modify the current <cite>rn101</cite> model — which only output logits at this
+Hence, we modify the current <cite>rn50</cite> model — which only output logits at this
 time — to expose both activation maps and logits signals:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rn101_exposed</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">rn101</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rn101_exposed</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">rn50</span><span class="p">)</span>
 <span class="n">_</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">gradcam</span><span class="p">(</span><span class="n">rn101_exposed</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">explaining_units</span><span class="p">)</span>
 
 <span class="n">ke</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span>
@@ -501,19 +501,19 @@ these <span class="math notranslate nohighlight">\(NK\)</span> outputs.</p>
 both logits and the activation signal immediately before the
 <em>Global Average Pooling</em> layer.</p>
 <p>Under the hood of our example,
-<a href="#id1"><span class="problematic" id="id2">:py:function:`keras_explainable.inspection.expose`</span></a> is simply
+<a class="reference internal" href="../../api/keras_explainable.html#keras_explainable.inspection.expose" title="keras_explainable.inspection.expose"><code class="xref py py-func docutils literal notranslate"><span class="pre">keras_explainable.inspection.expose()</span></code></a> is simply
 collecting the input and output signals of the global pooling
 and predictions layer, respectively:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">activations</span> <span class="o">=</span> <span class="n">rn101</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s1">&#39;avg_pool&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">input</span>
-<span class="n">scores</span> <span class="o">=</span> <span class="n">rn101</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s1">&#39;predictions&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">output</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">activations</span> <span class="o">=</span> <span class="n">rn50</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s1">&#39;avg_pool&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">input</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="n">rn50</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s1">&#39;predictions&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">output</span>
 
-<span class="n">rn101_exposed</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">rn101</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="p">[</span><span class="n">scores</span><span class="p">,</span> <span class="n">activations</span><span class="p">])</span>
+<span class="n">rn101_exposed</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">rn50</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="p">[</span><span class="n">scores</span><span class="p">,</span> <span class="n">activations</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>You can also provide hints regarding the argument and output signals, if
 your model’s topology is more complex or if you simply wish to compute the
 Grad-CAM with respect to other layer than the last convolutional one:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rn101_exposed</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">rn101</span><span class="p">,</span> <span class="s1">&#39;conv5_out&#39;</span><span class="p">,</span> <span class="s1">&#39;predictions&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rn101_exposed</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">rn50</span><span class="p">,</span> <span class="s1">&#39;conv5_out&#39;</span><span class="p">,</span> <span class="s1">&#39;predictions&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>For nested models that were created from different Input objects, you can
@@ -521,10 +521,10 @@ further specify which nodes to access within each layer, which maintains
 the computation graph connected:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Sequential</span>
 <span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span><span class="p">,</span> <span class="n">Activation</span>
-<span class="kn">from</span> <span class="nn">keras.applications</span> <span class="kn">import</span> <span class="n">ResNet101V2</span>
+<span class="kn">from</span> <span class="nn">keras.applications</span> <span class="kn">import</span> <span class="n">ResNet50V2</span>
 
 <span class="n">inputs</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
-<span class="n">backbone</span> <span class="o">=</span> <span class="n">ResNet101V2</span><span class="p">(</span><span class="n">include_top</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pooling</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">)</span>
+<span class="n">backbone</span> <span class="o">=</span> <span class="n">ResNet50V2</span><span class="p">(</span><span class="n">include_top</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pooling</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">([</span>
   <span class="n">inputs</span><span class="p">,</span>
   <span class="n">backbone</span><span class="p">,</span>
@@ -533,9 +533,9 @@ the computation graph connected:</p>
 <span class="p">])</span>
 
 <span class="n">rn101_exposed</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span>
-  <span class="n">rn101</span><span class="p">,</span>
+  <span class="n">rn50</span><span class="p">,</span>
   <span class="n">arguments</span><span class="o">=</span><span class="p">{</span>
-    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;rn101.avg_pool&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;rn50.avg_pool&#39;</span><span class="p">,</span>
     <span class="s1">&#39;link&#39;</span><span class="p">:</span> <span class="s1">&#39;input&#39;</span><span class="p">,</span>
     <span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="mi">1</span>
   <span class="p">},</span>

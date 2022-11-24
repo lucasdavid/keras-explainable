@@ -12,8 +12,8 @@ Saliency and Gradient-based
    :maxdepth: 1
 
    Gradient Back-propagation <saliency/gradients>
-   Smooth-Grad <saliency/smoothgrad>
-   Full-Grad <saliency/fullgrad>
+   SmoothGrad <saliency/smoothgrad>
+   Full-Gradient <saliency/fullgrad>
 
 CAM-Based Techniques
 """"""""""""""""""""

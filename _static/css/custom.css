@@ -1,3 +1,22 @@
+/***
+ * Code Highlighting.
+ **/
+
+ .highlight {
+  background-color: #f7f7f7 !important;
+  padding: 0 !important;
+ }
+
+.highlight > pre {
+  background: none;
+  border: none;
+  padding: 1em !important;
+
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
 .jupyter_container {
   background-color: transparent !important;
   border: none !important;
@@ -8,28 +27,37 @@
   box-shadow: none !important;
 }
 
-.code_cell {
+.jupyter_container > .code_cell {
   border: none !important;
-  background-color: transparent !important;
-  border-radius: 0 !important;
 }
 
-.highlight {
+.jupyter_container > .cell_output > .output {
+  margin: 0;
 }
 
-.highlight>pre {
-  background-color: #f7f7f7!important;
-
-  padding: 1.25em !important;
-  margin: .85rem 0 !important;
-
-  border: none !important;
-  border-radius: 0 !important;
-
-  -webkit-box-shadow: none !important;
-  -moz-box-shadow: none !important;
-  box-shadow: none !important;
+.jupyter_container > .cell_output > .output:first-child {
+  margin-top: 0.25em;
 }
+
+.jupyter_container > .cell_output > .output > .highlight {
+  margin: 0;
+}
+
+.jupyter_container > .cell_output > .output > .highlight > pre {
+  padding: 0 1em !important;
+}
+
+.jupyter_container > .cell_output > .output:first-child > .highlight > pre {
+  padding-top: 1em !important;
+}
+
+.jupyter_container > .cell_output > .output:last-child > .highlight > pre {
+  padding-bottom: 1em !important;
+}
+
+/***
+ * Forms
+ **/
 
 .dataframe {
   border: none !important;

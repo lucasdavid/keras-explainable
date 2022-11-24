@@ -95,6 +95,11 @@
    Explaining
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../exposure.html">
+   Exposure
+  </a>
+ </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../../methods/index.html">
    Methods
@@ -112,12 +117,12 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../methods/saliency/smoothgrad.html">
-     Smooth-Grad
+     SmoothGrad
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../methods/saliency/fullgrad.html">
-     Full-Grad
+     Full-Gradient
     </a>
    </li>
    <li class="toctree-l2">
@@ -134,7 +139,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../../wsol.html">
-   WSSL
+   WSSL &amp; WSSS
   </a>
  </li>
  <li class="toctree-l1">
@@ -330,17 +335,14 @@ title="Source repository"
         <span class="o">**</span><span class="n">params</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="n">logits</span><span class="p">,</span> <span class="n">maps</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">concat</span><span class="p">(([</span><span class="n">repetitions</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">inputs</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">noisy_inputs</span> <span class="o">=</span> <span class="n">inputs</span> <span class="o">+</span> <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">noise</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">inputs</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
         <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">control_dependencies</span><span class="p">([</span><span class="n">logits</span><span class="p">,</span> <span class="n">maps</span><span class="p">]):</span>
-            <span class="n">shape</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
-
-            <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">repetitions</span><span class="p">):</span>
-                <span class="n">batch_inputs</span> <span class="o">=</span> <span class="n">inputs</span> <span class="o">+</span> <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span>
-                    <span class="n">shape</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">noise</span><span class="p">,</span> <span class="n">inputs</span><span class="o">.</span><span class="n">dtype</span>
-                <span class="p">)</span>
-                <span class="n">batch_logits</span><span class="p">,</span> <span class="n">batch_maps</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span>
-                    <span class="n">model</span><span class="p">,</span> <span class="n">batch_inputs</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span>
-                <span class="p">)</span>
+            <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">repetitions</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">batch_inputs</span> <span class="o">=</span> <span class="n">noisy_inputs</span><span class="p">[</span><span class="n">step</span><span class="p">]</span>
+                <span class="n">batch_logits</span><span class="p">,</span> <span class="n">batch_maps</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">batch_inputs</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
 
                 <span class="n">logits</span> <span class="o">+=</span> <span class="n">batch_logits</span>
                 <span class="n">maps</span> <span class="o">+=</span> <span class="n">batch_maps</span>
@@ -374,9 +376,7 @@ title="Source repository"
         <span class="n">shapes</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
         <span class="n">sizes</span> <span class="o">=</span> <span class="n">shapes</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="n">logits</span><span class="p">,</span> <span class="n">maps</span> <span class="o">=</span> <span class="n">_forward</span><span class="p">(</span>
-            <span class="n">method_</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">sizes</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">resize_method</span>
-        <span class="p">)</span>
+        <span class="n">logits</span><span class="p">,</span> <span class="n">maps</span> <span class="o">=</span> <span class="n">_forward</span><span class="p">(</span><span class="n">method_</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">sizes</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">resize_method</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">hflip</span><span class="p">:</span>
             <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">control_dependencies</span><span class="p">([</span><span class="n">logits</span><span class="p">,</span> <span class="n">maps</span><span class="p">]):</span>

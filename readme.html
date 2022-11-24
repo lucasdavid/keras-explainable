@@ -98,6 +98,11 @@
    Explaining
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="exposure.html">
+   Exposure
+  </a>
+ </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="methods/index.html">
    Methods
@@ -115,12 +120,12 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="methods/saliency/smoothgrad.html">
-     Smooth-Grad
+     SmoothGrad
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="methods/saliency/fullgrad.html">
-     Full-Grad
+     Full-Gradient
     </a>
    </li>
    <li class="toctree-l2">
@@ -137,7 +142,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="wsol.html">
-   WSSL
+   WSSL &amp; WSSS
   </a>
  </li>
  <li class="toctree-l1">
@@ -400,6 +405,8 @@ title="Print to PDF"
                 
   <section id="keras-explainable">
 <h1>keras Explainable<a class="headerlink" href="#keras-explainable" title="Permalink to this headline">#</a></h1>
+<a class="reference external image-reference" href="https://github.com/lucasdavid/keras-explainable/actions/workflows/ci.yml"><img alt="Travis build status" src="https://github.com/lucasdavid/keras-explainable/actions/workflows/ci.yml/badge.svg?branch=release" /></a>
+<a class="reference external image-reference" href="https://lucasdavid.github.io/keras-explainable"><img alt="Documentation status" src="https://img.shields.io/badge/docs-0.0.2-blue" /></a>
 <p>Efficient explaining AI algorithms for Keras models.</p>
 <img alt="Examples of explaining methods employed to explain outputs from various example images." src="_images/cover.jpg" />
 <section id="installation">
@@ -425,19 +432,48 @@ example:</p>
 </section>
 <section id="implemented-explaining-methods">
 <h2>Implemented Explaining Methods<a class="headerlink" href="#implemented-explaining-methods" title="Permalink to this headline">#</a></h2>
-<p>Gradient-based Explaining Methods:</p>
-<ul class="simple">
-<li><p>Gradient Back-propagation</p></li>
-<li><p>FullGrad</p></li>
-<li><p>Smooth-Grad</p></li>
-</ul>
-<p>CAM-Based Visualization Methods:</p>
-<ul class="simple">
-<li><p>CAM</p></li>
-<li><p>Grad-CAM</p></li>
-<li><p>Grad-CAM++</p></li>
-<li><p>Score-CAM</p></li>
-</ul>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Kind</p></th>
+<th class="head"><p>Reference</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Gradient Back-propagation</p></td>
+<td><p>gradient</p></td>
+<td><p><a class="reference external" href="https://arxiv.org/abs/1312.6034">paper</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Full-Gradient</p></td>
+<td><p>gradient</p></td>
+<td><p><a class="reference external" href="https://arxiv.org/abs/1905.00780">paper</a></p></td>
+</tr>
+<tr class="row-even"><td><p>CAM</p></td>
+<td><p>CAM</p></td>
+<td><p><a class="reference external" href="https://arxiv.org/abs/1512.04150">paper</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Grad-CAM</p></td>
+<td><p>CAM</p></td>
+<td><p><a class="reference external" href="https://arxiv.org/abs/1610.02391">paper</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Grad-CAM++</p></td>
+<td><p>CAM</p></td>
+<td><p><a class="reference external" href="https://arxiv.org/abs/1710.11063">paper</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Score-CAM</p></td>
+<td><p>CAM</p></td>
+<td><p><a class="reference external" href="https://arxiv.org/abs/1910.01279">paper</a></p></td>
+</tr>
+<tr class="row-even"><td><p>SmoothGrad</p></td>
+<td><p>Meta</p></td>
+<td><p><a class="reference external" href="https://arxiv.org/abs/1706.03825">paper</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>TTA</p></td>
+<td><p>Meta</p></td>
+<td><p><a class="reference external" href="https://journalofbigdata.springeropen.com/articles/10.1186/s40537-019-0197-0/">paper</a></p></td>
+</tr>
+</tbody>
+</table>
 </section>
 </section>
 

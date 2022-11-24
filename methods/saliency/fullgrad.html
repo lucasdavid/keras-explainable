@@ -98,6 +98,11 @@
    Explaining
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../exposure.html">
+   Exposure
+  </a>
+ </li>
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="../index.html">
    Methods
@@ -115,12 +120,12 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="smoothgrad.html">
-     Smooth-Grad
+     SmoothGrad
     </a>
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Full-Grad
+     Full-Gradient
     </a>
    </li>
    <li class="toctree-l2">
@@ -137,7 +142,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../wsol.html">
-   WSSL
+   WSSL &amp; WSSS
   </a>
  </li>
  <li class="toctree-l1">
@@ -365,8 +370,8 @@ systems, 32. <a class="reference external" href="https://arxiv.org/abs/1905.0078
 <span class="n">model_exposed</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inters</span><span class="p">,</span> <span class="n">logits</span><span class="p">)</span>
 
 <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="p">(</span>
-  <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BATCH</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">SHAPE</span><span class="p">),</span>
-  <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BATCH</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+  <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+  <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 <span class="p">)</span>
 
 <span class="n">logits</span><span class="p">,</span> <span class="n">maps</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">full_gradients</span><span class="p">(</span>
@@ -377,49 +382,44 @@ systems, 32. <a class="reference external" href="https://arxiv.org/abs/1905.0078
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>We describe bellow these lines in detail.</p>
+<p>We describe bellow these lines in detail.
+Firstly, we employ the <code class="xref py py-class docutils literal notranslate"><span class="pre">ResNet50V2</span></code> network pre-trained over the
+ImageNet dataset:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
 </div>
 </div>
-<p>Firstly, we employ the <code class="xref py py-class docutils literal notranslate"><span class="pre">ResNet101</span></code> network pre-trained over the
-ImageNet dataset:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">WEIGHTS</span> <span class="o">=</span> <span class="s1">&#39;imagenet&#39;</span>
-
-<span class="n">input_tensor</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="o">*</span><span class="n">SIZES</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;inputs&#39;</span><span class="p">)</span>
-
-<span class="n">rn101</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">ResNet101V2</span><span class="p">(</span>
-  <span class="n">input_tensor</span><span class="o">=</span><span class="n">input_tensor</span><span class="p">,</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rn50</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">ResNet50V2</span><span class="p">(</span>
   <span class="n">classifier_activation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-  <span class="n">weights</span><span class="o">=</span><span class="n">WEIGHTS</span>
+  <span class="n">weights</span><span class="o">=</span><span class="s2">&quot;imagenet&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;ResNet101 with </span><span class="si">{</span><span class="n">WEIGHTS</span><span class="si">}</span><span class="s1"> pre-trained weights loaded.&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spatial map sizes: </span><span class="si">{</span><span class="n">rn101</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s1">&#39;avg_pool&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;ResNet50 pretrained over ImageNet was loaded.&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spatial map sizes: </span><span class="si">{</span><span class="n">rn50</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s1">&#39;avg_pool&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>ResNet101 with imagenet pre-trained weights loaded.
-Spatial map sizes: (None, 10, 10, 2048)
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>ResNet50 pretrained over ImageNet was loaded.
+Spatial map sizes: (None, 7, 7, 2048)
 </pre></div>
 </div>
 </div>
 </div>
-<p>We can feed-foward the samples once and get the predicted classes for each sample.
-Besides making sure the model is outputing the expected classes, this step is
+<p>We can feed-forward the samples once and get the predicted classes for each sample.
+Besides making sure the model is outputting the expected classes, this step is
 required in order to determine the most activating units in the <em>logits</em> layer,
 which improves performance of the explaining methods.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prec</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">resnet_v2</span><span class="o">.</span><span class="n">preprocess_input</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tensorflow.keras.applications.imagenet_utils</span> <span class="kn">import</span> <span class="n">preprocess_input</span>
 
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">prec</span><span class="p">(</span><span class="n">images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
-<span class="n">logits</span> <span class="o">=</span> <span class="n">rn101</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">preprocess_input</span><span class="p">(</span><span class="n">images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;tf&quot;</span><span class="p">)</span>
+<span class="n">logits</span> <span class="o">=</span> <span class="n">rn50</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">explaining_units</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Firstmost likely classes.</span>
+<span class="n">explaining_units</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># First-most likely classes.</span>
 </pre></div>
 </div>
 </div>
@@ -433,9 +433,9 @@ Thus, we must first expose them. The most efficient way to do so is
 by collecting the layers directly:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">logits</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">get_logits_layer</span><span class="p">(</span><span class="n">rn101</span><span class="p">)</span>
-<span class="n">inters</span><span class="p">,</span> <span class="n">biases</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">layers_with_biases</span><span class="p">(</span><span class="n">rn101</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">[</span><span class="n">logits</span><span class="p">])</span>
-<span class="n">model_exposed</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">rn101</span><span class="p">,</span> <span class="n">inters</span><span class="p">,</span> <span class="n">logits</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">logits</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">get_logits_layer</span><span class="p">(</span><span class="n">rn50</span><span class="p">)</span>
+<span class="n">inters</span><span class="p">,</span> <span class="n">biases</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">layers_with_biases</span><span class="p">(</span><span class="n">rn50</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">[</span><span class="n">logits</span><span class="p">])</span>
+<span class="n">model_exposed</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">rn50</span><span class="p">,</span> <span class="n">inters</span><span class="p">,</span> <span class="n">logits</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

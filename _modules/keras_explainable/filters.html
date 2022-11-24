@@ -95,6 +95,11 @@
    Explaining
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../exposure.html">
+   Exposure
+  </a>
+ </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../methods/index.html">
    Methods
@@ -112,12 +117,12 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../methods/saliency/smoothgrad.html">
-     Smooth-Grad
+     SmoothGrad
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../methods/saliency/fullgrad.html">
-     Full-Grad
+     Full-Gradient
     </a>
    </li>
    <li class="toctree-l2">
@@ -134,7 +139,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../wsol.html">
-   WSSL
+   WSSL &amp; WSSS
   </a>
  </li>
  <li class="toctree-l1">
@@ -293,37 +298,130 @@ title="Source repository"
               <div>
                 
   <h1>Source code for keras_explainable.filters</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span></span><span class="sd">&quot;&quot;&quot;Shortcuts for commonly used signal filters used in literature.</span>
+
+<span class="sd">These filters can be used as post or mid processing for explaining</span>
+<span class="sd">methods and techniques. For example, to account for the absolute</span>
+<span class="sd">pixel contribution, when computing the gradient of a score unit</span>
+<span class="sd">with respect to the input image:</span>
+
+<span class="sd">.. jupyter-execute::</span>
+<span class="sd">    :hide-code:</span>
+<span class="sd">    :hide-output:</span>
+
+<span class="sd">    import numpy as np</span>
+<span class="sd">    import keras_explainable as ke</span>
+
+<span class="sd">.. jupyter-execute::</span>
+
+<span class="sd">    x = 5 * np.random.normal(size=(4, 16, 16, 3))</span>
+<span class="sd">    y = ke.filters.absolute_normalize(x).numpy()</span>
+<span class="sd">    print(f&quot;[{x.min()}, {x.max()}] -&gt; [{y.min()}, {y.max()}]&quot;)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 
 <span class="kn">from</span> <span class="nn">keras_explainable.inspection</span> <span class="kn">import</span> <span class="n">SPATIAL_AXIS</span>
 
 
-<div class="viewcode-block" id="normalize"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.filters.normalize">[docs]</a><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">SPATIAL_AXIS</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Normalize a positional signal between 0 and 1.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="normalize"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.filters.normalize">[docs]</a><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPATIAL_AXIS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Normalize the signal into the interval [0, 1].</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (tf.Tensor): the input signal to be normalized.</span>
+<span class="sd">        axis (Tuple[int], optional): the dimensions containing positional</span>
+<span class="sd">            information. Defaults to ``SPATIAL_AXIS``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tf.Tensor: the normalized signal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">x</span> <span class="o">-=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_min</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">divide_no_nan</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_max</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="positive"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.filters.positive">[docs]</a><span class="k">def</span> <span class="nf">positive</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">SPATIAL_AXIS</span><span class="p">):</span>
+<div class="viewcode-block" id="positive"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.filters.positive">[docs]</a><span class="k">def</span> <span class="nf">positive</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPATIAL_AXIS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Retain only positive values of the input signal.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (tf.Tensor): the input signal.</span>
+<span class="sd">        axis (Tuple[int], optional): the dimensions containing positional</span>
+<span class="sd">            information. Defaults to ``SPATIAL_AXIS``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tf.Tensor: the filtered signal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="negative"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.filters.negative">[docs]</a><span class="k">def</span> <span class="nf">negative</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">SPATIAL_AXIS</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">)</span></div>
+<div class="viewcode-block" id="negative"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.filters.negative">[docs]</a><span class="k">def</span> <span class="nf">negative</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPATIAL_AXIS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Retain only negative values of the input signal.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (tf.Tensor): the input</span>
+<span class="sd">        axis (Tuple[int], optional): the dimensions containing positional</span>
+<span class="sd">            information. Defaults to ``SPATIAL_AXIS``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tf.Tensor: the filtered signal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="positive_normalize"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.filters.positive_normalize">[docs]</a><span class="k">def</span> <span class="nf">positive_normalize</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">SPATIAL_AXIS</span><span class="p">):</span>
+<div class="viewcode-block" id="positive_normalize"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.filters.positive_normalize">[docs]</a><span class="k">def</span> <span class="nf">positive_normalize</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPATIAL_AXIS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Retain only positive values of the input signal and normalize it between 0 and 1.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (tf.Tensor): the input signal.</span>
+<span class="sd">        axis (Tuple[int], optional): the dimensions containing positional</span>
+<span class="sd">            information. Defaults to ``SPATIAL_AXIS``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tf.Tensor: the filtered signal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">normalize</span><span class="p">(</span><span class="n">positive</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="absolute_normalize"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.filters.absolute_normalize">[docs]</a><span class="k">def</span> <span class="nf">absolute_normalize</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">SPATIAL_AXIS</span><span class="p">):</span>
+<div class="viewcode-block" id="absolute_normalize"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.filters.absolute_normalize">[docs]</a><span class="k">def</span> <span class="nf">absolute_normalize</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPATIAL_AXIS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Absolute values of the input signal and normalize it between 0 and 1.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (tf.Tensor): the input signal.</span>
+<span class="sd">        axis (Tuple[int], optional): the dimensions containing positional</span>
+<span class="sd">            information. Defaults to ``SPATIAL_AXIS``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tf.Tensor: the filtered signal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">normalize</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="negative_normalize"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.filters.negative_normalize">[docs]</a><span class="k">def</span> <span class="nf">negative_normalize</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">SPATIAL_AXIS</span><span class="p">):</span>
+<div class="viewcode-block" id="negative_normalize"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.filters.negative_normalize">[docs]</a><span class="k">def</span> <span class="nf">negative_normalize</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPATIAL_AXIS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Retain only negative values of the input signal and normalize it between 0 and 1.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (tf.Tensor): the input signal.</span>
+<span class="sd">        axis (Tuple[int], optional): the dimensions containing positional</span>
+<span class="sd">            information. Defaults to ``SPATIAL_AXIS``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tf.Tensor: the filtered signal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">normalize</span><span class="p">(</span><span class="n">negative</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;normalize&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;positive&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;negative&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;positive_normalize&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;absolute_normalize&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;negative_normalize&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 </pre></div>
 
               </div>

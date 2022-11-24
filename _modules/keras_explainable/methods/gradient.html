@@ -95,6 +95,11 @@
    Explaining
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../exposure.html">
+   Exposure
+  </a>
+ </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../../methods/index.html">
    Methods
@@ -112,12 +117,12 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../methods/saliency/smoothgrad.html">
-     Smooth-Grad
+     SmoothGrad
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../methods/saliency/fullgrad.html">
-     Full-Grad
+     Full-Gradient
     </a>
    </li>
    <li class="toctree-l2">
@@ -134,7 +139,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../../wsol.html">
-   WSSL
+   WSSL &amp; WSSS
   </a>
  </li>
  <li class="toctree-l1">
@@ -305,54 +310,12 @@ title="Source repository"
 <span class="kn">from</span> <span class="nn">keras_explainable</span> <span class="kn">import</span> <span class="n">inspection</span>
 <span class="kn">from</span> <span class="nn">keras_explainable.inspection</span> <span class="kn">import</span> <span class="n">KERNEL_AXIS</span>
 <span class="kn">from</span> <span class="nn">keras_explainable.inspection</span> <span class="kn">import</span> <span class="n">SPATIAL_AXIS</span>
-<span class="kn">from</span> <span class="nn">keras_explainable.methods</span> <span class="kn">import</span> <span class="n">autodocs</span>
-
-<span class="n">_GRAD_DOCS</span> <span class="o">=</span> <span class="n">autodocs</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
-    <span class="s2">&quot;Gradient Back-propagation&quot;</span><span class="p">,</span>
-    <span class="n">more_args</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        gradient_filter (Callable, optional): filter before</span>
-<span class="s2">            channel combining. Defaults to tf.abs.</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
-    <span class="n">references</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        - Simonyan, K., Vedaldi, A., &amp; Zisserman, A. (2013).</span>
-<span class="s2">            Deep inside convolutional networks: Visualising image classification</span>
-<span class="s2">            models and saliency maps. arXiv preprint arXiv:1312.6034.&quot;&quot;&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">_FULLGRAD_DOCS</span> <span class="o">=</span> <span class="n">autodocs</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
-    <span class="s2">&quot;Full Gradients&quot;</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    As described in the article &quot;Full-Gradient Representation for Neural</span>
-<span class="s2">    Network Visualization&quot;, Full-Gradient can be summarized in the following</span>
-<span class="s2">    equation:</span>
-
-<span class="s2">    .. math::</span>
-
-<span class="s2">      f(x) = ψ(∇_xf(x)</span><span class="se">\\</span><span class="s2">odot x) +∑_{l</span><span class="se">\\</span><span class="s2">in L}∑_{c</span><span class="se">\\</span><span class="s2">in c_l} ψ(f^b(x)_c)</span>
-
-<span class="s2">    This approach main idea is to add to add the individual contributions of</span>
-<span class="s2">    each bias factor in the network onto the extracted gradient.</span>
-
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
-    <span class="n">more_args</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        psi (Callable, optional): filter operation before combining the intermediate</span>
-<span class="s2">            signals. Defaults to ``filters.absolute_normalize``.</span>
-<span class="s2">        biases: (List[tf.Tensor], optional): list of biases associated with each</span>
-<span class="s2">            intermediate signal exposed by the model. If none is passed, it will</span>
-<span class="s2">            be infered from the endpoints (nodes) outputed by the model.</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
-    <span class="n">references</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        - Srinivas S, Fleuret F. Full-gradient representation for neural network</span>
-<span class="s2">            visualization. `arxiv.org/1905.00780 &lt;https://arxiv.org/pdf/1905.00780.pdf&gt;`_,</span>
-<span class="s2">            2019.</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
-<span class="p">)</span>
 
 
 <div class="viewcode-block" id="transpose_jacobian"><a class="viewcode-back" href="../../../api/keras_explainable.methods.html#keras_explainable.methods.gradient.transpose_jacobian">[docs]</a><span class="k">def</span> <span class="nf">transpose_jacobian</span><span class="p">(</span>
     <span class="n">x</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">spatial_rank</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">SPATIAL_AXIS</span><span class="p">)</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Transpose the Jacobian of shape (bj...) into (b...j).</span>
+    <span class="sd">&quot;&quot;&quot;Transpose the Jacobian of shape (b,g,...) into (b,...,g).</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        x (tf.Tensor): the jacobian tensor.</span>
@@ -376,8 +339,43 @@ title="Source repository"
     <span class="n">spatial_axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPATIAL_AXIS</span><span class="p">,</span>
     <span class="n">gradient_filter</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">abs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
-    <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{</span><span class="n">_GRAD_DOCS</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Computes the Gradient Back-propagation Visualization Method.</span>
 
+<span class="sd">    This method expects `inputs` to be a batch of positional signals of</span>
+<span class="sd">    shape ``BHW...C``, and will return a tensor of shape ``BH&#39;W&#39;...L``,</span>
+<span class="sd">    where ``(H&#39;, W&#39;, ...)`` are the sizes of the visual receptive field</span>
+<span class="sd">    in the explained activation layer and `L` is the number of labels</span>
+<span class="sd">    represented within the model&#39;s output logits.</span>
+
+<span class="sd">    If `indices` is passed, the specific logits indexed by elements in this</span>
+<span class="sd">    tensor are selected before the gradients are computed, effectively</span>
+<span class="sd">    reducing the columns in the jacobian, and the size of the output explaining map.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (tf.keras.Model): the model being explained</span>
+<span class="sd">        inputs (tf.Tensor): the input data</span>
+<span class="sd">        indices (Optional[tf.Tensor], optional): indices that should be gathered</span>
+<span class="sd">            from ``outputs``. Defaults to None.</span>
+<span class="sd">        indices_axis (int, optional): the axis containing the indices to gather.</span>
+<span class="sd">            Defaults to ``KERNEL_AXIS``.</span>
+<span class="sd">        indices_batch_dims (int, optional): the number of dimensions to broadcast</span>
+<span class="sd">            in the ``tf.gather`` operation. Defaults to ``-1``.</span>
+<span class="sd">        spatial_axis (Tuple[int], optional): the dimensions containing positional</span>
+<span class="sd">            information. Defaults to ``SPATIAL_AXIS``.</span>
+<span class="sd">        gradient_filter (Callable, optional): filter before channel combining.</span>
+<span class="sd">            Defaults to tf.abs.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple[tf.Tensor, tf.Tensor]: the logits and saliency maps.</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">        - Simonyan, K., Vedaldi, A., &amp; Zisserman, A. (2013).</span>
+<span class="sd">          Deep inside convolutional networks: Visualising image classification</span>
+<span class="sd">          models and saliency maps. arXiv preprint</span>
+<span class="sd">          `arXiv:1312.6034 &lt;https://arxiv.org/abs/1312.6034&gt;`_.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">GradientTape</span><span class="p">(</span><span class="n">watch_accessed_variables</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
         <span class="n">tape</span><span class="o">.</span><span class="n">watch</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
         <span class="n">logits</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -393,26 +391,26 @@ title="Source repository"
     <span class="k">return</span> <span class="n">logits</span><span class="p">,</span> <span class="n">maps</span></div>
 
 
-<div class="viewcode-block" id="resized_psi_dfx"><a class="viewcode-back" href="../../../api/keras_explainable.methods.html#keras_explainable.methods.gradient.resized_psi_dfx">[docs]</a><span class="k">def</span> <span class="nf">resized_psi_dfx</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">_resized_psi_dfx</span><span class="p">(</span>
     <span class="n">inputs</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">outputs</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">sizes</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">psi</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">filters</span><span class="o">.</span><span class="n">absolute_normalize</span><span class="p">,</span>
     <span class="n">spatial_axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPATIAL_AXIS</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Filter and resize intermediate gradient tensors.</span>
+    <span class="sd">&quot;&quot;&quot;Filter and resize the gradient tensor.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        inputs (tf.Tensor): the input signal.</span>
 <span class="sd">        outputs (tf.Tensor): the output signal.</span>
 <span class="sd">        sizes (tf.Tensor): the expected sizes.</span>
 <span class="sd">        psi (Callable, optional): the filtering function. Defaults to</span>
-<span class="sd">            ``filters.absolute_normalize``.</span>
+<span class="sd">            :func:`~keras_explainable.filters.absolute_normalize`.</span>
 <span class="sd">        spatial_axis (Tuple[int], optional): the spatial axes in the signal.</span>
 <span class="sd">            Defaults to ``SPATIAL_AXIS``.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        tf.Tensor: _description_</span>
+<span class="sd">        tf.Tensor: the resized and processed tensor.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">outputs</span> <span class="o">*</span> <span class="n">inputs</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">psi</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">spatial_axis</span><span class="p">)</span>
@@ -420,7 +418,7 @@ title="Source repository"
     <span class="c1"># t = transpose_jacobian(t, len(spatial_axis))</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">sizes</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">t</span></div>
+    <span class="k">return</span> <span class="n">t</span>
 
 
 <div class="viewcode-block" id="full_gradients"><a class="viewcode-back" href="../../../api/keras_explainable.methods.html#keras_explainable.methods.gradient.full_gradients">[docs]</a><span class="k">def</span> <span class="nf">full_gradients</span><span class="p">(</span>
@@ -433,13 +431,57 @@ title="Source repository"
     <span class="n">psi</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">filters</span><span class="o">.</span><span class="n">absolute_normalize</span><span class="p">,</span>
     <span class="n">biases</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{</span><span class="n">_FULLGRAD_DOCS</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Computes the Full-Grad Visualization Method.</span>
 
+<span class="sd">    This technique adds the individual contributions of each bias factor</span>
+<span class="sd">    in the model to the extracted gradient, forming the &quot;full gradient&quot;</span>
+<span class="sd">    representation, and it can be summarized by the following equation:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">      f(x) = ψ(∇_xf(x)\\odot x) +∑_{l\\in L}∑_{c\\in c_l} ψ(f^b(x)_c)</span>
+
+<span class="sd">    This method expects `inputs` to be a batch of positional signals of</span>
+<span class="sd">    shape ``BHW...C``, and will return a tensor of shape ``BH&#39;W&#39;...L``,</span>
+<span class="sd">    where ``(H&#39;, W&#39;, ...)`` are the sizes of the visual receptive field</span>
+<span class="sd">    in the explained activation layer and `L` is the number of labels</span>
+<span class="sd">    represented within the model&#39;s output logits.</span>
+
+<span class="sd">    If `indices` is passed, the specific logits indexed by elements in this</span>
+<span class="sd">    tensor are selected before the gradients are computed, effectively</span>
+<span class="sd">    reducing the columns in the jacobian, and the size of the output explaining map.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (tf.keras.Model): the model being explained</span>
+<span class="sd">        inputs (tf.Tensor): the input data</span>
+<span class="sd">        indices (Optional[tf.Tensor], optional): indices that should be gathered</span>
+<span class="sd">            from ``outputs``. Defaults to None.</span>
+<span class="sd">        indices_axis (int, optional): the axis containing the indices to gather.</span>
+<span class="sd">            Defaults to ``KERNEL_AXIS``.</span>
+<span class="sd">        indices_batch_dims (int, optional): the number of dimensions to broadcast</span>
+<span class="sd">            in the ``tf.gather`` operation. Defaults to ``-1``.</span>
+<span class="sd">        spatial_axis (Tuple[int], optional): the dimensions containing positional</span>
+<span class="sd">            information. Defaults to ``SPATIAL_AXIS``.</span>
+<span class="sd">        psi (Callable, optional): filter operation before combining the intermediate</span>
+<span class="sd">            signals. Defaults to ``filters.absolute_normalize``.</span>
+<span class="sd">        biases: (List[tf.Tensor], optional): list of biases associated with each</span>
+<span class="sd">            intermediate signal exposed by the model. If none is passed, it will</span>
+<span class="sd">            be infered from the endpoints (nodes) outputed by the model.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple[tf.Tensor, tf.Tensor]: the logits and saliency maps.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        - Srinivas S, Fleuret F. Full-gradient representation for neural network</span>
+<span class="sd">          visualization. `arxiv.org/1905.00780 &lt;https://arxiv.org/pdf/1905.00780.pdf&gt;`_,</span>
+<span class="sd">          2019.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">shape</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
     <span class="n">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">shape</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">spatial_axis</span><span class="p">]</span>
 
     <span class="n">resized_psi_dfx_</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
-        <span class="n">resized_psi_dfx</span><span class="p">,</span>
+        <span class="n">_resized_psi_dfx</span><span class="p">,</span>
         <span class="n">sizes</span><span class="o">=</span><span class="n">sizes</span><span class="p">,</span>
         <span class="n">psi</span><span class="o">=</span><span class="n">psi</span><span class="p">,</span>
         <span class="n">spatial_axis</span><span class="o">=</span><span class="n">spatial_axis</span><span class="p">,</span>
@@ -469,6 +511,11 @@ title="Source repository"
     <span class="n">gradients</span><span class="p">,</span>
     <span class="n">full_gradients</span><span class="p">,</span>
 <span class="p">]</span>
+<span class="sd">&quot;&quot;&quot;Available Gradient-based AI Explaining methods.</span>
+
+<span class="sd">This list contains all available methods implemented in this module,</span>
+<span class="sd">and it is kept and used for introspection and validation purposes.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
 
               </div>

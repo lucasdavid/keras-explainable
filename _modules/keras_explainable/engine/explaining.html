@@ -95,6 +95,11 @@
    Explaining
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../exposure.html">
+   Exposure
+  </a>
+ </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../../methods/index.html">
    Methods
@@ -112,12 +117,12 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../methods/saliency/smoothgrad.html">
-     Smooth-Grad
+     SmoothGrad
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../methods/saliency/fullgrad.html">
-     Full-Grad
+     Full-Gradient
     </a>
    </li>
    <li class="toctree-l2">
@@ -134,7 +139,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../../wsol.html">
-   WSSL
+   WSSL &amp; WSSS
   </a>
  </li>
  <li class="toctree-l1">
@@ -368,9 +373,7 @@ title="Source repository"
             <span class="k">return</span> <span class="n">outputs</span>
 
         <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">_jit_compile</span><span class="p">:</span>
-            <span class="n">run_step</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">function</span><span class="p">(</span>
-                <span class="n">run_step</span><span class="p">,</span> <span class="n">jit_compile</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">reduce_retracing</span><span class="o">=</span><span class="kc">True</span>
-            <span class="p">)</span>
+            <span class="n">run_step</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="n">run_step</span><span class="p">,</span> <span class="n">jit_compile</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">reduce_retracing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">iterator</span><span class="p">)</span>
         <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">distribute_strategy</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">run_step</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">data</span><span class="p">,))</span>
@@ -399,8 +402,7 @@ title="Source repository"
 <span class="p">):</span>
     <span class="n">dataset_types</span> <span class="o">=</span> <span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span>
-        <span class="n">model</span><span class="o">.</span><span class="n">_in_multi_worker_mode</span><span class="p">()</span>
-        <span class="ow">or</span> <span class="n">_is_tpu_multi_host</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">distribute_strategy</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">_in_multi_worker_mode</span><span class="p">()</span> <span class="ow">or</span> <span class="n">_is_tpu_multi_host</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">distribute_strategy</span><span class="p">)</span>
     <span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dataset_types</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">opts</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Options</span><span class="p">()</span>
@@ -430,6 +432,7 @@ title="Source repository"
         <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
         <span class="n">steps_per_execution</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">_steps_per_execution</span><span class="p">,</span>
     <span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="explain"><a class="viewcode-back" href="../../../api/keras_explainable.engine.html#keras_explainable.explain">[docs]</a><span class="k">def</span> <span class="nf">explain</span><span class="p">(</span>
     <span class="n">method</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
@@ -462,7 +465,7 @@ title="Source repository"
 <span class="sd">        verbose (Union[str, int], optional): wether to show a progress bar during</span>
 <span class="sd">            the calculation of the explaining maps. Defaults to &quot;auto&quot;.</span>
 <span class="sd">        steps (Optional[int], optional): the number of steps, if ``x`` is a</span>
-<span class="sd">        ``tf.data.Dataset`` of unknown cardinallity. Defaults to None.</span>
+<span class="sd">          ``tf.data.Dataset`` of unknown cardinallity. Defaults to None.</span>
 <span class="sd">        callbacks (List[Callback], optional): list of callbacks called during the</span>
 <span class="sd">            explaining procedure. Defaults to None.</span>
 <span class="sd">        max_queue_size (int, optional): the queue size when retrieving inputs.</span>
@@ -475,20 +478,20 @@ title="Source repository"
 <span class="sd">        force (bool, optional): to force the creation of the explaining function.</span>
 <span class="sd">            Can be set to False if the same function is always applied to a model,</span>
 <span class="sd">            avoiding retracing. Defaults to True.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Besides the parameters described above, any named parameters passed to this function</span>
 <span class="sd">    will be collected into ``methods_params`` and passed onto the :func:`explain_step`</span>
-<span class="sd">    and ``method`` functions. Common ones are:</span>
+<span class="sd">    and ``method`` functions. The most common ones are:</span>
 
-<span class="sd">        indices_batch_dims (int): The dimensions marked as ``batch`` when gathering</span>
-<span class="sd">            units described by ``y``. Ignore if ``y`` is None.</span>
-<span class="sd">        indices_axis: The axes from which to gather units described by ``y``.</span>
-<span class="sd">            Ignore if ``y`` is None.</span>
-<span class="sd">        spatial_axis: The axes containing the positional visual info. We assume `inputs`</span>
-<span class="sd">            to contain 2D images or videos in the shape `(B1, B2, ..., BN, H, W, 3)`.</span>
-<span class="sd">            For 3D image data, set `spatial_axis` to `(1, 2, 3)` or `(-4, -3, -2)`.</span>
-<span class="sd">        postprocessing: A function to process the activation maps before normalization</span>
-<span class="sd">            (most commonly adopted being `maximum(x, 0)` and `abs`).</span>
+<span class="sd">    - indices_batch_dims (int): The dimensions marked as ``batch`` when gathering</span>
+<span class="sd">      units described by ``y``. Ignore if ``y`` is None.</span>
+<span class="sd">    - indices_axis: The axes from which to gather units described by ``y``.</span>
+<span class="sd">      Ignore if ``y`` is None.</span>
+<span class="sd">    - spatial_axis: The axes containing the positional visual info. We assume `inputs`</span>
+<span class="sd">      to contain 2D images or videos in the shape `(B1, B2, ..., BN, H, W, 3)`.</span>
+<span class="sd">      For 3D image data, set `spatial_axis` to `(1, 2, 3)` or `(-4, -3, -2)`.</span>
+<span class="sd">    - postprocessing: A function to process the activation maps before normalization</span>
+<span class="sd">      (most commonly adopted being `maximum(x, 0)` and `abs`).</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        ValueError: the explaining method produced in an unexpected.</span>
@@ -527,9 +530,7 @@ title="Source repository"
                 <span class="n">steps</span><span class="o">=</span><span class="n">data_handler</span><span class="o">.</span><span class="n">inferred_steps</span><span class="p">,</span>
             <span class="p">)</span>
 
-        <span class="n">explain_function</span> <span class="o">=</span> <span class="n">make_explain_function</span><span class="p">(</span>
-            <span class="n">model</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">method_params</span><span class="p">,</span> <span class="n">force</span>
-        <span class="p">)</span>
+        <span class="n">explain_function</span> <span class="o">=</span> <span class="n">make_explain_function</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">method_params</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
         <span class="n">model</span><span class="o">.</span><span class="n">_explain_counter</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">callbacks</span><span class="o">.</span><span class="n">on_predict_begin</span><span class="p">()</span>
         <span class="n">batch_outputs</span> <span class="o">=</span> <span class="kc">None</span>
@@ -540,9 +541,7 @@ title="Source repository"
                     <span class="n">tmp_batch_outputs</span> <span class="o">=</span> <span class="n">explain_function</span><span class="p">(</span><span class="n">iterator</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">data_handler</span><span class="o">.</span><span class="n">should_sync</span><span class="p">:</span>
                         <span class="n">context</span><span class="o">.</span><span class="n">async_wait</span><span class="p">()</span>
-                    <span class="n">batch_outputs</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="n">tmp_batch_outputs</span>  <span class="c1"># No error, now safe to assign.</span>
-                    <span class="p">)</span>
+                    <span class="n">batch_outputs</span> <span class="o">=</span> <span class="n">tmp_batch_outputs</span>  <span class="c1"># No error, now safe to assign.</span>
                     <span class="k">if</span> <span class="n">outputs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="n">outputs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nest</span><span class="o">.</span><span class="n">map_structure</span><span class="p">(</span>
                             <span class="k">lambda</span> <span class="n">batch_output</span><span class="p">:</span> <span class="p">[</span><span class="n">batch_output</span><span class="p">],</span>
@@ -551,16 +550,12 @@ title="Source repository"
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">tf</span><span class="o">.</span><span class="n">__internal__</span><span class="o">.</span><span class="n">nest</span><span class="o">.</span><span class="n">map_structure_up_to</span><span class="p">(</span>
                             <span class="n">batch_outputs</span><span class="p">,</span>
-                            <span class="k">lambda</span> <span class="n">output</span><span class="p">,</span> <span class="n">batch_output</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                                <span class="n">batch_output</span>
-                            <span class="p">),</span>
+                            <span class="k">lambda</span> <span class="n">output</span><span class="p">,</span> <span class="n">batch_output</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">batch_output</span><span class="p">),</span>
                             <span class="n">outputs</span><span class="p">,</span>
                             <span class="n">batch_outputs</span><span class="p">,</span>
                         <span class="p">)</span>
                     <span class="n">end_step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="n">data_handler</span><span class="o">.</span><span class="n">step_increment</span>
-                    <span class="n">callbacks</span><span class="o">.</span><span class="n">on_predict_batch_end</span><span class="p">(</span>
-                        <span class="n">end_step</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="n">batch_outputs</span><span class="p">}</span>
-                    <span class="p">)</span>
+                    <span class="n">callbacks</span><span class="o">.</span><span class="n">on_predict_batch_end</span><span class="p">(</span><span class="n">end_step</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="n">batch_outputs</span><span class="p">})</span>
         <span class="k">if</span> <span class="n">batch_outputs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;Unexpected result of `explain_function` &quot;</span>
@@ -583,6 +578,7 @@ title="Source repository"
 <span class="sd">    Args:</span>
 <span class="sd">        method (Callable): the explaining method being wrapped by ``explain``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">_partial_method_explain</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
         <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">default_params</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">explain</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>

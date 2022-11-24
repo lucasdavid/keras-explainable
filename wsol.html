@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Weakly Supervised Object Localization &#8212; Keras Explainable</title>
+    <title>Weakly Supervised Object Localization and Semantic Segmentation &#8212; Keras Explainable</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -98,6 +98,11 @@
    Explaining
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="exposure.html">
+   Exposure
+  </a>
+ </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="methods/index.html">
    Methods
@@ -115,12 +120,12 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="methods/saliency/smoothgrad.html">
-     Smooth-Grad
+     SmoothGrad
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="methods/saliency/fullgrad.html">
-     Full-Grad
+     Full-Gradient
     </a>
    </li>
    <li class="toctree-l2">
@@ -137,7 +142,7 @@
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   WSSL
+   WSSL &amp; WSSS
   </a>
  </li>
  <li class="toctree-l1">
@@ -329,7 +334,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Weakly Supervised Object Localization</h1>
+                <h1>Weakly Supervised Object Localization and Semantic Segmentation</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -341,27 +346,35 @@ title="Print to PDF"
                 
               <div>
                 
-  <section id="weakly-supervised-object-localization">
-<h1>Weakly Supervised Object Localization<a class="headerlink" href="#weakly-supervised-object-localization" title="Permalink to this headline">#</a></h1>
-<p>Object localization cues can be extracted from models trained over
-multi-label datasets in a weakly supervised setup.</p>
+  <section id="weakly-supervised-object-localization-and-semantic-segmentation">
+<h1>Weakly Supervised Object Localization and Semantic Segmentation<a class="headerlink" href="#weakly-supervised-object-localization-and-semantic-segmentation" title="Permalink to this headline">#</a></h1>
+<p>Object localization and segmentation cues can be extracted from models
+trained over multi-label datasets in a weakly supervised setup.</p>
+<p>An example of this technique is OC-CSE, which was first described in
+the paper “Unlocking the potential of ordinary classifier: Class-specific
+adversarial erasing framework for weakly supervised semantic segmentation.”,
+by Kweon et al. (2021) [<a class="reference external" href="https://openaccess.thecvf.com/content/ICCV2021/html/Kweon_Unlocking_the_Potential_of_Ordinary_Classifier_Class-Specific_Adversarial_Erasing_Framework_ICCV_2021_paper.html">link</a>].
+Its original code (written in PyTorch) is available at
+<a class="reference external" href="https://github.com/KAIST-vilab/OC-CSE">KAIST-vilab/OC-CSE</a>, but
+we will actually load its TensorFlow alternative, available at
+<a class="reference external" href="https://github.com/lucasdavid/resnet38d-tf">lucasdavid/resnet38d-tf</a>:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
 </div>
 </div>
-<p>Firstly, we employ the <code class="xref py py-class docutils literal notranslate"><span class="pre">ResNet38-d</span></code> network pre-trained over the
-Pascal VOC 2012 dataset:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">WEIGHTS</span> <span class="o">=</span> <span class="s1">&#39;voc2012&#39;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">COLORS</span> <span class="o">=</span> <span class="n">pascal_voc_colors</span><span class="p">()</span>
 <span class="n">CLASSES</span> <span class="o">=</span> <span class="n">pascal_voc_classes</span><span class="p">()</span>
-<span class="n">COLORS</span> <span class="o">=</span> <span class="n">pascal_voc_colors</span><span class="p">(</span><span class="n">classes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">CLASSES</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">WEIGHTS</span> <span class="o">=</span> <span class="s1">&#39;docs/_build/data/resnet38d_voc2012_occse.h5&#39;</span>
 
-<span class="o">!</span> wget -nc https://raw.githubusercontent.com/lucasdavid/resnet38d-tf/main/resnet38d.py
+<span class="o">!</span> mkdir -p docs/_build/data
+<span class="o">!</span> wget -q -nc https://raw.githubusercontent.com/lucasdavid/resnet38d-tf/main/resnet38d.py
+<span class="o">!</span> wget -qnc https://github.com/lucasdavid/resnet38d-tf/releases/download/0.0.1/resnet38d_voc2012_occse.h5 -P docs/_build/data/
 
 <span class="kn">from</span> <span class="nn">resnet38d</span> <span class="kn">import</span> <span class="n">ResNet38d</span>
 
-<span class="n">input_tensor</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="o">*</span><span class="n">SIZES</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;inputs&quot;</span><span class="p">)</span>
+<span class="n">input_tensor</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;inputs&quot;</span><span class="p">)</span>
 <span class="n">rn38d</span> <span class="o">=</span> <span class="n">ResNet38d</span><span class="p">(</span><span class="n">input_tensor</span><span class="o">=</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">WEIGHTS</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ResNet38-d with </span><span class="si">{</span><span class="n">WEIGHTS</span><span class="si">}</span><span class="s2"> pre-trained weights loaded.&quot;</span><span class="p">)</span>
@@ -372,285 +385,8 @@ Pascal VOC 2012 dataset:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>--2022-11-11 21:02:20--  https://raw.githubusercontent.com/lucasdavid/resnet38d-tf/main/resnet38d.py
-Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.110.133, 185.199.109.133, 185.199.111.133, ...
-Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.110.133|:443... connected.
-HTTP request sent, awaiting response... 
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>200 OK
-Length: 6420 (6.3K) [text/plain]
-Saving to: ‘resnet38d.py’
-
-
-resnet38d.py          0%[                    ]       0  --.-KB/s               
-resnet38d.py        100%[===================&gt;]   6.27K  --.-KB/s    in 0s      
-
-2022-11-11 21:02:20 (58.9 MB/s) - ‘resnet38d.py’ saved [6420/6420]
-
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading data from https://github.com/lucasdavid/resnet38d-tf/releases/download/0.0.1/resnet38d_voc2012.h5
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-     8192/421438120 [..............................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-  8871936/421438120 [..............................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
- 20226048/421438120 [&gt;.............................] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
- 29368320/421438120 [=&gt;............................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
- 37756928/421438120 [=&gt;............................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
- 46145536/421438120 [==&gt;...........................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
- 54534144/421438120 [==&gt;...........................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
- 67117056/421438120 [===&gt;..........................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
- 74702848/421438120 [====&gt;.........................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
- 79699968/421438120 [====&gt;.........................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
- 92282880/421438120 [=====&gt;........................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-103522304/421438120 [======&gt;.......................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-109060096/421438120 [======&gt;.......................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-120643584/421438120 [=======&gt;......................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-122003456/421438120 [=======&gt;......................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-130031616/421438120 [========&gt;.....................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-130605056/421438120 [========&gt;.....................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-132292608/421438120 [========&gt;.....................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-142925824/421438120 [=========&gt;....................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-157155328/421438120 [==========&gt;...................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-160079872/421438120 [==========&gt;...................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-163586048/421438120 [==========&gt;...................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-170205184/421438120 [===========&gt;..................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-176234496/421438120 [===========&gt;..................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-184557568/421438120 [============&gt;.................] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-192946176/421438120 [============&gt;.................] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-197140480/421438120 [=============&gt;................] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-207847424/421438120 [=============&gt;................] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-213917696/421438120 [==============&gt;...............] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-219144192/421438120 [==============&gt;...............] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-225263616/421438120 [===============&gt;..............] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-230219776/421438120 [===============&gt;..............] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-234889216/421438120 [===============&gt;..............] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-239083520/421438120 [================&gt;.............] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-247472128/421438120 [================&gt;.............] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-255549440/421438120 [=================&gt;............] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-260055040/421438120 [=================&gt;............] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-266395648/421438120 [=================&gt;............] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-272637952/421438120 [==================&gt;...........] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-278503424/421438120 [==================&gt;...........] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-285458432/421438120 [===================&gt;..........] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-292167680/421438120 [===================&gt;..........] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-300933120/421438120 [====================&gt;.........] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-301998080/421438120 [====================&gt;.........] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-309633024/421438120 [=====================&gt;........] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-314580992/421438120 [=====================&gt;........] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-319635456/421438120 [=====================&gt;........] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-322969600/421438120 [=====================&gt;........] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-331513856/421438120 [======================&gt;.......] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-337698816/421438120 [=======================&gt;......] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-343941120/421438120 [=======================&gt;......] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-348135424/421438120 [=======================&gt;......] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-352329728/421438120 [========================&gt;.....] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-361447424/421438120 [========================&gt;.....] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-373301248/421438120 [=========================&gt;....] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-377495552/421438120 [=========================&gt;....] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-383901696/421438120 [==========================&gt;...] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-388694016/421438120 [==========================&gt;...] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-397549568/421438120 [===========================&gt;..] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-398827520/421438120 [===========================&gt;..] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-402939904/421438120 [===========================&gt;..] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-412557312/421438120 [============================&gt;.] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-415244288/421438120 [============================&gt;.] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-421438120/421438120 [==============================] - 4s 0us/step
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>ResNet38-d with voc2012 pre-trained weights loaded.
-Spatial map sizes: (None, 38, 38, 4096)
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>ResNet38-d with docs/_build/data/resnet38d_voc2012_occse.h5 pre-trained weights loaded.
+Spatial map sizes: (None, None, None, 4096)
 </pre></div>
 </div>
 </div>
@@ -675,7 +411,23 @@ which improves performance of the explaining methods.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rn38d</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">rn38d</span><span class="p">,</span> <span class="s2">&quot;s5/ac&quot;</span><span class="p">,</span> <span class="s1">&#39;avg_pool&#39;</span><span class="p">)</span>
-<span class="n">_</span><span class="p">,</span> <span class="n">maps</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">cam</span><span class="p">(</span><span class="n">rn38d</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+
+<span class="c1"># Vanilla CAM</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">cam</span><span class="p">(</span><span class="n">rn38d</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># TTA-CAM</span>
+<span class="n">tta_cam_method</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">tta</span><span class="p">(</span>
+  <span class="n">ke</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">cams</span><span class="o">.</span><span class="n">cam</span><span class="p">,</span>
+  <span class="n">scales</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.</span><span class="p">],</span>
+  <span class="n">hflip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">tta_cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span>
+  <span class="n">tta_cam_method</span><span class="p">,</span>
+  <span class="n">rn38d</span><span class="p">,</span>
+  <span class="n">inputs</span><span class="p">,</span>
+  <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+  <span class="n">postprocessing</span><span class="o">=</span><span class="n">ke</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">positive_normalize</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -686,20 +438,32 @@ which improves performance of the explaining methods.</p>
 respecting the conventional Pascal color mapping:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@tf</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="n">reduce_retracing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">jit_compile</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">cams_to_colors</span><span class="p">(</span><span class="n">maps</span><span class="p">,</span> <span class="n">probabilities</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
-  <span class="n">detected</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">probabilities</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">maps</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cams_to_colors</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">maps</span><span class="p">,</span> <span class="n">colors</span><span class="p">):</span>
+  <span class="n">overlays</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
 
-  <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;bhwl,bl,lc-&gt;bwhc&#39;</span><span class="p">,</span> <span class="n">maps</span><span class="p">,</span> <span class="n">detected</span><span class="p">,</span> <span class="n">COLORS</span><span class="p">[:</span><span class="mi">20</span><span class="p">])</span>
+  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">l</span><span class="p">]</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">maps</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">...</span><span class="p">,</span> <span class="n">l</span><span class="p">]</span>
+    <span class="n">o</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;dc,hwd-&gt;hwc&#39;</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">overlays</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
 
-<span class="n">overlays</span> <span class="o">=</span> <span class="n">cams_to_colors</span><span class="p">(</span><span class="n">maps</span><span class="p">,</span> <span class="n">probs</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">overlays</span>
 
-<span class="n">ke</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">overlays</span><span class="o">=</span><span class="n">overlays</span><span class="p">)</span>
+<span class="n">cam_overlays</span> <span class="o">=</span> <span class="n">cams_to_colors</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">cams</span><span class="p">,</span> <span class="n">COLORS</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">21</span><span class="p">])</span>
+<span class="n">tta_overlays</span> <span class="o">=</span> <span class="n">cams_to_colors</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">tta_cams</span><span class="p">,</span> <span class="n">COLORS</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">21</span><span class="p">])</span>
+
+<span class="n">ke</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span>
+  <span class="n">images</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">cam_overlays</span><span class="p">,</span> <span class="n">tta_overlays</span><span class="p">),</span> <span class="p">()),</span>
+  <span class="n">titles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Original&#39;</span><span class="p">,</span> <span class="s1">&#39;CAM&#39;</span><span class="p">,</span> <span class="s1">&#39;TTA CAM&#39;</span><span class="p">],</span>
+  <span class="n">cols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/wsol_4_9.png" src="_images/wsol_4_9.png" />
+<img alt="_images/wsol_4_0.png" src="_images/wsol_4_0.png" />
 </div>
 </div>
 </section>

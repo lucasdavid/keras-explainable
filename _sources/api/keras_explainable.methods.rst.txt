@@ -4,14 +4,6 @@ keras\_explainable.methods package
 Submodules
 ----------
 
-keras\_explainable.methods.autodocs module
-------------------------------------------
-
-.. automodule:: keras_explainable.methods.autodocs
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 keras\_explainable.methods.cams module
 --------------------------------------
 

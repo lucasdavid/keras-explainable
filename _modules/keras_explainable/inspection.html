@@ -95,6 +95,11 @@
    Explaining
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../exposure.html">
+   Exposure
+  </a>
+ </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../methods/index.html">
    Methods
@@ -112,12 +117,12 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../methods/saliency/smoothgrad.html">
-     Smooth-Grad
+     SmoothGrad
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../methods/saliency/fullgrad.html">
-     Full-Grad
+     Full-Gradient
     </a>
    </li>
    <li class="toctree-l2">
@@ -134,7 +139,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../wsol.html">
-   WSSL
+   WSSL &amp; WSSS
   </a>
  </li>
  <li class="toctree-l1">
@@ -307,13 +312,12 @@ title="Source repository"
 <span class="kn">from</span> <span class="nn">keras.engine.base_layer</span> <span class="kn">import</span> <span class="n">Layer</span>
 <span class="kn">from</span> <span class="nn">keras.engine.keras_tensor</span> <span class="kn">import</span> <span class="n">KerasTensor</span>
 <span class="kn">from</span> <span class="nn">keras.engine.training</span> <span class="kn">import</span> <span class="n">Model</span>
-<span class="kn">from</span> <span class="nn">keras.layers.normalization.batch_normalization</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">BatchNormalizationBase</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">keras.layers.normalization.batch_normalization</span> <span class="kn">import</span> <span class="n">BatchNormalizationBase</span>
 <span class="kn">from</span> <span class="nn">keras.layers.normalization.layer_normalization</span> <span class="kn">import</span> <span class="n">LayerNormalization</span>
 <span class="kn">from</span> <span class="nn">keras.layers.pooling.base_global_pooling1d</span> <span class="kn">import</span> <span class="n">GlobalPooling1D</span>
 <span class="kn">from</span> <span class="nn">keras.layers.pooling.base_global_pooling2d</span> <span class="kn">import</span> <span class="n">GlobalPooling2D</span>
 <span class="kn">from</span> <span class="nn">keras.layers.pooling.base_global_pooling3d</span> <span class="kn">import</span> <span class="n">GlobalPooling3D</span>
+<span class="kn">from</span> <span class="nn">keras.layers.reshaping.flatten</span> <span class="kn">import</span> <span class="n">Flatten</span>
 
 <span class="kn">from</span> <span class="nn">keras_explainable.utils</span> <span class="kn">import</span> <span class="n">tolist</span>
 
@@ -328,6 +332,7 @@ title="Source repository"
 <span class="p">)</span>
 
 <span class="n">POOLING_LAYERS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Flatten</span><span class="p">,</span>
     <span class="n">GlobalPooling1D</span><span class="p">,</span>
     <span class="n">GlobalPooling2D</span><span class="p">,</span>
     <span class="n">GlobalPooling3D</span><span class="p">,</span>
@@ -336,17 +341,18 @@ title="Source repository"
 
 <div class="viewcode-block" id="get_nested_layer"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.inspection.get_nested_layer">[docs]</a><span class="k">def</span> <span class="nf">get_nested_layer</span><span class="p">(</span>
     <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Layer</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Retrieve a nested layer in the model.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        model (Model): the model containing the nested layer.</span>
-<span class="sd">        name (str): the descriptor of the nested layer.</span>
-<span class="sd">          Nested layers are separated by &quot;.&quot;</span>
+<span class="sd">        name (Union[str, List[str]]): a string (or list of string) containing</span>
+<span class="sd">            the name of the layer (or a list of names, each of which references</span>
+<span class="sd">            a recursively nested module up to the layer of interest).</span>
 
 <span class="sd">    Example:</span>
-<span class="sd">    </span>
+
 <span class="sd">    .. code-block:: python</span>
 
 <span class="sd">        model = tf.keras.Sequential([</span>
@@ -354,15 +360,15 @@ title="Source repository"
 <span class="sd">            tf.keras.layers.Dense(10, activation=&#39;softmax&#39;, name=&#39;predictions&#39;)</span>
 <span class="sd">        ])</span>
 
-<span class="sd">        pooling_layer = get_nested_layer(model, &#39;resnet101v2.avg_pool&#39;)</span>
+<span class="sd">        pooling_layer = get_nested_layer(model, (&#39;resnet101v2&#39;, &#39;avg_pool&#39;))</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        ValueError: if `name` is not a nested member of `model`.</span>
+<span class="sd">        ValueError: if ``name`` is not a nested member of ``model``.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tf.keras.layer.Layer: the retrieved layer.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">tolist</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">model</span></div>
@@ -445,10 +451,9 @@ title="Source repository"
     <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">get_nested_layer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 
-    <span class="n">layers</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span>
+    <span class="n">layers</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_flatten_layers</span><span class="p">(</span><span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">search_reversed</span><span class="p">:</span>
-        <span class="n">layers</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
-
+        <span class="n">layers</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">layers</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">klass</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">klass</span><span class="p">):</span>
             <span class="k">continue</span>
@@ -458,8 +463,8 @@ title="Source repository"
         <span class="k">return</span> <span class="n">layer</span>  <span class="c1"># `layer` matches all conditions.</span>
 
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-        <span class="s2">&quot;A valid layer couldn&#39;t be inferred from the name=`</span><span class="si">{name}</span><span class="s2">`, &quot;</span>
-        <span class="s2">&quot;klass=`</span><span class="si">{klass}</span><span class="s2">` and properties=`</span><span class="si">{properties}</span><span class="s2">`. Make sure these &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;A valid layer couldn&#39;t be inferred from the name=`</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">`, &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;klass=`</span><span class="si">{</span><span class="n">klass</span><span class="si">}</span><span class="s2">` and properties=`</span><span class="si">{</span><span class="n">properties</span><span class="si">}</span><span class="s2">`. Make sure these &quot;</span>
         <span class="s2">&quot;attributes correctly reflect a layer in the model.&quot;</span>
     <span class="p">)</span></div>
 
@@ -502,12 +507,13 @@ title="Source repository"
             <span class="n">layer</span> <span class="o">=</span> <span class="n">get_nested_layer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ep</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
 
         <span class="n">link</span> <span class="o">=</span> <span class="n">ep</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;link&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">)</span>
-        <span class="n">node</span> <span class="o">=</span> <span class="n">ep</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;node&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">ep</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;node&quot;</span><span class="p">,</span> <span class="s2">&quot;last&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="s2">&quot;last&quot;</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">_inbound_nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
 
         <span class="n">endpoint</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">layer</span><span class="o">.</span><span class="n">get_input_at</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">link</span> <span class="o">==</span> <span class="s2">&quot;input&quot;</span>
-            <span class="k">else</span> <span class="n">layer</span><span class="o">.</span><span class="n">get_output_at</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="n">layer</span><span class="o">.</span><span class="n">get_input_at</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="k">if</span> <span class="n">link</span> <span class="o">==</span> <span class="s2">&quot;input&quot;</span> <span class="k">else</span> <span class="n">layer</span><span class="o">.</span><span class="n">get_output_at</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="p">)</span>
 
         <span class="n">endpoints_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
@@ -526,27 +532,28 @@ title="Source repository"
 <span class="sd">    Args:</span>
 <span class="sd">        model (Model): The model being explained.</span>
 <span class="sd">        arguments (Optional[E], optional): Name of the argument layer/tensor in</span>
-<span class="sd">        the model. The jacobian of the output explaining units will be computed</span>
-<span class="sd">        with respect to the input signal of this layer. This argument can also</span>
-<span class="sd">        be an integer, a dictionary representing the intermediate signal or</span>
-<span class="sd">        the pooling layer itself. If None is passed, the penultimate layer</span>
-<span class="sd">        is assumed to be a GAP layer. Defaults to None.</span>
+<span class="sd">            the model. The jacobian of the output explaining units will be computed</span>
+<span class="sd">            with respect to the input signal of this layer. This argument can also</span>
+<span class="sd">            be an integer, a dictionary representing the intermediate signal or</span>
+<span class="sd">            the pooling layer itself. If None is passed, the penultimate layer</span>
+<span class="sd">            is assumed to be a GAP layer. Defaults to None.</span>
 <span class="sd">        outputs (Optional[E], optional): Name of the output layer in the model.</span>
-<span class="sd">        The jacobian will be computed for the activation signal of units in this</span>
-<span class="sd">        layer. This argument can also be an integer, a dictionary representing</span>
-<span class="sd">        the output signal and the logits layer itself. If None is passed,</span>
-<span class="sd">        the last layer is assumed to be the logits layer.. Defaults to None.</span>
+<span class="sd">            The jacobian will be computed for the activation signal of units in this</span>
+<span class="sd">            layer. This argument can also be an integer, a dictionary representing</span>
+<span class="sd">            the output signal and the logits layer itself. If None is passed,</span>
+<span class="sd">            the last layer is assumed to be the logits layer. Defaults to None.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        Model: the exposed model, whose outputs contain the intermediate</span>
-<span class="sd">          and output tensors.</span>
+<span class="sd">        Model: the exposed model, whose outputs contain the intermediate and</span>
+<span class="sd">        output tensors.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">outputs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">outputs</span> <span class="o">=</span> <span class="n">get_logits_layer</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arguments</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arguments</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
         <span class="n">arguments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">arguments</span><span class="p">}</span>
     <span class="k">if</span> <span class="n">arguments</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">arguments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;layer&quot;</span><span class="p">:</span> <span class="n">get_global_pooling_layer</span><span class="p">(</span><span class="n">model</span><span class="p">),</span> <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">}</span>
+        <span class="n">gpl</span> <span class="o">=</span> <span class="n">get_global_pooling_layer</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">arguments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;layer&quot;</span><span class="p">:</span> <span class="n">gpl</span><span class="p">,</span> <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">}</span>
 
     <span class="n">outputs</span> <span class="o">=</span> <span class="n">tolist</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
     <span class="n">arguments</span> <span class="o">=</span> <span class="n">tolist</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span>
@@ -589,6 +596,18 @@ title="Source repository"
     <span class="n">exclude</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Layer</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="n">return_biases</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Layer</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Extract layers containing biases from a model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (Model): the model inspected.</span>
+<span class="sd">        exclude (Tuple[Layer], optional): a list of layers to ignore. Defaults to ().</span>
+<span class="sd">        return_biases (bool, optional): wether or not to return the biases as well.</span>
+<span class="sd">            Defaults to True.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[Layer]: a list of layers.</span>
+<span class="sd">        List[Layer], List[tf.Tensor]: a list of layers and biases.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">layers</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">layer</span>
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">_flatten_layers</span><span class="p">(</span><span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -611,10 +630,19 @@ title="Source repository"
 <div class="viewcode-block" id="biases"><a class="viewcode-back" href="../../api/keras_explainable.html#keras_explainable.inspection.biases">[docs]</a><span class="k">def</span> <span class="nf">biases</span><span class="p">(</span>
     <span class="n">layers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Layer</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Retrieve all biases from a model.</span>
+    <span class="sd">&quot;&quot;&quot;Recursively retrieve the biases from layers.</span>
+
+<span class="sd">    Layers containing implicit bias are unrolled before returned. For</span>
+<span class="sd">    instance, the Batch Normalization layer, whose equation is defined by</span>
+<span class="sd">    :math:`y(x) = \\frac{x - \\mu}{\\sigma} w + b`, will have bias equals to:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \\frac{-\\mu w}{s} + b</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        model (Model): the model being inspected.</span>
+<span class="sd">        layers (List[Layer]): a list of layers from which</span>
+<span class="sd">            biases should be extracted.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        List[tf.Tensor]: a list of all biases retrieved.</span>
@@ -628,9 +656,7 @@ title="Source repository"
             <span class="n">biases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="o">-</span><span class="n">layer</span><span class="o">.</span><span class="n">moving_mean</span>
                 <span class="o">*</span> <span class="n">layer</span><span class="o">.</span><span class="n">gamma</span>
-                <span class="o">/</span> <span class="n">tf</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
-                    <span class="n">layer</span><span class="o">.</span><span class="n">moving_variance</span> <span class="o">+</span> <span class="mf">1e-07</span>
-                <span class="p">)</span>  <span class="c1"># might be variance here.</span>
+                <span class="o">/</span> <span class="n">tf</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">moving_variance</span> <span class="o">+</span> <span class="mf">1e-07</span><span class="p">)</span>  <span class="c1"># might be variance here.</span>
                 <span class="o">+</span> <span class="n">layer</span><span class="o">.</span><span class="n">beta</span>
             <span class="p">)</span>
 

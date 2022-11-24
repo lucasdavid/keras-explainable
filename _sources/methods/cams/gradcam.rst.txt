@@ -56,30 +56,25 @@ We describe bellow these lines in detail.
 
   SOURCE_DIRECTORY = 'docs/_static/images/singleton/'
   SAMPLES = 8
-  SIZES = (299, 299)
+  SIZES = (224, 224)
 
   file_names = os.listdir(SOURCE_DIRECTORY)
   image_paths = [os.path.join(SOURCE_DIRECTORY, f) for f in file_names if f != '_links.txt']
   images = np.stack([img_to_array(load_img(ip).resize(SIZES)) for ip in image_paths])
   images = images.astype("uint8")[:SAMPLES]
 
-Firstly, we employ the :py:class:`ResNet101` network pre-trained over the
+Firstly, we employ the :class:`ResNet50` network pre-trained over the
 ImageNet dataset:
 
 .. jupyter-execute::
 
-  WEIGHTS = 'imagenet'
-
-  input_tensor = tf.keras.Input(shape=(*SIZES, 3), name='inputs')
-
-  rn101 = tf.keras.applications.ResNet101V2(
-    input_tensor=input_tensor,
+  rn50 = tf.keras.applications.ResNet50V2(
     classifier_activation=None,
-    weights=WEIGHTS
+    weights='imagenet'
   )
 
-  print(f'ResNet101 with {WEIGHTS} pre-trained weights loaded.')
-  print(f"Spatial map sizes: {rn101.get_layer('avg_pool').input.shape}")
+  print(f'ResNet50 pretrained over ImageNet was loaded.')
+  print(f"Spatial map sizes: {rn50.get_layer('avg_pool').input.shape}")
 
 We can feed-foward the samples once and get the predicted classes for each sample.
 Besides making sure the model is outputing the expected classes, this step is
@@ -88,10 +83,10 @@ which improves performance of the explaining methods.
 
 .. jupyter-execute::
 
-  prec = tf.keras.applications.resnet_v2.preprocess_input
+  from tensorflow.keras.applications.imagenet_utils import preprocess_input
 
-  inputs = prec(images.astype("float").copy())
-  logits = rn101.predict(inputs, verbose=0)
+  inputs = images / 127.5 - 1
+  logits = rn50.predict(inputs, verbose=0)
   indices = np.argsort(logits, axis=-1)[:, ::-1]
 
   explaining_units = indices[:, :1]  # First most likely class of each sample.
@@ -104,12 +99,12 @@ signal (oftentimes advent from the last convolutional layer).
 CAM-based methods implemented here expect the model to output both logits and
 activation signal, so their respective representative tensors are exposed and
 the jacobian can be computed from the former with respect to the latter.
-Hence, we modify the current `rn101` model --- which only output logits at this
+Hence, we modify the current `rn50` model --- which only output logits at this
 time --- to expose both activation maps and logits signals:
 
 .. jupyter-execute::
 
-  rn101_exposed = ke.inspection.expose(rn101)
+  rn101_exposed = ke.inspection.expose(rn50)
   _, cams = ke.gradcam(rn101_exposed, inputs, explaining_units)
 
   ke.utils.visualize(
@@ -128,21 +123,21 @@ Breakdown of Model Exposure and Grad-CAM
 """"""""""""""""""""""""""""""""""""""""
 
 The function :py:func:`keras_explainable.inspection.expose` will take a
-:py:class:`keras.Model` as argument and instantiate a new model that outputs
+:class:`keras.Model` as argument and instantiate a new model that outputs
 both logits and the activation signal immediately before the
 *Global Average Pooling* layer.
 
 Under the hood of our example,
-:py:function:`keras_explainable.inspection.expose` is simply
+:func:`keras_explainable.inspection.expose` is simply
 collecting the input and output signals of the global pooling
 and predictions layer, respectively:
 
 .. code-block:: python
 
-  activations = rn101.get_layer('avg_pool').input
-  scores = rn101.get_layer('predictions').output
+  activations = rn50.get_layer('avg_pool').input
+  scores = rn50.get_layer('predictions').output
 
-  rn101_exposed = tf.keras.Model(rn101.inputs, [scores, activations])
+  rn101_exposed = tf.keras.Model(rn50.inputs, [scores, activations])
 
 You can also provide hints regarding the argument and output signals, if
 your model's topology is more complex or if you simply wish to compute the
@@ -150,7 +145,7 @@ Grad-CAM with respect to other layer than the last convolutional one:
 
 .. code-block:: python
 
-  rn101_exposed = ke.inspection.expose(rn101, 'conv5_out', 'predictions')
+  rn101_exposed = ke.inspection.expose(rn50, 'conv5_out', 'predictions')
 
 For nested models that were created from different Input objects, you can
 further specify which nodes to access within each layer, which maintains
@@ -160,10 +155,10 @@ the computation graph connected:
 
   from keras import Input, Sequential
   from keras.layers import Dense, Activation
-  from keras.applications import ResNet101V2
+  from keras.applications import ResNet50V2
 
   inputs = Input(shape=[None, None, 3])
-  backbone = ResNet101V2(include_top=False, pooling='avg')
+  backbone = ResNet50V2(include_top=False, pooling='avg')
   model = Sequential([
     inputs,
     backbone,
@@ -172,9 +167,9 @@ the computation graph connected:
   ])
 
   rn101_exposed = ke.inspection.expose(
-    rn101,
+    rn50,
     arguments={
-      'name': 'rn101.avg_pool',
+      'name': 'rn50.avg_pool',
       'link': 'input',
       'index': 1
     },

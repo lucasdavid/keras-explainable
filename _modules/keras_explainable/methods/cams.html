@@ -95,6 +95,11 @@
    Explaining
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../exposure.html">
+   Exposure
+  </a>
+ </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../../methods/index.html">
    Methods
@@ -112,12 +117,12 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../methods/saliency/smoothgrad.html">
-     Smooth-Grad
+     SmoothGrad
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../methods/saliency/fullgrad.html">
-     Full-Grad
+     Full-Gradient
     </a>
    </li>
    <li class="toctree-l2">
@@ -134,7 +139,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../../wsol.html">
-   WSSL
+   WSSL &amp; WSSS
   </a>
  </li>
  <li class="toctree-l1">
@@ -293,7 +298,9 @@ title="Source repository"
               <div>
                 
   <h1>Source code for keras_explainable.methods.cams</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span></span><span class="sd">&quot;&quot;&quot;Implementation of various CAM-based AI explaining methods and techniques.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 
@@ -306,48 +313,6 @@ title="Source repository"
 <span class="kn">from</span> <span class="nn">keras_explainable.inspection</span> <span class="kn">import</span> <span class="n">SPATIAL_AXIS</span>
 <span class="kn">from</span> <span class="nn">keras_explainable.inspection</span> <span class="kn">import</span> <span class="n">gather_units</span>
 <span class="kn">from</span> <span class="nn">keras_explainable.inspection</span> <span class="kn">import</span> <span class="n">get_logits_layer</span>
-<span class="kn">from</span> <span class="nn">keras_explainable.methods</span> <span class="kn">import</span> <span class="n">autodocs</span>
-
-<span class="n">_CAM_DOCS</span> <span class="o">=</span> <span class="n">autodocs</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
-    <span class="s2">&quot;CAM&quot;</span><span class="p">,</span>
-    <span class="n">more_args</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        logits_layer (Callable, optional): filter before</span>
-<span class="s2">            channel combining. Defaults to tf.abs.</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
-    <span class="n">references</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        - Simonyan, K., Vedaldi, A., &amp; Zisserman, A. (2013).</span>
-<span class="s2">            Deep inside convolutional networks: Visualising image classification</span>
-<span class="s2">            models and saliency maps. arXiv preprint arXiv:1312.6034.&quot;&quot;&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">_GRADCAM_DOCS</span> <span class="o">=</span> <span class="n">autodocs</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
-    <span class="s2">&quot;Grad-CAM&quot;</span><span class="p">,</span>
-    <span class="n">references</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        - Selvaraju, R. R., Cogswell, M., Das, A., Vedantam, R., Parikh, D., &amp; Batra, D.</span>
-<span class="s2">            (2017). Grad-cam: Visual explanations from deep networks via gradient-based</span>
-<span class="s2">            localization. In Proceedings of the IEEE international conference on computer</span>
-<span class="s2">            vision (pp. 618-626).&quot;&quot;&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">_GRADCAMPP_DOCS</span> <span class="o">=</span> <span class="n">autodocs</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
-    <span class="s2">&quot;Grad-CAM++&quot;</span><span class="p">,</span>
-    <span class="n">references</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        - Chattopadhay, A., Sarkar, A., Howlader, P., &amp; Balasubramanian, V. N.</span>
-<span class="s2">            (2018, March). Grad-cam++: Generalized gradient-based visual explanations</span>
-<span class="s2">            for deep convolutional networks. In 2018 IEEE winter conference on</span>
-<span class="s2">            applications of computer vision (WACV) (pp. 839-847). IEEE.</span>
-
-<span class="s2">        - Grad-CAM++&#39;s official implementation. Github. Available at:</span>
-<span class="s2">            `adityac94/Grad-CAM++ &lt;github.com/adityac94/Grad_CAM_plus_plus&gt;`_.&quot;&quot;&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">_SCORECAM_DOCS</span> <span class="o">=</span> <span class="n">autodocs</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
-    <span class="s2">&quot;Score-CAM&quot;</span><span class="p">,</span>
-    <span class="n">references</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        - Score-CAM: Score-Weighted Visual Explanations for Convolutional Neural</span>
-<span class="s2">            Networks. Available at:</span>
-<span class="s2">            `arxiv/1910.01279 &lt;https://arxiv.org/abs/1910.01279&gt;`_.&quot;&quot;&quot;</span><span class="p">,</span>
-<span class="p">)</span>
 
 
 <div class="viewcode-block" id="cam"><a class="viewcode-back" href="../../../api/keras_explainable.methods.html#keras_explainable.methods.cams.cam">[docs]</a><span class="k">def</span> <span class="nf">cam</span><span class="p">(</span>
@@ -359,17 +324,71 @@ title="Source repository"
     <span class="n">spatial_axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPATIAL_AXIS</span><span class="p">,</span>
     <span class="n">logits_layer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Layer</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{</span><span class="n">_CAM_DOCS</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Computes the CAM Visualization Method.</span>
 
+<span class="sd">    This method expects `inputs` to be a batch of positional signals of</span>
+<span class="sd">    shape ``BHW...C``, and will return a tensor of shape ``BH&#39;W&#39;...L``,</span>
+<span class="sd">    where ``(H&#39;, W&#39;, ...)`` are the sizes of the visual receptive field</span>
+<span class="sd">    in the explained activation layer and ``L`` is the number of labels</span>
+<span class="sd">    represented within the model&#39;s output logits.</span>
+
+<span class="sd">    If ``indices`` is passed, the specific logits indexed by elements in</span>
+<span class="sd">    this tensor are selected before the gradients are computed,</span>
+<span class="sd">    effectively reducing the columns in the jacobian, and the size of</span>
+<span class="sd">    the output explaining map.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        import numpy as np</span>
+<span class="sd">        import keras_explainable as ke</span>
+
+<span class="sd">        x = np.random.normal((2, 224, 224, 3))</span>
+<span class="sd">        y = np.asarray([</span>
+<span class="sd">            [16, 32],</span>
+<span class="sd">            [32, 64],</span>
+<span class="sd">        ])</span>
+
+<span class="sd">        model = tf.keras.applications.ResNet50V2(weights=None, include_top=True)</span>
+<span class="sd">        model = ke.inspection.expose(model)</span>
+
+<span class="sd">        scores, cams = ke.methods.cams.cam(model, x, y)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (tf.keras.Model): the model being explained</span>
+<span class="sd">        inputs (tf.Tensor): the input data</span>
+<span class="sd">        indices (Optional[tf.Tensor], optional): indices that should be gathered</span>
+<span class="sd">            from ``outputs``. Defaults to None.</span>
+<span class="sd">        indices_axis (int, optional): the axis containing the indices to gather.</span>
+<span class="sd">            Defaults to ``KERNEL_AXIS``.</span>
+<span class="sd">        indices_batch_dims (int, optional): the number of dimensions to broadcast</span>
+<span class="sd">            in the ``tf.gather`` operation. Defaults to ``-1``.</span>
+<span class="sd">        spatial_axis (Tuple[int], optional): the dimensions containing positional</span>
+<span class="sd">            information. Defaults to ``SPATIAL_AXIS``.</span>
+<span class="sd">        logits_layer (Callable, optional): filter before channel combining.</span>
+<span class="sd">            Defaults to tf.abs.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple[tf.Tensor, tf.Tensor]: the logits and Class Activation Maps (CAMs).</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        - Zhou, B., Khosla, A., Lapedriza, A., Oliva, A., &amp; Torralba, A. (2016).</span>
+<span class="sd">          Learning deep features for discriminative localization. In Proceedings</span>
+<span class="sd">          of the IEEE conference on computer vision and pattern</span>
+<span class="sd">          recognition (pp. 2921-2929). Available at:</span>
+<span class="sd">          `arxiv/1512.04150 &lt;https://arxiv.org/pdf/1512.04150.pdf&gt;`_.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logits</span><span class="p">,</span> <span class="n">activations</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">logits</span> <span class="o">=</span> <span class="n">gather_units</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">indices_axis</span><span class="p">,</span> <span class="n">indices_batch_dims</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">logits_layer</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="n">logits_layer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">logits_layer</span> <span class="o">=</span> <span class="n">get_logits_layer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">logits_layer</span><span class="p">)</span>
 
-    <span class="n">weights</span> <span class="o">=</span> <span class="n">logits_layer</span><span class="o">.</span><span class="n">kernel</span>
-    <span class="n">weights</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
-    <span class="n">weights</span> <span class="o">=</span> <span class="n">gather_units</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_dims</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">gather_units</span><span class="p">(</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">logits_layer</span><span class="o">.</span><span class="n">kernel</span><span class="p">),</span> <span class="n">indices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_dims</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">)</span>
 
     <span class="n">dims</span> <span class="o">=</span> <span class="s2">&quot;kc&quot;</span> <span class="k">if</span> <span class="n">indices</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;kbc&quot;</span>
     <span class="n">maps</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;b...k,</span><span class="si">{</span><span class="n">dims</span><span class="si">}</span><span class="s2">-&gt;b...c&quot;</span><span class="p">,</span> <span class="n">activations</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
@@ -385,8 +404,41 @@ title="Source repository"
     <span class="n">indices_batch_dims</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">spatial_axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPATIAL_AXIS</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{</span><span class="n">_GRADCAM_DOCS</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Computes the Grad-CAM Visualization Method.</span>
 
+<span class="sd">    This method expects `inputs` to be a batch of positional signals of</span>
+<span class="sd">    shape ``BHW...C``, and will return a tensor of shape ``BH&#39;W&#39;...L``,</span>
+<span class="sd">    where ``(H&#39;, W&#39;, ...)`` are the sizes of the visual receptive field</span>
+<span class="sd">    in the explained activation layer and `L` is the number of labels</span>
+<span class="sd">    represented within the model&#39;s output logits.</span>
+
+<span class="sd">    If `indices` is passed, the specific logits indexed by elements in this</span>
+<span class="sd">    tensor are selected before the gradients are computed, effectively</span>
+<span class="sd">    reducing the columns in the jacobian, and the size of the output explaining map.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (tf.keras.Model): the model being explained</span>
+<span class="sd">        inputs (tf.Tensor): the input data</span>
+<span class="sd">        indices (Optional[tf.Tensor], optional): indices that should be gathered</span>
+<span class="sd">            from ``outputs``. Defaults to None.</span>
+<span class="sd">        indices_axis (int, optional): the axis containing the indices to gather.</span>
+<span class="sd">            Defaults to ``KERNEL_AXIS``.</span>
+<span class="sd">        indices_batch_dims (int, optional): the number of dimensions to broadcast</span>
+<span class="sd">            in the ``tf.gather`` operation. Defaults to ``-1``.</span>
+<span class="sd">        spatial_axis (Tuple[int], optional): the dimensions containing positional</span>
+<span class="sd">            information. Defaults to ``SPATIAL_AXIS``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple[tf.Tensor, tf.Tensor]: the logits and Class Activation Maps (CAMs).</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        - Selvaraju, R. R., Cogswell, M., Das, A., Vedantam, R., Parikh, D., &amp; Batra, D.</span>
+<span class="sd">          (2017). Grad-CAM: Visual explanations from deep networks via gradient-based</span>
+<span class="sd">          localization. In Proceedings of the IEEE international conference on computer</span>
+<span class="sd">          vision (pp. 618-626).</span>
+<span class="sd">          Available at: `arxiv/1610.02391 &lt;https://arxiv.org/abs/1610.02391&gt;`_.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">GradientTape</span><span class="p">(</span><span class="n">watch_accessed_variables</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
         <span class="n">tape</span><span class="o">.</span><span class="n">watch</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
         <span class="n">logits</span><span class="p">,</span> <span class="n">activations</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -407,8 +459,42 @@ title="Source repository"
     <span class="n">indices_batch_dims</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">spatial_axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPATIAL_AXIS</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{</span><span class="n">_GRADCAMPP_DOCS</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Computes the Grad-CAM++ Visualization Method.</span>
 
+<span class="sd">    This method expects `inputs` to be a batch of positional signals of</span>
+<span class="sd">    shape ``BHW...C``, and will return a tensor of shape ``BH&#39;W&#39;...L``,</span>
+<span class="sd">    where ``(H&#39;, W&#39;, ...)`` are the sizes of the visual receptive field</span>
+<span class="sd">    in the explained activation layer and `L` is the number of labels</span>
+<span class="sd">    represented within the model&#39;s output logits.</span>
+
+<span class="sd">    If `indices` is passed, the specific logits indexed by elements in this</span>
+<span class="sd">    tensor are selected before the gradients are computed, effectively</span>
+<span class="sd">    reducing the columns in the jacobian, and the size of the output explaining map.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (tf.keras.Model): the model being explained</span>
+<span class="sd">        inputs (tf.Tensor): the input data</span>
+<span class="sd">        indices (Optional[tf.Tensor], optional): indices that should be gathered</span>
+<span class="sd">            from ``outputs``. Defaults to None.</span>
+<span class="sd">        indices_axis (int, optional): the axis containing the indices to gather.</span>
+<span class="sd">            Defaults to ``KERNEL_AXIS``.</span>
+<span class="sd">        indices_batch_dims (int, optional): the number of dimensions to broadcast</span>
+<span class="sd">            in the ``tf.gather`` operation. Defaults to ``-1``.</span>
+<span class="sd">        spatial_axis (Tuple[int], optional): the dimensions containing positional</span>
+<span class="sd">            information. Defaults to ``SPATIAL_AXIS``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple[tf.Tensor, tf.Tensor]: the logits and Class Activation Maps (CAMs).</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        - Chattopadhay, A., Sarkar, A., Howlader, P., &amp; Balasubramanian, V. N.</span>
+<span class="sd">          (2018, March). Grad-cam++: Generalized gradient-based visual explanations</span>
+<span class="sd">          for deep convolutional networks. In 2018 IEEE winter conference on</span>
+<span class="sd">          applications of computer vision (WACV) (pp. 839-847). IEEE.</span>
+<span class="sd">        - Grad-CAM++&#39;s official implementation. Github. Available at:</span>
+<span class="sd">          `adityac94/Grad-CAM++ &lt;github.com/adityac94/Grad_CAM_plus_plus&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">GradientTape</span><span class="p">(</span><span class="n">watch_accessed_variables</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
         <span class="n">tape</span><span class="o">.</span><span class="n">watch</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
         <span class="n">logits</span><span class="p">,</span> <span class="n">activations</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -422,8 +508,7 @@ title="Source repository"
     <span class="n">aab</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">activations</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">spatial_axis</span><span class="p">)</span>  <span class="c1"># (BK)</span>
     <span class="n">akc</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">divide_no_nan</span><span class="p">(</span>
         <span class="n">d2</span><span class="p">,</span>
-        <span class="mf">2.0</span> <span class="o">*</span> <span class="n">d2</span>
-        <span class="o">+</span> <span class="n">tf</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;bk,bc...k-&gt;bc...k&quot;</span><span class="p">,</span> <span class="n">aab</span><span class="p">,</span> <span class="n">d3</span><span class="p">),</span>  <span class="c1"># (2*(BUHWK) + (BK)*BUHWK)</span>
+        <span class="mf">2.0</span> <span class="o">*</span> <span class="n">d2</span> <span class="o">+</span> <span class="n">tf</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;bk,bc...k-&gt;bc...k&quot;</span><span class="p">,</span> <span class="n">aab</span><span class="p">,</span> <span class="n">d3</span><span class="p">),</span>  <span class="c1"># (2*(BUHWK) + (BK)*BUHWK)</span>
     <span class="p">)</span>
 
     <span class="c1"># Tensorflow has a glitch that doesn&#39;t allow this form:</span>
@@ -431,9 +516,7 @@ title="Source repository"
     <span class="c1"># So we use this one instead:</span>
     <span class="n">weights</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">akc</span> <span class="o">*</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">dyda</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="n">spatial_axis</span><span class="p">)</span>
 
-    <span class="n">maps</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
-        <span class="s2">&quot;bck,b...k-&gt;b...c&quot;</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">activations</span>
-    <span class="p">)</span>  <span class="c1"># a: bhwk, m: buhw</span>
+    <span class="n">maps</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;bck,b...k-&gt;b...c&quot;</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">activations</span><span class="p">)</span>  <span class="c1"># a: bhwk, m: buhw</span>
 
     <span class="k">return</span> <span class="n">logits</span><span class="p">,</span> <span class="n">maps</span></div>
 
@@ -446,8 +529,39 @@ title="Source repository"
     <span class="n">indices_batch_dims</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">spatial_axis</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPATIAL_AXIS</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{</span><span class="n">_SCORECAM_DOCS</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Computes the Score-CAM Visualization Method.</span>
 
+<span class="sd">    This method expects `inputs` to be a batch of positional signals of</span>
+<span class="sd">    shape ``BHW...C``, and will return a tensor of shape ``BH&#39;W&#39;...L``,</span>
+<span class="sd">    where ``(H&#39;, W&#39;, ...)`` are the sizes of the visual receptive field</span>
+<span class="sd">    in the explained activation layer and `L` is the number of labels</span>
+<span class="sd">    represented within the model&#39;s output logits.</span>
+
+<span class="sd">    If `indices` is passed, the specific logits indexed by elements in this</span>
+<span class="sd">    tensor are selected before the gradients are computed, effectively</span>
+<span class="sd">    reducing the columns in the jacobian, and the size of the output explaining map.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (tf.keras.Model): the model being explained</span>
+<span class="sd">        inputs (tf.Tensor): the input data</span>
+<span class="sd">        indices (Optional[tf.Tensor], optional): indices that should be gathered</span>
+<span class="sd">            from ``outputs``. Defaults to None.</span>
+<span class="sd">        indices_axis (int, optional): the axis containing the indices to gather.</span>
+<span class="sd">            Defaults to ``KERNEL_AXIS``.</span>
+<span class="sd">        indices_batch_dims (int, optional): the number of dimensions to broadcast</span>
+<span class="sd">            in the ``tf.gather`` operation. Defaults to ``-1``.</span>
+<span class="sd">        spatial_axis (Tuple[int], optional): the dimensions containing positional</span>
+<span class="sd">            information. Defaults to ``SPATIAL_AXIS``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple[tf.Tensor, tf.Tensor]: the logits and Class Activation Maps (CAMs).</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        - Score-CAM: Score-Weighted Visual Explanations for Convolutional</span>
+<span class="sd">          Neural Networks. Available at:</span>
+<span class="sd">          `arxiv/1910.01279 &lt;https://arxiv.org/abs/1910.01279&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">scores</span><span class="p">,</span> <span class="n">activations</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">scores</span> <span class="o">=</span> <span class="n">gather_units</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">indices_axis</span><span class="p">,</span> <span class="n">indices_batch_dims</span><span class="p">)</span>
 
@@ -471,7 +585,17 @@ title="Source repository"
     <span class="k">return</span> <span class="n">scores</span><span class="p">,</span> <span class="n">maps</span></div>
 
 
-<span class="n">METHODS</span> <span class="o">=</span> <span class="p">[</span><span class="n">cam</span><span class="p">,</span> <span class="n">gradcam</span><span class="p">,</span> <span class="n">gradcampp</span><span class="p">,</span> <span class="n">scorecam</span><span class="p">]</span>
+<span class="n">METHODS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">cam</span><span class="p">,</span>
+    <span class="n">gradcam</span><span class="p">,</span>
+    <span class="n">gradcampp</span><span class="p">,</span>
+    <span class="n">scorecam</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="sd">&quot;&quot;&quot;Available CAM-based AI Explaining methods.</span>
+
+<span class="sd">This list contains all available methods implemented in this module,</span>
+<span class="sd">and it is kept and used for introspection and validation purposes.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
 
               </div>
