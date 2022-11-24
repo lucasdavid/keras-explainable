@@ -22,7 +22,9 @@ template snippet:
     scales=[0.5, 1.0, 1.5, 2.],
     hflip=True
   )
-  _, cams = ke.explain(tta_gradcam, model, inputs)
+  _, cams = ke.explain(
+    tta_gradcam, model, inputs, postprocessing=ke.filters.positive_normalize
+  )
 
 .. jupyter-execute::
   :hide-code:

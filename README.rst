@@ -6,7 +6,7 @@ keras Explainable
   :alt: Travis build status
   :target: https://github.com/lucasdavid/keras-explainable/actions/workflows/ci.yml
 
-.. image:: https://img.shields.io/badge/docs-0.0.1-blue
+.. image:: https://img.shields.io/badge/docs-0.0.2-blue
   :alt: Documentation status
   :target: https://lucasdavid.github.io/keras-explainable
 

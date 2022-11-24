@@ -5,6 +5,15 @@ Weakly Supervised Object Localization and Semantic Segmentation
 Object localization and segmentation cues can be extracted from models
 trained over multi-label datasets in a weakly supervised setup.
 
+An example of this technique is OC-CSE, which was first described in
+the paper "Unlocking the potential of ordinary classifier: Class-specific
+adversarial erasing framework for weakly supervised semantic segmentation.",
+by Kweon et al. (2021) [`link <https://openaccess.thecvf.com/content/ICCV2021/html/Kweon_Unlocking_the_Potential_of_Ordinary_Classifier_Class-Specific_Adversarial_Erasing_Framework_ICCV_2021_paper.html>`_].
+Its original code (written in PyTorch) is available at
+`KAIST-vilab/OC-CSE <https://github.com/KAIST-vilab/OC-CSE>`_, but
+we will actually load its TensorFlow alternative, available at
+`lucasdavid/resnet38d-tf <https://github.com/lucasdavid/resnet38d-tf>`_:
+
 .. jupyter-execute::
   :hide-code:
   :hide-output:
@@ -25,15 +34,14 @@ trained over multi-label datasets in a weakly supervised setup.
   image_paths = [os.path.join(SOURCE_DIRECTORY, f) for f in file_names if f != '_links.txt']
   images = np.stack([img_to_array(load_img(ip).resize(SIZES)) for ip in image_paths])
   images = images.astype("uint8")[:SAMPLES]
-  label_indices = [[13], [12, 13], [6, 12, 13], [13], [11, 13],
-            [4, 13], [1, 13], [8, 13], [13], [13]]
+  label_indices = [[8, 11], [2], [1, 14], [4, 14], [16], [2], [0, 14], [13, 14]]
   labels = np.zeros((len(label_indices), 20))
   for i, l in enumerate(label_indices):
     labels[i, l] = 1.
 
   def pascal_voc_classes():
     return np.asarray((
-      "aeroplane bicycle bird boat bottle bus car cat chair cow diningtable"
+      "aeroplane bicycle bird boat bottle bus car cat chair cow diningtable "
       "dog horse motorbike person pottedplant sheep sofa train tvmonitor"
     ).split())
 
@@ -61,18 +69,17 @@ trained over multi-label datasets in a weakly supervised setup.
         [128, 192, 0],
         [0, 64, 128],
         [224, 224, 192]  # void (contours, outline and padded regions)
-    ])
+    ]) / 255.
 
-Firstly, we employ the :class:`ResNet38-d` network pre-trained over the
-Pascal VOC 2012 dataset:
 
 .. jupyter-execute::
 
   COLORS = pascal_voc_colors()
   CLASSES = pascal_voc_classes()
-  WEIGHTS = '/home/ldavid/workspace/models/rn38d-occse.h5'
+  WEIGHTS = 'resnet38d_voc2012_occse.h5'
 
   ! wget -q -nc https://raw.githubusercontent.com/lucasdavid/resnet38d-tf/main/resnet38d.py
+  ! wget -qnc https://github.com/lucasdavid/resnet38d-tf/releases/download/0.0.1/resnet38d_voc2012_occse.h5
 
   from resnet38d import ResNet38d
 
@@ -83,6 +90,7 @@ Pascal VOC 2012 dataset:
   print(f"Spatial map sizes: {rn38d.get_layer('s5/ac').input.shape}")
 
   ! rm resnet38d.py
+  ! rm resnet38d_voc2012_occse.h5
 
 We can feed-foward the samples once and get the predicted classes for each sample.
 Besides making sure the model is outputing the expected classes, this step is
@@ -101,12 +109,23 @@ Finally, we can simply run all available explaining methods:
 .. jupyter-execute::
 
   rn38d = ke.inspection.expose(rn38d, "s5/ac", 'avg_pool')
-  tta_cam = ke.methods.meta.tta(
+  
+  # Vanilla CAM
+  _, cams = ke.cam(rn38d, inputs, batch_size=4)
+
+  # TTA-CAM
+  tta_cam_method = ke.methods.meta.tta(
     ke.methods.cams.cam,
     scales=[0.5, 1.0, 1.5, 2.],
-    hflip=True
+    hflip=True,
   )
-  _, maps = ke.explain(tta_cam, rn38d, inputs, batch_size=1)
+  _, tta_cams = ke.explain(
+    tta_cam_method,
+    rn38d,
+    inputs,
+    batch_size=4,
+    postprocessing=ke.filters.positive_normalize,
+  )
 
 Explaining maps can be converted into color maps,
 respecting the conventional Pascal color mapping:
@@ -118,14 +137,19 @@ respecting the conventional Pascal color mapping:
     labels = labels.astype(bool)
 
     for i in range(8):
-      l = labels[i]        # L
-      c = colors[l]        # LC
-      m = maps[i][..., l]  # HWL
-      o = (m @ c).clip(0, 1)
+      l = labels[i]
+      c = colors[l]
+      m = maps[i][..., l]
+      o = np.einsum('dc,hwd->hwc', c, m).clip(0, 1)
       overlays.append(o)
 
     return overlays
 
-  overlays = cams_to_colors(labels, maps, COLORS[1:21])
+  map_overlays = cams_to_colors(labels, maps, COLORS[1:21])
+  cam_overlays = cams_to_colors(labels, cams, COLORS[1:21])
 
-  ke.utils.visualize(images, overlays=overlays, rows=2)
+  ke.utils.visualize(
+    images=sum(zip(images, cam_overlays, map_overlays), ()),
+    titles=['Original', 'CAM', 'TTA CAM'],
+    cols=3,
+  )
