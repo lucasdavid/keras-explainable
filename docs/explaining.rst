@@ -40,20 +40,17 @@ GPUs and/or workers.
   images = images.astype("uint8")[:SAMPLES]
 
 We demonstrate bellow how predictions can be explained using the
-ResNet101 network trained over ImageNet, using a few image samples.
+ResNet50 network trained over ImageNet, using a few image samples.
 Firstly, we load the network:
 
 .. jupyter-execute::
 
-  rn101 = tf.keras.applications.ResNet101V2(
+  rn50 = tf.keras.applications.ResNet50V2(
     classifier_activation=None,
     weights='imagenet',
   )
 
-  prec = tf.keras.applications.resnet_v2.preprocess_input
-  decode_predictions = tf.keras.applications.resnet_v2.decode_predictions
-
-  print(f"Spatial map sizes: {rn101.get_layer('avg_pool').input.shape}")
+  print(f"Spatial map sizes: {rn50.get_layer('avg_pool').input.shape}")
 
 We can feed-foward the samples once and get the predicted classes for each sample.
 Besides making sure the model is outputing the expected classes, this step is
@@ -62,8 +59,10 @@ which improves performance of the explaining methods.
 
 .. jupyter-execute::
 
-  inputs = prec(images.astype("float").copy())
-  logits = rn101.predict(inputs, verbose=0)
+  from tensorflow.keras.applications.imagenet_utils import preprocess_input, decode_predictions
+
+  inputs = images / 127.5 - 1
+  logits = rn50.predict(inputs, verbose=0)
 
   indices = np.argsort(logits, axis=-1)[:, ::-1]
   probs = tf.nn.softmax(logits).numpy()
@@ -72,7 +71,7 @@ which improves performance of the explaining methods.
   ke.utils.visualize(
     images=images,
     titles=[
-      ', '.join(f"{klass} {prob:.0%}" for code, klass, prob in p)
+      ", ".join(f"{klass} {prob:.0%}" for code, klass, prob in p)
       for p in predictions
     ]
   )
@@ -84,20 +83,20 @@ Finally, we can simply run all available explaining methods:
   explaining_units = indices[:, :1]  # First most likely class.
 
   # Gradient Back-propagation
-  _, g_maps = ke.gradients(rn101, inputs, explaining_units)
+  _, g_maps = ke.gradients(rn50, inputs, explaining_units)
 
   # Full-Gradient
-  logits = ke.inspection.get_logits_layer(rn101)
-  inters, biases = ke.inspection.layers_with_biases(rn101, exclude=[logits])
-  rn101_exp = ke.inspection.expose(rn101, inters, logits)
-  _, fg_maps = ke.full_gradients(rn101_exp, inputs, explaining_units, biases=biases)
+  logits = ke.inspection.get_logits_layer(rn50)
+  inters, biases = ke.inspection.layers_with_biases(rn50, exclude=[logits])
+  rn50_exp = ke.inspection.expose(rn50, inters, logits)
+  _, fg_maps = ke.full_gradients(rn50_exp, inputs, explaining_units, biases=biases)
 
   # CAM-Based
-  rn101_exp = ke.inspection.expose(rn101)
-  _, c_maps = ke.cam(rn101_exp, inputs, explaining_units)
-  _, gc_maps = ke.gradcam(rn101_exp, inputs, explaining_units)
-  _, gcpp_maps = ke.gradcampp(rn101_exp, inputs, explaining_units)
-  _, sc_maps = ke.scorecam(rn101_exp, inputs, explaining_units)
+  rn50_exp = ke.inspection.expose(rn50)
+  _, c_maps = ke.cam(rn50_exp, inputs, explaining_units)
+  _, gc_maps = ke.gradcam(rn50_exp, inputs, explaining_units)
+  _, gcpp_maps = ke.gradcampp(rn50_exp, inputs, explaining_units)
+  _, sc_maps = ke.scorecam(rn50_exp, inputs, explaining_units)
 
 Following the original Grad-CAM paper, we only consider the positive contributing regions
 in the creation of the CAMs, crunching negatively contributing and non-related regions together:

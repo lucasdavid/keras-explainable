@@ -181,7 +181,7 @@ def explain(
 
     Besides the parameters described above, any named parameters passed to this function
     will be collected into ``methods_params`` and passed onto the :func:`explain_step`
-    and ``method`` functions. Common ones are:
+    and ``method`` functions. The most common ones are:
 
     - indices_batch_dims (int): The dimensions marked as ``batch`` when gathering
       units described by ``y``. Ignore if ``y`` is None.

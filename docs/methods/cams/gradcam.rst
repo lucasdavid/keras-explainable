@@ -85,7 +85,7 @@ which improves performance of the explaining methods.
 
   from tensorflow.keras.applications.imagenet_utils import preprocess_input
 
-  inputs = preprocess_input(images.astype("float").copy(), mode="tf")
+  inputs = images / 127.5 - 1
   logits = rn50.predict(inputs, verbose=0)
   indices = np.argsort(logits, axis=-1)[:, ::-1]
 

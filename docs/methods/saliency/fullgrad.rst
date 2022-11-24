@@ -30,8 +30,8 @@ Briefly, this can be achieved with the following template snippet:
   model_exposed = ke.inspection.expose(model, inters, logits)
 
   x, y = (
-    np.random.rand(self.BATCH, *self.SHAPE),
-    np.random.randint(10, size=(self.BATCH, 1))
+    np.random.rand(32, 512, 512, 3),
+    np.random.randint(10, size=[32, 1])
   )
 
   logits, maps = ke.full_gradients(
@@ -42,6 +42,9 @@ Briefly, this can be achieved with the following template snippet:
   )
 
 We describe bellow these lines in detail.
+Firstly, we employ the :class:`ResNet50V2` network pre-trained over the
+ImageNet dataset:
+
 
 .. jupyter-execute::
   :hide-code:
@@ -57,26 +60,22 @@ We describe bellow these lines in detail.
 
   SOURCE_DIRECTORY = 'docs/_static/images/singleton/'
   SAMPLES = 8
-  SIZES = (480, 480)
+  SIZES = (224, 224)
 
   file_names = os.listdir(SOURCE_DIRECTORY)
   image_paths = [os.path.join(SOURCE_DIRECTORY, f) for f in file_names if f != '_links.txt']
   images = np.stack([img_to_array(load_img(ip).resize(SIZES)) for ip in image_paths])
   images = images.astype("uint8")[:SAMPLES]
 
-Firstly, we employ the :class:`EfficientNetV2M` network pre-trained over the
-ImageNet dataset:
-
 .. jupyter-execute::
 
-  enm = tf.keras.applications.EfficientNetV2M(
+  rn50 = tf.keras.applications.ResNet50V2(
     classifier_activation=None,
-    include_preprocessing=False,
     weights="imagenet",
   )
 
-  print(f'EN-M pretrained over ImageNet was loaded.')
-  print(f"Spatial map sizes: {enm.get_layer('avg_pool').input.shape}")
+  print(f'ResNet50 pretrained over ImageNet was loaded.')
+  print(f"Spatial map sizes: {rn50.get_layer('avg_pool').input.shape}")
 
 We can feed-forward the samples once and get the predicted classes for each sample.
 Besides making sure the model is outputting the expected classes, this step is
@@ -87,8 +86,8 @@ which improves performance of the explaining methods.
 
   from tensorflow.keras.applications.imagenet_utils import preprocess_input
 
-  inputs = preprocess_input(images.astype("float").copy(), mode="torch")
-  logits = enm.predict(inputs, verbose=0)
+  inputs = preprocess_input(images.astype("float").copy(), mode="tf")
+  logits = rn50.predict(inputs, verbose=0)
   indices = np.argsort(logits, axis=-1)[:, ::-1]
   explaining_units = indices[:, :1]  # First-most likely classes.
 
@@ -100,9 +99,9 @@ by collecting the layers directly:
 
 .. jupyter-execute::
 
-  logits = ke.inspection.get_logits_layer(enm)
-  inters, biases = ke.inspection.layers_with_biases(enm, exclude=[logits])
-  model_exposed = ke.inspection.expose(enm, inters, logits)
+  logits = ke.inspection.get_logits_layer(rn50)
+  inters, biases = ke.inspection.layers_with_biases(rn50, exclude=[logits])
+  model_exposed = ke.inspection.expose(rn50, inters, logits)
 
 Now we can obtain FullGrad by simply calling to the :func:`explain` function:
 

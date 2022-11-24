@@ -40,7 +40,9 @@ Briefly, this can be achieved with the following template snippet:
     postprocessing=ke.filters.normalize,
   )
 
-We describe bellow these lines in detail.
+We will describe each one of the steps above in detail.
+Firstly, we employ the :class:`ResNet50V2` network pre-trained over the
+ImageNet dataset:
 
 .. jupyter-execute::
   :hide-code:
@@ -56,26 +58,22 @@ We describe bellow these lines in detail.
 
   SOURCE_DIRECTORY = 'docs/_static/images/singleton/'
   SAMPLES = 8
-  SIZES = (480, 480)
+  SIZES = (224, 224)
 
   file_names = os.listdir(SOURCE_DIRECTORY)
   image_paths = [os.path.join(SOURCE_DIRECTORY, f) for f in file_names if f != '_links.txt']
   images = np.stack([img_to_array(load_img(ip).resize(SIZES)) for ip in image_paths])
   images = images.astype("uint8")[:SAMPLES]
 
-Firstly, we employ the :class:`EfficientNetV2M` network pre-trained over the
-ImageNet dataset:
-
 .. jupyter-execute::
 
-  enm = tf.keras.applications.EfficientNetV2M(
+  rn50 = tf.keras.applications.ResNet50V2(
     classifier_activation=None,
-    include_preprocessing=False,
     weights='imagenet',
   )
 
-  print(f'EN-M pretrained over ImageNet was loaded.')
-  print(f"Spatial map sizes: {enm.get_layer('avg_pool').input.shape}")
+  print(f'ResNet50 pretrained over ImageNet was loaded.')
+  print(f"Spatial map sizes: {rn50.get_layer('avg_pool').input.shape}")
 
 We can feed-forward the samples once and get the predicted classes for each sample.
 Besides making sure the model is outputting the expected classes, this step is
@@ -84,10 +82,8 @@ which improves performance of the explaining methods.
 
 .. jupyter-execute::
 
-  from tensorflow.keras.applications.imagenet_utils import preprocess_input
-
-  inputs = preprocess_input(images.astype("float").copy(), mode="torch")
-  logits = enm.predict(inputs, verbose=0)
+  inputs = images / 127.5 - 1
+  logits = rn50.predict(inputs, verbose=0)
   indices = np.argsort(logits, axis=-1)[:, ::-1]
   explaining_units = indices[:, :1]  # First most likely class.
 
@@ -103,7 +99,7 @@ explaining method and smooths out its outputs. For example:
     noise=0.1,
   )
   _, smoothed_maps = smoothgrad(
-    enm,
+    rn50,
     inputs,
     explaining_units,
   )
@@ -115,6 +111,6 @@ For comparative purposes, we also compute the vanilla gradients method:
 
 .. jupyter-execute::
 
-  _, maps = ke.gradients(enm, inputs, explaining_units)
+  _, maps = ke.gradients(rn50, inputs, explaining_units)
 
   ke.utils.visualize(sum(zip(images, maps, smoothed_maps), ()), cols=3)

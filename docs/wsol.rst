@@ -76,21 +76,21 @@ we will actually load its TensorFlow alternative, available at
 
   COLORS = pascal_voc_colors()
   CLASSES = pascal_voc_classes()
-  WEIGHTS = 'resnet38d_voc2012_occse.h5'
+  WEIGHTS = 'docs/_build/data/resnet38d_voc2012_occse.h5'
 
+  ! mkdir -p docs/_build/data
   ! wget -q -nc https://raw.githubusercontent.com/lucasdavid/resnet38d-tf/main/resnet38d.py
-  ! wget -qnc https://github.com/lucasdavid/resnet38d-tf/releases/download/0.0.1/resnet38d_voc2012_occse.h5
+  ! wget -qnc https://github.com/lucasdavid/resnet38d-tf/releases/download/0.0.1/resnet38d_voc2012_occse.h5 -P docs/_build/data/
 
   from resnet38d import ResNet38d
 
-  input_tensor = tf.keras.Input(shape=(384, 384, 3), name="inputs")
+  input_tensor = tf.keras.Input(shape=(None, None, 3), name="inputs")
   rn38d = ResNet38d(input_tensor=input_tensor, weights=WEIGHTS)
 
   print(f"ResNet38-d with {WEIGHTS} pre-trained weights loaded.")
   print(f"Spatial map sizes: {rn38d.get_layer('s5/ac').input.shape}")
 
   ! rm resnet38d.py
-  ! rm resnet38d_voc2012_occse.h5
 
 We can feed-foward the samples once and get the predicted classes for each sample.
 Besides making sure the model is outputing the expected classes, this step is
@@ -145,11 +145,11 @@ respecting the conventional Pascal color mapping:
 
     return overlays
 
-  map_overlays = cams_to_colors(labels, maps, COLORS[1:21])
   cam_overlays = cams_to_colors(labels, cams, COLORS[1:21])
+  tta_overlays = cams_to_colors(labels, tta_cams, COLORS[1:21])
 
   ke.utils.visualize(
-    images=sum(zip(images, cam_overlays, map_overlays), ()),
+    images=sum(zip(images, cam_overlays, tta_overlays), ()),
     titles=['Original', 'CAM', 'TTA CAM'],
     cols=3,
   )

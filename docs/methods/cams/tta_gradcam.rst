@@ -74,7 +74,7 @@ this step is required in order to determine the most activating units in the
 
   from tensorflow.keras.applications.imagenet_utils import preprocess_input
 
-  inputs = preprocess_input(images.astype("float").copy(), mode="torch")
+  inputs = images / 127.5 - 1
   logits = rn50.predict(inputs, verbose=0)
   indices = np.argsort(logits, axis=-1)[:, ::-1]
 
