@@ -1,9 +1,7 @@
 """Shortcuts for commonly used signal filters used in literature.
 
 These filters can be used as post or mid processing for explaining
-methods and techniques. For example, to account for the absolute
-pixel contribution, when computing the gradient of a score unit
-with respect to the input image:
+methods and techniques.
 
 .. jupyter-execute::
     :hide-code:
@@ -11,12 +9,6 @@ with respect to the input image:
 
     import numpy as np
     import keras_explainable as ke
-
-.. jupyter-execute::
-
-    x = 5 * np.random.normal(size=(4, 16, 16, 3))
-    y = ke.filters.absolute_normalize(x).numpy()
-    print(f"[{x.min()}, {x.max()}] -> [{y.min()}, {y.max()}]")
 
 """
 
@@ -29,6 +21,14 @@ from keras_explainable.inspection import SPATIAL_AXIS
 
 def normalize(x: tf.Tensor, axis: Tuple[int] = SPATIAL_AXIS) -> tf.Tensor:
     """Normalize the signal into the interval [0, 1].
+
+    Usage:
+
+    .. jupyter-execute::
+
+        x = 5 * np.random.normal(size=(4, 16, 16, 3)).round(1)
+        y = ke.filters.absolute_normalize(x).numpy()
+        print(f"[{x.min()}, {x.max()}] -> [{y.min()}, {y.max()}]")
 
     Args:
         x (tf.Tensor): the input signal to be normalized.
@@ -47,6 +47,14 @@ def normalize(x: tf.Tensor, axis: Tuple[int] = SPATIAL_AXIS) -> tf.Tensor:
 def positive(x: tf.Tensor, axis: Tuple[int] = SPATIAL_AXIS) -> tf.Tensor:
     """Retain only positive values of the input signal.
 
+    Usage:
+
+    .. jupyter-execute::
+
+        x = np.asarray([0, -1, 2, -3])
+        y = ke.filters.positive(x).numpy()
+        print(f"{x} -> {y}")
+
     Args:
         x (tf.Tensor): the input signal.
         axis (Tuple[int], optional): the dimensions containing positional
@@ -60,6 +68,14 @@ def positive(x: tf.Tensor, axis: Tuple[int] = SPATIAL_AXIS) -> tf.Tensor:
 
 def negative(x: tf.Tensor, axis: Tuple[int] = SPATIAL_AXIS) -> tf.Tensor:
     """Retain only negative values of the input signal.
+
+    Usage:
+
+    .. jupyter-execute::
+
+        x = np.asarray([0, -1, 2, -3])
+        y = ke.filters.negative(x).numpy()
+        print(f"{x} -> {y}")
 
     Args:
         x (tf.Tensor): the input

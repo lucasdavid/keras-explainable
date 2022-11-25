@@ -1,3 +1,9 @@
+"""Implementation of various Meta techniques.
+
+These can be used conjointly with CAM and Gradient-based methods,
+providing cleaner and more robust results.
+"""
+
 from functools import partial
 from typing import Callable
 from typing import List
@@ -12,8 +18,34 @@ def smooth(
     method: Callable,
     repetitions: int = 20,
     noise: int = 0.1,
-):
+) -> Tuple[tf.Tensor, tf.Tensor]:
     """Smooth Meta Explaining Method.
+
+    This technique consists of repeatedly applying an AI explaining method, considering
+    small variations of the input signal each time (tempered with gaussian noise).
+
+    Usage:
+
+    .. code-block:: python
+
+        x = np.random.normal((1, 224, 224, 3))
+        y = np.asarray([[16, 32]])
+
+        model = tf.keras.applications.ResNet50V2(classifier_activation=None)
+
+        smoothgrad = ke.methods.meta.smooth(
+            ke.methods.gradient.gradients,
+            repetitions=20,
+            noise=0.1,
+        )
+
+        scores, maps = smoothgrad(model, x, y)
+
+    References:
+
+      - Smilkov, D., Thorat, N., Kim, B., Viégas, F., & Wattenberg, M. (2017).
+        SmoothGrad: removing noise by adding noise. arXiv preprint arXiv:1706.03825.
+        Available at: [arxiv/1706.03825](https://arxiv.org/abs/1706.03825)
 
     Args:
       method (Callable): the explaining method to be smoothed
@@ -21,13 +53,10 @@ def smooth(
       noise (int, optional): standard deviation of the gaussian noise
         added to the input signal. Defaults to 0.1.
 
-    References:
+    Returns:
+        Tuple[tf.Tensor, tf.Tensor]: the logits and explaining maps.
 
-      - Smilkov, D., Thorat, N., Kim, B., Viégas, F., & Wattenberg, M. (2017).
-        SmoothGrad: removing noise by adding noise. arXiv preprint arXiv:1706.03825.
-        Available at: [arxiv/1706.03825](https://arxiv.org/abs/1706.03825)
     """
-
     def apply(
         model: tf.keras.Model,
         inputs: tf.Tensor,
@@ -61,8 +90,37 @@ def tta(
     scales: List[float] = [0.5, 1.5, 2.0],
     hflip: bool = True,
     resize_method: str = "bilinear",
-):
-    """Computes the TTA version of a visualization method."""
+) -> Tuple[tf.Tensor, tf.Tensor]:
+    """Computes the TTA version of a visualization method.
+
+    Usage:
+
+    .. code-block:: python
+
+        x = np.random.normal((1, 224, 224, 3))
+        y = np.asarray([[16, 32]])
+
+        model = tf.keras.applications.ResNet50V2(classifier_activation=None)
+
+        scores, maps = ke.explain(
+            methods.gradient.gradients,
+            rn50,
+            inputs,
+            explaining_units,
+            postprocessing=filters.absolute_normalize,
+        )
+
+    Args:
+        method (Callable): the explaining method to be augmented
+        scales (List[float], optional): a list of coefs to scale the inputs by.
+            Defaults to [0.5, 1.5, 2.0].
+        hflip (bool, optional): wether or not to flip horizontally the inputs.
+            Defaults to True.
+        resize_method (str, optional): the resizing method used. Defaults to "bilinear".
+
+    Returns:
+        Tuple[tf.Tensor, tf.Tensor]: the logits and explaining maps.
+    """
     scales = tf.convert_to_tensor(scales, dtype=tf.float32)
 
     def apply(

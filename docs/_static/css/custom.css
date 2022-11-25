@@ -2,15 +2,19 @@
  * Code Highlighting.
  **/
 
- .highlight {
-  background-color: #f7f7f7 !important;
+.highlight {
+  background-color: #fafafa !important;
   padding: 0 !important;
  }
+
+.notranslate {
+  margin-bottom: 1em;
+}
 
 .highlight > pre {
   background: none;
   border: none;
-  padding: 1em !important;
+  /* padding: 1em !important; */
 
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
@@ -44,15 +48,23 @@
 }
 
 .jupyter_container > .cell_output > .output > .highlight > pre {
-  padding: 0 1em !important;
+  padding: 0 20px !important;
 }
 
 .jupyter_container > .cell_output > .output:first-child > .highlight > pre {
-  padding-top: 1em !important;
+  padding-top: 20px !important;
 }
 
 .jupyter_container > .cell_output > .output:last-child > .highlight > pre {
-  padding-bottom: 1em !important;
+  padding-bottom: 20px !important;
+}
+
+/***
+*  Sizes
+*/
+
+.site-main {
+  max-width: 1200px;
 }
 
 /***
@@ -66,16 +78,9 @@
 input[type="text"] {
   display: block;
   width: 100%;
-  padding: .375rem .75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: .25rem;
-  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
+
+/* 
 
 input[type="text"]:focus {
   border-color: #007daf;
@@ -85,9 +90,39 @@ input[type="text"]:focus {
 .function>dt,
 .method>dt {
   overflow-x: auto;
+} */
+
+img {
+  max-width: 100%;
 }
 
-table {
+/* Spacing */
+
+h1,h2,h3 {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+p {
+  margin-bottom: 0.5em;
+}
+
+.admonition, .note {
+  border: 0;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.viewcode-link {
+  float: right;
+}
+
+
+/***
+ * Tables
+ **/
+
+/* table {
   color: #666;
   border: #eee 1px solid;
   width: 100%;
@@ -102,4 +137,4 @@ table td {
   text-align: right;
   border: #efefef 1px solid;
   padding: 0.2em;
-}
+} */

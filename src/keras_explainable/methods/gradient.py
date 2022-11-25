@@ -1,3 +1,6 @@
+"""Implementation of various Gradient-based AI explaining methods and techniques.
+"""
+
 from functools import partial
 from typing import Callable
 from typing import List
@@ -41,6 +44,15 @@ def gradients(
 ) -> Tuple[tf.Tensor, tf.Tensor]:
     """Computes the Gradient Back-propagation Visualization Method.
 
+    This technique computes the gradient of the output activation unit being explained
+    with respect to each unit in the input signal.
+    Features (channels) in each pixel of the input sinal are absolutely averaged,
+    following the original implementation:
+
+    .. math::
+
+        f(x) = ψ(∇_xf(x))
+
     This method expects `inputs` to be a batch of positional signals of
     shape ``BHW...C``, and will return a tensor of shape ``BH'W'...L``,
     where ``(H', W', ...)`` are the sizes of the visual receptive field
@@ -50,6 +62,23 @@ def gradients(
     If `indices` is passed, the specific logits indexed by elements in this
     tensor are selected before the gradients are computed, effectively
     reducing the columns in the jacobian, and the size of the output explaining map.
+
+    Usage:
+
+    .. code-block:: python
+
+        x = np.random.normal((1, 224, 224, 3))
+        y = np.asarray([[16, 32]])
+
+        model = tf.keras.applications.ResNet50V2(classifier_activation=None)
+        scores, cams = ke.methods.gradient.gradients(model, x, y)
+
+    References:
+
+        - Simonyan, K., Vedaldi, A., & Zisserman, A. (2013).
+          Deep inside convolutional networks: Visualising image classification
+          models and saliency maps. arXiv preprint
+          `arXiv:1312.6034 <https://arxiv.org/abs/1312.6034>`_.
 
     Args:
         model (tf.keras.Model): the model being explained
@@ -63,17 +92,10 @@ def gradients(
         spatial_axis (Tuple[int], optional): the dimensions containing positional
             information. Defaults to ``SPATIAL_AXIS``.
         gradient_filter (Callable, optional): filter before channel combining.
-            Defaults to tf.abs.
+            Defaults to ``tf.abs``.
 
     Returns:
         Tuple[tf.Tensor, tf.Tensor]: the logits and saliency maps.
-
-    References:
-
-        - Simonyan, K., Vedaldi, A., & Zisserman, A. (2013).
-          Deep inside convolutional networks: Visualising image classification
-          models and saliency maps. arXiv preprint
-          `arXiv:1312.6034 <https://arxiv.org/abs/1312.6034>`_.
 
     """
     with tf.GradientTape(watch_accessed_variables=False) as tape:
@@ -139,7 +161,7 @@ def full_gradients(
 
     .. math::
 
-      f(x) = ψ(∇_xf(x)\\odot x) +∑_{l\\in L}∑_{c\\in c_l} ψ(f^b(x)_c)
+        f(x) = ψ(∇_xf(x)\\odot x) +∑_{l\\in L}∑_{c\\in c_l} ψ(f^b(x)_c)
 
     This method expects `inputs` to be a batch of positional signals of
     shape ``BHW...C``, and will return a tensor of shape ``BH'W'...L``,
@@ -150,6 +172,30 @@ def full_gradients(
     If `indices` is passed, the specific logits indexed by elements in this
     tensor are selected before the gradients are computed, effectively
     reducing the columns in the jacobian, and the size of the output explaining map.
+
+    Furthermore, the cached list of ``biases`` can be passed as a parameter for this
+    method. If none is passed, it will be inferred at runtime, implying on a marginal
+    increase in execution overhead during tracing.
+
+    Usage:
+
+    .. code-block:: python
+
+        x = np.random.normal((1, 224, 224, 3))
+        y = np.asarray([[16, 32]])
+
+        model = tf.keras.applications.ResNet50V2(classifier_activation=None)
+
+        logits = ke.inspection.get_logits_layer(model)
+        inters, biases = ke.inspection.layers_with_biases(model, exclude=[logits])
+        model = ke.inspection.expose(model, inters, logits)
+
+        scores, cams = ke.methods.gradient.full_gradients(model, x, y, biases=biases)
+
+    References:
+        - Srinivas S, Fleuret F. Full-gradient representation for neural network
+          visualization. `arxiv.org/1905.00780 <https://arxiv.org/pdf/1905.00780.pdf>`_,
+          2019.
 
     Args:
         model (tf.keras.Model): the model being explained
@@ -166,15 +212,10 @@ def full_gradients(
             signals. Defaults to ``filters.absolute_normalize``.
         biases: (List[tf.Tensor], optional): list of biases associated with each
             intermediate signal exposed by the model. If none is passed, it will
-            be infered from the endpoints (nodes) outputed by the model.
+            be inferred from the endpoints (nodes) outputed by the model.
 
     Returns:
         Tuple[tf.Tensor, tf.Tensor]: the logits and saliency maps.
-
-    References:
-        - Srinivas S, Fleuret F. Full-gradient representation for neural network
-          visualization. `arxiv.org/1905.00780 <https://arxiv.org/pdf/1905.00780.pdf>`_,
-          2019.
 
     """
     shape = tf.shape(inputs)
@@ -216,3 +257,8 @@ METHODS = [
 This list contains all available methods implemented in this module,
 and it is kept and used for introspection and validation purposes.
 """
+
+__all__ = [
+    "gradients",
+    "full_gradients",
+]

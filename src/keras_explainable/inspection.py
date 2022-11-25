@@ -227,7 +227,7 @@ def expose(
     outputs: Optional[E] = None,
 ) -> Model:
     """Creates a new model that exposes all endpoints described by
-      `arguments` and `outputs`.
+    ``arguments`` and ``outputs``.
 
     Args:
         model (Model): The model being explained.

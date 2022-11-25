@@ -41,7 +41,7 @@ Briefly, this can be achieved with the following template snippet:
   )
 
 We will describe each one of the steps above in detail.
-Firstly, we employ the :class:`ResNet50V2` network pre-trained over the
+Firstly, we employ the :class:`Xception` network pre-trained over the
 ImageNet dataset:
 
 .. jupyter-execute::
@@ -58,7 +58,7 @@ ImageNet dataset:
 
   SOURCE_DIRECTORY = 'docs/_static/images/singleton/'
   SAMPLES = 8
-  SIZES = (224, 224)
+  SIZES = (299, 299)
 
   file_names = os.listdir(SOURCE_DIRECTORY)
   image_paths = [os.path.join(SOURCE_DIRECTORY, f) for f in file_names if f != '_links.txt']
@@ -67,13 +67,13 @@ ImageNet dataset:
 
 .. jupyter-execute::
 
-  rn50 = tf.keras.applications.ResNet50V2(
+  model = tf.keras.applications.Xception(
     classifier_activation=None,
     weights='imagenet',
   )
 
   print(f'ResNet50 pretrained over ImageNet was loaded.')
-  print(f"Spatial map sizes: {rn50.get_layer('avg_pool').input.shape}")
+  print(f"Spatial map sizes: {model.get_layer('avg_pool').input.shape}")
 
 We can feed-forward the samples once and get the predicted classes for each sample.
 Besides making sure the model is outputting the expected classes, this step is
@@ -83,7 +83,7 @@ which improves performance of the explaining methods.
 .. jupyter-execute::
 
   inputs = images / 127.5 - 1
-  logits = rn50.predict(inputs, verbose=0)
+  logits = model.predict(inputs, verbose=0)
   indices = np.argsort(logits, axis=-1)[:, ::-1]
   explaining_units = indices[:, :1]  # First most likely class.
 
@@ -99,7 +99,7 @@ explaining method and smooths out its outputs. For example:
     noise=0.1,
   )
   _, smoothed_maps = smoothgrad(
-    rn50,
+    model,
     inputs,
     explaining_units,
   )
@@ -111,6 +111,6 @@ For comparative purposes, we also compute the vanilla gradients method:
 
 .. jupyter-execute::
 
-  _, maps = ke.gradients(rn50, inputs, explaining_units)
+  _, maps = ke.gradients(model, inputs, explaining_units)
 
-  ke.utils.visualize(sum(zip(images, maps, smoothed_maps), ()), cols=3)
+  ke.utils.visualize([*images, *maps, *smoothed_maps])

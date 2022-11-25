@@ -32,17 +32,20 @@ finally:
 
 cam = partial_explain(methods.cams.cam, postprocessing=filters.positive_normalize)
 """Shortcut for :py:func:`methods.cams.cam`,
-filtering positively contributing regions"""
+filtering positively contributing regions.
+"""
 
 gradcam = partial_explain(methods.cams.gradcam, postprocessing=filters.positive_normalize)
 """Shortcut for :py:func:`methods.cams.gradcam`,
-filtering positively contributing regions"""
+filtering positively contributing regions.
+"""
 
 gradcampp = partial_explain(
     methods.cams.gradcampp, postprocessing=filters.positive_normalize
 )
 """Shortcut for :py:func:`methods.cams.gradcampp`,
-filtering positively contributing regions"""
+filtering positively contributing regions.
+"""
 
 scorecam = partial_explain(
     methods.cams.scorecam,
@@ -50,7 +53,8 @@ scorecam = partial_explain(
     resizing=False,
 )
 """Shortcut for :py:func:`methods.cams.scorecam`,
-filtering positively contributing regions"""
+filtering positively contributing regions.
+"""
 
 gradients = partial_explain(
     methods.gradient.gradients,
@@ -58,7 +62,8 @@ gradients = partial_explain(
     resizing=False,
 )
 """Shortcut for :py:func:`methods.gradient.gradients`,
-filtering absolutely contributing regions"""
+filtering absolutely contributing regions.
+"""
 
 full_gradients = partial_explain(
     methods.gradient.full_gradients,
@@ -66,7 +71,8 @@ full_gradients = partial_explain(
     resizing=False,
 )
 """Shortcut for :py:func:`methods.gradient.full_gradients`,
-filtering absolutely contributing regions"""
+filtering absolutely contributing regions.
+"""
 
 __all__ = [
     "methods",
@@ -75,9 +81,10 @@ __all__ = [
     "utils",
     "explaining",
     "explain",
+    "gradients",
+    "full_gradients",
     "cam",
     "gradcam",
     "gradcampp",
     "scorecam",
-    "gradients",
 ]

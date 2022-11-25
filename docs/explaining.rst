@@ -32,7 +32,7 @@ GPUs and/or workers.
 
   SOURCE_DIRECTORY = 'docs/_static/images/singleton/'
   SAMPLES = 8
-  SIZES = (224, 224)
+  SIZES = (299, 299)
 
   file_names = os.listdir(SOURCE_DIRECTORY)
   image_paths = [os.path.join(SOURCE_DIRECTORY, f) for f in file_names if f != '_links.txt']
@@ -40,20 +40,20 @@ GPUs and/or workers.
   images = images.astype("uint8")[:SAMPLES]
 
 We demonstrate bellow how predictions can be explained using the
-ResNet50 network trained over ImageNet, using a few image samples.
+Xception network trained over ImageNet, using a few image samples.
 Firstly, we load the network:
 
 .. jupyter-execute::
 
-  rn50 = tf.keras.applications.ResNet50V2(
+  model = tf.keras.applications.Xception(
     classifier_activation=None,
     weights='imagenet',
   )
 
-  print(f"Spatial map sizes: {rn50.get_layer('avg_pool').input.shape}")
+  print(f"Spatial map sizes: {model.get_layer('avg_pool').input.shape}")
 
-We can feed-foward the samples once and get the predicted classes for each sample.
-Besides making sure the model is outputing the expected classes, this step is
+We can feed-forward the samples once and get the predicted classes for each sample.
+Besides making sure the model is outputting the expected classes, this step is
 required in order to determine the most activating units in the *logits* layer,
 which improves performance of the explaining methods.
 
@@ -62,7 +62,7 @@ which improves performance of the explaining methods.
   from tensorflow.keras.applications.imagenet_utils import preprocess_input, decode_predictions
 
   inputs = images / 127.5 - 1
-  logits = rn50.predict(inputs, verbose=0)
+  logits = model.predict(inputs, verbose=0)
 
   indices = np.argsort(logits, axis=-1)[:, ::-1]
   probs = tf.nn.softmax(logits).numpy()
@@ -79,29 +79,28 @@ which improves performance of the explaining methods.
 Finally, we can simply run all available explaining methods:
 
 .. jupyter-execute::
+  :hide-output:
 
   explaining_units = indices[:, :1]  # First most likely class.
 
   # Gradient Back-propagation
-  _, g_maps = ke.gradients(rn50, inputs, explaining_units)
+  _, g_maps = ke.gradients(model, inputs, explaining_units)
 
   # Full-Gradient
-  logits = ke.inspection.get_logits_layer(rn50)
-  inters, biases = ke.inspection.layers_with_biases(rn50, exclude=[logits])
-  rn50_exp = ke.inspection.expose(rn50, inters, logits)
-  _, fg_maps = ke.full_gradients(rn50_exp, inputs, explaining_units, biases=biases)
+  logits = ke.inspection.get_logits_layer(model)
+  inters, biases = ke.inspection.layers_with_biases(model, exclude=[logits])
+  model_exp = ke.inspection.expose(model, inters, logits)
+  _, fg_maps = ke.full_gradients(model_exp, inputs, explaining_units, biases=biases)
 
   # CAM-Based
-  rn50_exp = ke.inspection.expose(rn50)
-  _, c_maps = ke.cam(rn50_exp, inputs, explaining_units)
-  _, gc_maps = ke.gradcam(rn50_exp, inputs, explaining_units)
-  _, gcpp_maps = ke.gradcampp(rn50_exp, inputs, explaining_units)
-  _, sc_maps = ke.scorecam(rn50_exp, inputs, explaining_units)
-
-Following the original Grad-CAM paper, we only consider the positive contributing regions
-in the creation of the CAMs, crunching negatively contributing and non-related regions together:
+  model_exp = ke.inspection.expose(model)
+  _, c_maps = ke.cam(model_exp, inputs, explaining_units)
+  _, gc_maps = ke.gradcam(model_exp, inputs, explaining_units)
+  _, gcpp_maps = ke.gradcampp(model_exp, inputs, explaining_units)
+  _, sc_maps = ke.scorecam(model_exp, inputs, explaining_units)
 
 .. jupyter-execute::
+  :hide-code:
 
   all_maps = (g_maps, fg_maps, c_maps, gc_maps, gcpp_maps, sc_maps)
 
@@ -110,3 +109,35 @@ in the creation of the CAMs, crunching negatively contributing and non-related r
   _overlays = sum(zip([None] * len(images), *all_maps), ())
 
   ke.utils.visualize(_images, _titles, _overlays, cols=1 + len(all_maps))
+
+The functions above are simply shortcuts for
+:func:`~keras_explainable.engine.explaining.explain`, using their conventional
+hyper-parameters and post processing functions.
+For more flexibility, you can use the regular form:
+
+.. code-block:: python
+
+  logits, cams = ke.explain(
+    ke.methods.cam.gradcam,
+    model_exp,
+    inputs,
+    explaining_units,
+    batch_size=32,
+    postprocessing=ke.filters.positive_normalize,
+  )
+
+While the :func:`~keras_explainable.engine.explaining.explain` function is a convenient
+wrapper, transparently distributing the workload based on the distribution strategy
+associated with the model, it is not a necessary component in the overall functioning
+of the library. Alternatively, one can call any explaining method directly:
+
+.. code-block:: python
+
+  logits, cams = ke.methods.cams.gradcam(model, inputs, explaining_units)
+
+  # Or the following, which is more efficient:
+  gradcam = tf.function(ke.methods.cams.gradcam, reduce_retracing=True)
+  logits, cams = gradcam(model, inputs, explaining_units)
+
+  cams = ke.filters.positive_normalize(cams)
+  cams = tf.image.resize(cams, (299, 299)).numpy()

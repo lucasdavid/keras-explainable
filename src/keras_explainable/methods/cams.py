@@ -1,5 +1,6 @@
 """Implementation of various CAM-based AI explaining methods and techniques.
 """
+
 from typing import Optional
 from typing import Tuple
 from typing import Union
@@ -23,7 +24,7 @@ def cam(
     indices_batch_dims: int = -1,
     spatial_axis: Tuple[int] = SPATIAL_AXIS,
     logits_layer: Optional[Union[str, Layer]] = None,
-):
+) -> Tuple[tf.Tensor, tf.Tensor]:
     """Computes the CAM Visualization Method.
 
     This method expects `inputs` to be a batch of positional signals of
@@ -41,19 +42,20 @@ def cam(
 
     .. code-block:: python
 
-        import numpy as np
-        import keras_explainable as ke
+        x = np.random.normal((1, 224, 224, 3))
+        y = np.asarray([[16, 32]])
 
-        x = np.random.normal((2, 224, 224, 3))
-        y = np.asarray([
-            [16, 32],
-            [32, 64],
-        ])
-
-        model = tf.keras.applications.ResNet50V2(weights=None, include_top=True)
+        model = tf.keras.applications.ResNet50V2(classifier_activation=None)
         model = ke.inspection.expose(model)
 
         scores, cams = ke.methods.cams.cam(model, x, y)
+
+    References:
+        - Zhou, B., Khosla, A., Lapedriza, A., Oliva, A., & Torralba, A. (2016).
+          Learning deep features for discriminative localization. In Proceedings
+          of the IEEE conference on computer vision and pattern
+          recognition (pp. 2921-2929). Available at:
+          `arxiv/1512.04150 <https://arxiv.org/pdf/1512.04150.pdf>`_.
 
     Args:
         model (tf.keras.Model): the model being explained
@@ -71,13 +73,6 @@ def cam(
 
     Returns:
         Tuple[tf.Tensor, tf.Tensor]: the logits and Class Activation Maps (CAMs).
-
-    References:
-        - Zhou, B., Khosla, A., Lapedriza, A., Oliva, A., & Torralba, A. (2016).
-          Learning deep features for discriminative localization. In Proceedings
-          of the IEEE conference on computer vision and pattern
-          recognition (pp. 2921-2929). Available at:
-          `arxiv/1512.04150 <https://arxiv.org/pdf/1512.04150.pdf>`_.
 
     """
     logits, activations = model(inputs, training=False)
@@ -116,6 +111,25 @@ def gradcam(
     tensor are selected before the gradients are computed, effectively
     reducing the columns in the jacobian, and the size of the output explaining map.
 
+    Usage:
+
+    .. code-block:: python
+
+        x = np.random.normal((1, 224, 224, 3))
+        y = np.asarray([[16, 32]])
+
+        model = tf.keras.applications.ResNet50V2(classifier_activation=None)
+        model = ke.inspection.expose(model)
+
+        scores, cams = ke.methods.cams.gradcam(model, x, y)
+
+    References:
+        - Selvaraju, R. R., Cogswell, M., Das, A., Vedantam, R., Parikh, D., & Batra, D.
+          (2017). Grad-CAM: Visual explanations from deep networks via gradient-based
+          localization. In Proceedings of the IEEE international conference on computer
+          vision (pp. 618-626).
+          Available at: `arxiv/1610.02391 <https://arxiv.org/abs/1610.02391>`_.
+
     Args:
         model (tf.keras.Model): the model being explained
         inputs (tf.Tensor): the input data
@@ -130,13 +144,6 @@ def gradcam(
 
     Returns:
         Tuple[tf.Tensor, tf.Tensor]: the logits and Class Activation Maps (CAMs).
-
-    References:
-        - Selvaraju, R. R., Cogswell, M., Das, A., Vedantam, R., Parikh, D., & Batra, D.
-          (2017). Grad-CAM: Visual explanations from deep networks via gradient-based
-          localization. In Proceedings of the IEEE international conference on computer
-          vision (pp. 618-626).
-          Available at: `arxiv/1610.02391 <https://arxiv.org/abs/1610.02391>`_.
 
     """
     with tf.GradientTape(watch_accessed_variables=False) as tape:
@@ -171,6 +178,26 @@ def gradcampp(
     tensor are selected before the gradients are computed, effectively
     reducing the columns in the jacobian, and the size of the output explaining map.
 
+    Usage:
+
+    .. code-block:: python
+
+        x = np.random.normal((1, 224, 224, 3))
+        y = np.asarray([[16, 32]])
+
+        model = tf.keras.applications.ResNet50V2(classifier_activation=None)
+        model = ke.inspection.expose(model)
+
+        scores, cams = ke.methods.cams.gradcampp(model, x, y)
+
+    References:
+        - Chattopadhay, A., Sarkar, A., Howlader, P., & Balasubramanian, V. N.
+          (2018, March). Grad-cam++: Generalized gradient-based visual explanations
+          for deep convolutional networks. In 2018 IEEE winter conference on
+          applications of computer vision (WACV) (pp. 839-847). IEEE.
+        - Grad-CAM++'s official implementation. Github. Available at:
+          `adityac94/Grad-CAM++ <github.com/adityac94/Grad_CAM_plus_plus>`_
+
     Args:
         model (tf.keras.Model): the model being explained
         inputs (tf.Tensor): the input data
@@ -185,14 +212,6 @@ def gradcampp(
 
     Returns:
         Tuple[tf.Tensor, tf.Tensor]: the logits and Class Activation Maps (CAMs).
-
-    References:
-        - Chattopadhay, A., Sarkar, A., Howlader, P., & Balasubramanian, V. N.
-          (2018, March). Grad-cam++: Generalized gradient-based visual explanations
-          for deep convolutional networks. In 2018 IEEE winter conference on
-          applications of computer vision (WACV) (pp. 839-847). IEEE.
-        - Grad-CAM++'s official implementation. Github. Available at:
-          `adityac94/Grad-CAM++ <github.com/adityac94/Grad_CAM_plus_plus>`_
 
     """
     with tf.GradientTape(watch_accessed_variables=False) as tape:
@@ -241,6 +260,23 @@ def scorecam(
     tensor are selected before the gradients are computed, effectively
     reducing the columns in the jacobian, and the size of the output explaining map.
 
+    Usage:
+
+    .. code-block:: python
+
+        x = np.random.normal((1, 224, 224, 3))
+        y = np.asarray([[16, 32]])
+
+        model = tf.keras.applications.ResNet50V2(classifier_activation=None)
+        model = ke.inspection.expose(model)
+
+        scores, cams = ke.methods.cams.scorecam(model, x, y)
+
+    References:
+        - Score-CAM: Score-Weighted Visual Explanations for Convolutional
+          Neural Networks. Available at:
+          `arxiv/1910.01279 <https://arxiv.org/abs/1910.01279>`_
+
     Args:
         model (tf.keras.Model): the model being explained
         inputs (tf.Tensor): the input data
@@ -255,11 +291,6 @@ def scorecam(
 
     Returns:
         Tuple[tf.Tensor, tf.Tensor]: the logits and Class Activation Maps (CAMs).
-
-    References:
-        - Score-CAM: Score-Weighted Visual Explanations for Convolutional
-          Neural Networks. Available at:
-          `arxiv/1910.01279 <https://arxiv.org/abs/1910.01279>`_
 
     """
     scores, activations = model(inputs, training=False)
@@ -296,3 +327,10 @@ METHODS = [
 This list contains all available methods implemented in this module,
 and it is kept and used for introspection and validation purposes.
 """
+
+__all__ = [
+    "cam",
+    "gradcam",
+    "gradcampp",
+    "scorecam",
+]

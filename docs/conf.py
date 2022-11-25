@@ -54,6 +54,8 @@ try:
 except Exception as e:
   print("Running `sphinx-apidoc` failed!\n{}".format(e))
 
+import sphinx_redactor_theme
+
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -141,7 +143,7 @@ add_module_names = False
 # show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = "arduino"
+pygments_style = "vs"
 
 # A list of ignored prefixes for module index sorting.
 # modindex_common_prefix = []
@@ -156,20 +158,22 @@ todo_emit_warnings = True
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'sphinx_book_theme'
+# html_theme = 'sphinx_book_theme'
+html_theme = 'sphinx_redactor_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
   # "sidebar_width": "300px", "page_width": "1200px"
-    "repository_url": "https://github.com/lucasdavid/keras-explainable",
-    "use_repository_button": True,
+    # "repository_url": "https://github.com/lucasdavid/keras-explainable",
+    # "use_repository_button": True,
 }
 
 
 # Add any paths that contain custom themes here, relative to this directory.
 # html_theme_path = []
+html_theme_path = [sphinx_redactor_theme.get_html_theme_path()]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -220,7 +224,7 @@ html_static_path = ["_static"]
 # html_show_sourcelink = True
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
-# html_show_sphinx = True
+html_show_sphinx = False
 
 # If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
 # html_show_copyright = True

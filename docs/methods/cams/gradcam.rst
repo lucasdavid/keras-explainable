@@ -56,28 +56,28 @@ We describe bellow these lines in detail.
 
   SOURCE_DIRECTORY = 'docs/_static/images/singleton/'
   SAMPLES = 8
-  SIZES = (224, 224)
+  SIZES = (299, 299)
 
   file_names = os.listdir(SOURCE_DIRECTORY)
   image_paths = [os.path.join(SOURCE_DIRECTORY, f) for f in file_names if f != '_links.txt']
   images = np.stack([img_to_array(load_img(ip).resize(SIZES)) for ip in image_paths])
   images = images.astype("uint8")[:SAMPLES]
 
-Firstly, we employ the :class:`ResNet50` network pre-trained over the
+Firstly, we employ the :class:`Xception` network pre-trained over the
 ImageNet dataset:
 
 .. jupyter-execute::
 
-  rn50 = tf.keras.applications.ResNet50V2(
+  model = tf.keras.applications.Xception(
     classifier_activation=None,
-    weights='imagenet'
+    weights='imagenet',
   )
 
-  print(f'ResNet50 pretrained over ImageNet was loaded.')
-  print(f"Spatial map sizes: {rn50.get_layer('avg_pool').input.shape}")
+  print(f'Xception pretrained over ImageNet was loaded.')
+  print(f"Spatial map sizes: {model.get_layer('avg_pool').input.shape}")
 
-We can feed-foward the samples once and get the predicted classes for each sample.
-Besides making sure the model is outputing the expected classes, this step is
+We can feed-forward the samples once and get the predicted classes for each sample.
+Besides making sure the model is outputting the expected classes, this step is
 required in order to determine the most activating units in the *logits* layer,
 which improves performance of the explaining methods.
 
@@ -86,7 +86,7 @@ which improves performance of the explaining methods.
   from tensorflow.keras.applications.imagenet_utils import preprocess_input
 
   inputs = images / 127.5 - 1
-  logits = rn50.predict(inputs, verbose=0)
+  logits = model.predict(inputs, verbose=0)
   indices = np.argsort(logits, axis=-1)[:, ::-1]
 
   explaining_units = indices[:, :1]  # First most likely class of each sample.
@@ -99,18 +99,17 @@ signal (oftentimes advent from the last convolutional layer).
 CAM-based methods implemented here expect the model to output both logits and
 activation signal, so their respective representative tensors are exposed and
 the jacobian can be computed from the former with respect to the latter.
-Hence, we modify the current `rn50` model --- which only output logits at this
+Hence, we modify the current `model` model --- which only output logits at this
 time --- to expose both activation maps and logits signals:
 
 .. jupyter-execute::
 
-  rn101_exposed = ke.inspection.expose(rn50)
-  _, cams = ke.gradcam(rn101_exposed, inputs, explaining_units)
+  model = ke.inspection.expose(model)
+  _, cams = ke.gradcam(model, inputs, explaining_units)
 
   ke.utils.visualize(
-    images,
-    overlays=cams.clip(0., 1.).transpose((3, 0, 1, 2)).reshape(-1, *SIZES, 1),
-    cols=4
+    images=[*images, *cams, *images],
+    overlays=[None] * (2 * len(images)) + [*cams],
   )
 
 .. note::
@@ -118,76 +117,6 @@ time --- to expose both activation maps and logits signals:
   To increase efficiency, we sub-select only the top :math:`K` scoring
   classification units to explain. The jacobian will only be computed for
   these :math:`NK` outputs.
-
-Breakdown of Model Exposure and Grad-CAM
-""""""""""""""""""""""""""""""""""""""""
-
-The function :py:func:`keras_explainable.inspection.expose` will take a
-:class:`keras.Model` as argument and instantiate a new model that outputs
-both logits and the activation signal immediately before the
-*Global Average Pooling* layer.
-
-Under the hood of our example,
-:func:`keras_explainable.inspection.expose` is simply
-collecting the input and output signals of the global pooling
-and predictions layer, respectively:
-
-.. code-block:: python
-
-  activations = rn50.get_layer('avg_pool').input
-  scores = rn50.get_layer('predictions').output
-
-  rn101_exposed = tf.keras.Model(rn50.inputs, [scores, activations])
-
-You can also provide hints regarding the argument and output signals, if
-your model's topology is more complex or if you simply wish to compute the
-Grad-CAM with respect to other layer than the last convolutional one:
-
-.. code-block:: python
-
-  rn101_exposed = ke.inspection.expose(rn50, 'conv5_out', 'predictions')
-
-For nested models that were created from different Input objects, you can
-further specify which nodes to access within each layer, which maintains
-the computation graph connected:
-
-.. code-block:: python
-
-  from keras import Input, Sequential
-  from keras.layers import Dense, Activation
-  from keras.applications import ResNet50V2
-
-  inputs = Input(shape=[None, None, 3])
-  backbone = ResNet50V2(include_top=False, pooling='avg')
-  model = Sequential([
-    inputs,
-    backbone,
-    Dense(10, name='logits'),
-    Activation('softmax', dtype='float32'),
-  ])
-
-  rn101_exposed = ke.inspection.expose(
-    rn50,
-    arguments={
-      'name': 'rn50.avg_pool',
-      'link': 'input',
-      'index': 1
-    },
-    outputs='predictions'
-  )
-
-As for the :py:func:`ke.gradcam` function, it is only a shortcut for
-``ke.explain(ke.methods.cams.gradcam, model, inputs, ...)``.
-
-All explaining methods can also be called directly:
-
-.. code-block:: python
-
-  gradcam = tf.function(ke.methods.cams.gradcam, reduce_retracing=True)
-  logits, cams = gradcam(model, inputs, explaining_units)
-
-  cams = ke.filters.positive_normalize(cams)
-  cams = tf.image.resize(cams, SIZES).numpy()
 
 Following the original Grad-CAM paper, we only consider the positive
 contributing regions in the creation of the CAMs, crunching negatively

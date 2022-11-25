@@ -152,6 +152,21 @@ def explain(
     """Explain the outputs of ``model`` with respect to the inputs or an intermediate
     signal, using an AI explaining method.
 
+    Usage:
+
+    .. code-block:: python
+
+        x = np.random.normal((1, 224, 224, 3))
+        y = np.asarray([[16, 32]])
+
+        model = tf.keras.applications.ResNet50V2(classifier_activation=None)
+
+        scores, maps = ke.explain(
+            ke.methods.gradient.gradients,
+            model, x, y,
+            postprocessing=filters.absolute_normalize,
+        )
+
     Args:
         method (Callable): An AI explaining function, as the ones contained in
             `methods` module.
@@ -183,15 +198,16 @@ def explain(
     will be collected into ``methods_params`` and passed onto the :func:`explain_step`
     and ``method`` functions. The most common ones are:
 
-    - indices_batch_dims (int): The dimensions marked as ``batch`` when gathering
+    - **indices_batch_dims** (int): The dimensions marked as ``batch`` when gathering
       units described by ``y``. Ignore if ``y`` is None.
-    - indices_axis: The axes from which to gather units described by ``y``.
+    - **indices_axis** (int): The axes from which to gather units described by ``y``.
       Ignore if ``y`` is None.
-    - spatial_axis: The axes containing the positional visual info. We assume `inputs`
-      to contain 2D images or videos in the shape `(B1, B2, ..., BN, H, W, 3)`.
+    - **spatial_axis** (Tuple[int]): The axes containing the positional visual info.
+      We assume `inputs` to contain 2D images or videos in the shape
+      `(B1, B2, ..., BN, H, W, 3)`.
       For 3D image data, set `spatial_axis` to `(1, 2, 3)` or `(-4, -3, -2)`.
-    - postprocessing: A function to process the activation maps before normalization
-      (most commonly adopted being `maximum(x, 0)` and `abs`).
+    - **postprocessing** (Callable): A function to process the activation maps before
+      normalization (most commonly adopted being `maximum(x, 0)` and `abs`).
 
     Raises:
         ValueError: the explaining method produced in an unexpected.

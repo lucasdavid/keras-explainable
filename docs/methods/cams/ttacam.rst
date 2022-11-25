@@ -1,6 +1,6 @@
-============
-TTA Grad-CAM
-============
+=======
+TTA CAM
+=======
 
 Test-time augmentation (TTA) is a commonly employed strategy in Saliency
 detection and Weakly Supervised Segmentation tasks order to obtain smoother
@@ -14,16 +14,16 @@ template snippet:
 
   import keras_explainable as ke
 
-  model = tf.keras.applications.ResNet50V2(...)
+  model = tf.keras.applications.Xception(...)
   model = ke.inspection.expose(model)
 
-  tta_gradcam = ke.methods.meta.tta(
-    ke.methods.cams.gradcam,
+  ttacam = ke.methods.meta.tta(
+    ke.methods.cams.cam,
     scales=[0.5, 1.0, 1.5, 2.],
     hflip=True
   )
   _, cams = ke.explain(
-    tta_gradcam, model, inputs, postprocessing=ke.filters.positive_normalize
+    ttacam, model, inputs, postprocessing=ke.filters.positive_normalize
   )
 
 .. jupyter-execute::
@@ -48,22 +48,21 @@ template snippet:
   images = images.astype("uint8")[:SAMPLES]
 
 We describe bellow these lines in detail.
-
-Firstly, we employ the :class:`ResNet50V2` network pre-trained over the
+Firstly, we employ the :class:`Xception` network pre-trained over the
 ImageNet dataset:
 
 .. jupyter-execute::
 
   input_tensor = tf.keras.Input(shape=(None, None, 3), name='inputs')
 
-  rn50 = tf.keras.applications.ResNet50V2(
+  model = tf.keras.applications.Xception(
     input_tensor=input_tensor,
     classifier_activation=None,
     weights='imagenet',
   )
 
-  print(f'ResNet50 pretrained over ImageNet was loaded.')
-  print(f"Spatial map sizes: {rn50.get_layer('avg_pool').input.shape}")
+  print(f'Xception pretrained over ImageNet was loaded.')
+  print(f"Spatial map sizes: {model.get_layer('avg_pool').input.shape}")
 
 We can feed-forward the samples once and get the predicted classes for each
 sample. Besides making sure the model is outputting the expected classes,
@@ -75,26 +74,23 @@ this step is required in order to determine the most activating units in the
   from tensorflow.keras.applications.imagenet_utils import preprocess_input
 
   inputs = images / 127.5 - 1
-  logits = rn50.predict(inputs, verbose=0)
+  logits = model.predict(inputs, verbose=0)
   indices = np.argsort(logits, axis=-1)[:, ::-1]
 
   explaining_units = indices[:, :1]  # First-most likely classes.
 
 .. jupyter-execute::
 
-  rn50 = ke.inspection.expose(rn50)
+  model = ke.inspection.expose(model)
 
-  tta_gradcam = ke.methods.meta.tta(
-    ke.methods.cams.gradcam,
+  ttacam = ke.methods.meta.tta(
+    ke.methods.cams.cam,
     scales=[0.5, 1.0, 1.5, 2.],
     hflip=True
   )
-  _, cams = ke.explain(
-    tta_gradcam, rn50, inputs, explaining_units, batch_size=1
-  )
+  _, cams = ke.explain(ttacam, model, inputs, explaining_units, batch_size=1)
 
   ke.utils.visualize(
-    images,
-    overlays=cams.clip(0., 1.).transpose((3, 0, 1, 2)).reshape(-1, *SIZES, 1),
-    cols=4
+    images=[*images, *cams, *images],
+    overlays=[None] * (2 * len(images)) + [*cams],
   )

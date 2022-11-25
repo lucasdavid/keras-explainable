@@ -22,4 +22,4 @@ CAM-Based Techniques
    :maxdepth: 1
 
    Grad-CAM <cams/gradcam>
-   TTA Grad-CAM <cams/tta_gradcam>
+   TTA CAM <cams/ttacam>

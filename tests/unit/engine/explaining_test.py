@@ -144,7 +144,7 @@ class ExplainTest(tf.test.TestCase):
     logits = ke.inspection.get_logits_layer(model)
     inters, biases = ke.inspection.layers_with_biases(model, exclude=[logits])
 
-    model_exposed = ke.inspection.expose(model, inters, logits)
+    model = ke.inspection.expose(model, inters, logits)
 
     x, y = (
       np.random.rand(self.BATCH, *self.SHAPE),
@@ -153,7 +153,7 @@ class ExplainTest(tf.test.TestCase):
 
     logits, maps = ke.explain(
       ke.methods.gradient.full_gradients,
-      model_exposed,
+      model,
       x,
       y,
       biases=biases,
