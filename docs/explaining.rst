@@ -133,10 +133,10 @@ of the library. Alternatively, one can call any explaining method directly:
 
 .. code-block:: python
 
-  logits, cams = ke.methods.cams.gradcam(model, inputs, explaining_units)
+  gradcam =  ke.methods.cams.gradcam
+  # Uncomment the following to compile the explaining pass:
+  # gradcam = tf.function(ke.methods.cams.gradcam, reduce_retracing=True, jit_compile=True)
 
-  # Or the following, which is more efficient:
-  gradcam = tf.function(ke.methods.cams.gradcam, reduce_retracing=True)
   logits, cams = gradcam(model, inputs, explaining_units)
 
   cams = ke.filters.positive_normalize(cams)

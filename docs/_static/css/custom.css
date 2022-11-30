@@ -60,14 +60,6 @@
 }
 
 /***
-*  Sizes
-*/
-
-.site-main {
-  max-width: 1200px;
-}
-
-/***
  * Forms
  **/
 
@@ -113,7 +105,7 @@ p {
   margin-bottom: 1em;
 }
 
-.viewcode-link {
+.viewcode-link, .viewcode-back {
   float: right;
 }
 
