@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="utf-8">
+    <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <title>TTA CAM</title>
+    
+
+    <link rel="stylesheet" href="../../_static/css/redactor.css" type="text/css" />
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <link rel="stylesheet" href="../../_static/css/redactor.css" type="text/css" />
+    
+    <link rel="stylesheet" href="../../_static/jupyter-sphinx.css" type="text/css" />
+    
+    <link rel="stylesheet" href="../../_static/thebelab.css" type="text/css" />
+    
+    <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+    
+    
+    <link rel="index" title="Index" href="../../genindex.html"/>
+    <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Keras Explainable" href="../../index.html"/>
+    <link rel="up" title="AI Explaining Methods" href="../index.html"/>
+    <link rel="next" title="Weakly Supervised Object Localization and Semantic Segmentation" href="../../wsol.html"/>
+    <link rel="prev" title="Grad-CAM" href="gradcam.html"/> 
+</head>
+
+<body role="document">
+     
+
+    
+<a href="#" id="js-navigation-toggle" class="navigation-toggle">
+    <i class="mdi mdi-menu"></i><i class="mdi mdi-close"></i>
+</a>
+
+<section class="site-sidebar">
+
+<nav>
+
+
+    <a href="../../index.html" class="branding-link">
+    
+        keras-explainable
+    
+    
+    
+        
+        
+            <span class="branding-link__version">
+                0.0.2
+            </span>
+        
+    
+    </a>
+
+    
+<section role="search">
+    <form action="../../search.html" method="get" class="site-searchform">
+        <input type="text" name="q" placeholder="Search docs" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+</section>
+
+
+
+    <section class="site-nav">
+    
+    
+        <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../explaining.html">Explaining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../exposure.html">Exposure</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Methods</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#saliency-and-gradient-based">Saliency and Gradient-based</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#cam-based-techniques">CAM-Based Techniques</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../wsol.html">WSSL &amp; WSSS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">Module Reference</a></li>
+</ul>
+
+    
+    </section>
+
+</nav>
+
+</section>
+
+    <main class="site-main" role="main">
+        
+
+
+
+
+
+
+
+
+
+
+
+<nav class="site-breadcrumbs">
+    <ul>
+    
+        <li>
+            <a href="../../index.html">Docs</a> /
+        </li>
+        
+        <li>
+            <a href="../index.html">AI Explaining Methods</a> /
+        </li>
+        
+        <li class="site-breadcrumbs__leaf">TTA CAM</li>
+    
+    </ul>
+</nav>
+        <section class="site-content">
+            <div class="container">
+                
+  <section id="tta-cam">
+<h1>TTA CAM<a class="headerlink" href="#tta-cam" title="Permalink to this heading">¶</a></h1>
+<p>Test-time augmentation (TTA) is a commonly employed strategy in Saliency
+detection and Weakly Supervised Segmentation tasks order to obtain smoother
+and more stable explaining maps.</p>
+<p>We illustrate in this example how to apply TTA to AI explaining methods using
+<code class="docutils literal notranslate"><span class="pre">keras-explainable</span></code>. This can be easily achieved with the following code
+template snippet:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">keras_explainable</span> <span class="k">as</span> <span class="nn">ke</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">Xception</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="n">ttacam</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">tta</span><span class="p">(</span>
+  <span class="n">ke</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">cams</span><span class="o">.</span><span class="n">cam</span><span class="p">,</span>
+  <span class="n">scales</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.</span><span class="p">],</span>
+  <span class="n">hflip</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span>
+  <span class="n">ttacam</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">postprocessing</span><span class="o">=</span><span class="n">ke</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">positive_normalize</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="jupyter_cell docutils container">
+<div class="cell_output docutils container">
+</div>
+</div>
+<p>We describe bellow these lines in detail.
+Firstly, we employ the <code class="xref py py-class docutils literal notranslate"><span class="pre">Xception</span></code> network pre-trained over the
+ImageNet dataset:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">input_tensor</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;inputs&#39;</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">Xception</span><span class="p">(</span>
+  <span class="n">input_tensor</span><span class="o">=</span><span class="n">input_tensor</span><span class="p">,</span>
+  <span class="n">classifier_activation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+  <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;imagenet&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Xception pretrained over ImageNet was loaded.&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spatial map sizes: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s1">&#39;avg_pool&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Xception pretrained over ImageNet was loaded.
+Spatial map sizes: (None, None, None, 2048)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can feed-forward the samples once and get the predicted classes for each
+sample. Besides making sure the model is outputting the expected classes,
+this step is required in order to determine the most activating units in the
+<em>logits</em> layer, which improves performance of the explaining methods.</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tensorflow.keras.applications.imagenet_utils</span> <span class="kn">import</span> <span class="n">preprocess_input</span>
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">images</span> <span class="o">/</span> <span class="mf">127.5</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">logits</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">explaining_units</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># First-most likely classes.</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="n">ttacam</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">tta</span><span class="p">(</span>
+  <span class="n">ke</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">cams</span><span class="o">.</span><span class="n">cam</span><span class="p">,</span>
+  <span class="n">scales</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.</span><span class="p">],</span>
+  <span class="n">hflip</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span><span class="n">ttacam</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">explaining_units</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">ke</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span>
+  <span class="n">images</span><span class="o">=</span><span class="p">[</span><span class="o">*</span><span class="n">images</span><span class="p">,</span> <span class="o">*</span><span class="n">cams</span><span class="p">,</span> <span class="o">*</span><span class="n">images</span><span class="p">],</span>
+  <span class="n">overlays</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">))</span> <span class="o">+</span> <span class="p">[</span><span class="o">*</span><span class="n">cams</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/ttacam_3_0.png" src="../../_images/ttacam_3_0.png" />
+</div>
+</div>
+</section>
+
+
+            </div>
+
+        </section>
+
+        
+            <nav class="site-bottom-navigation" role="navigation">
+            
+                <a href="../../wsol.html" class="btn btn--primary btn--next right"
+                    title="Weakly Supervised Object Localization and Semantic Segmentation" accesskey="n">
+                    Next
+                </a>
+            
+            
+                <a href="gradcam.html" class="btn btn--primary btn--prev"
+                    title="Grad-CAM" accesskey="p">
+                    Previous
+                </a>
+            
+            </nav>
+        
+
+        
+            <div class="source-link">
+            
+                
+                    <a href="../../_sources/methods/cams/ttacam.rst.txt" rel="nofollow">
+                        <i class="mdi mdi-code-tags"></i>
+                        View page source
+                    </a>
+                
+            
+            </div>
+        
+
+
+
+    </main>
+
+    <footer class="site-footer">
+<div class="container">
+
+    <div role="contentinfo">
+        <p>
+                &copy; Copyright 2022, Lucas David.
+        </p>
+    </div> 
+
+</div>
+</footer>
+
+    
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'',
+            VERSION:'0.0.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sphinx_highlight.js"></script>
+    <script type="text/javascript" src="../../_static/thebelab-helper.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script type="text/javascript" src="../../_static/js/theme-min.js"></script> 
+</body>
+</html>

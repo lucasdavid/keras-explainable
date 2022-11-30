@@ -92,8 +92,8 @@ we will actually load its TensorFlow alternative, available at
 
   ! rm resnet38d.py
 
-We can feed-foward the samples once and get the predicted classes for each sample.
-Besides making sure the model is outputing the expected classes, this step is
+We can feed-forward the samples once and get the predicted classes for each sample.
+Besides making sure the model is outputting the expected classes, this step is
 required in order to determine the most activating units in the *logits* layer,
 which improves performance of the explaining methods.
 
@@ -148,8 +148,4 @@ respecting the conventional Pascal color mapping:
   cam_overlays = cams_to_colors(labels, cams, COLORS[1:21])
   tta_overlays = cams_to_colors(labels, tta_cams, COLORS[1:21])
 
-  ke.utils.visualize(
-    images=sum(zip(images, cam_overlays, tta_overlays), ()),
-    titles=['Original', 'CAM', 'TTA CAM'],
-    cols=3,
-  )
+  ke.utils.visualize([*images, *cam_overlays, *tta_overlays])

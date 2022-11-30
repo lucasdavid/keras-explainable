@@ -1,456 +1,170 @@
-
 <!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="utf-8">
+    <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>keras_explainable package &#8212; Keras Explainable</title>
-    
-  <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     
-  <link rel="stylesheet"
-    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
-    
-  <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/thebelab-helper.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="keras_explainable.engine package" href="keras_explainable.engine.html" />
-    <link rel="prev" title="keras_explainable" href="modules.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
+    <title>keras_explainable package</title>
     
 
-    <!-- Google Analytics -->
+    <link rel="stylesheet" href="../_static/css/redactor.css" type="text/css" />
     
-  </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay overlay-navbar" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<!-- Checkboxes to toggle the in-page toc -->
-<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
-<label class="overlay overlay-pagetoc" for="__page-toc">
-    <div class="visually-hidden">Toggle in-page Table of Contents</div>
-</label>
-<!-- Headers at the top -->
-<div class="announcement header-item noprint"></div>
-<div class="header header-item noprint"></div>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <link rel="stylesheet" href="../_static/css/redactor.css" type="text/css" />
+    
+    <link rel="stylesheet" href="../_static/jupyter-sphinx.css" type="text/css" />
+    
+    <link rel="stylesheet" href="../_static/thebelab.css" type="text/css" />
+    
+    <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    
+    
+    <link rel="index" title="Index" href="../genindex.html"/>
+    <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="Keras Explainable" href="../index.html"/>
+    <link rel="up" title="keras_explainable" href="modules.html"/>
+    <link rel="next" title="keras_explainable.engine package" href="keras_explainable.engine.html"/>
+    <link rel="prev" title="keras_explainable" href="modules.html"/> 
+</head>
+
+<body role="document">
+     
 
     
-    <div class="container-fluid" id="banner"></div>
-
-    
-
-    <div class="container-xl">
-      <div class="row">
-          
-<!-- Sidebar -->
-<div class="bd-sidebar noprint" id="site-navigation">
-    <div class="bd-sidebar__content">
-        <div class="bd-sidebar__top"><div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="../index.html">
-      
-      
-      
-      <h1 class="site-logo" id="site-title">Keras Explainable</h1>
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
-        <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../readme.html">
-   Overview
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../explaining.html">
-   Explaining
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../exposure.html">
-   Exposure
-  </a>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../methods/index.html">
-   Methods
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../methods/saliency/gradients.html">
-     Gradient Back-propagation
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../methods/saliency/smoothgrad.html">
-     SmoothGrad
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../methods/saliency/fullgrad.html">
-     Full-Gradient
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../methods/cams/gradcam.html">
-     Grad-CAM
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../methods/cams/tta_gradcam.html">
-     TTA Grad-CAM
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../wsol.html">
-   WSSL &amp; WSSS
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../contributing.html">
-   Contributions &amp; Help
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../license.html">
-   License
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../authors.html">
-   Authors
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="modules.html">
-   Module Reference
-  </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2 current active has-children">
-    <a class="current reference internal" href="#">
-     keras_explainable package
-    </a>
-    <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-    <label for="toctree-checkbox-3">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="keras_explainable.engine.html">
-       keras_explainable.engine package
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="keras_explainable.methods.html">
-       keras_explainable.methods package
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
-</ul>
-
-    </div>
-</nav></div>
-        <div class="bd-sidebar__bottom">
-             <!-- To handle the deprecated key -->
-            
-            <div class="navbar_extra_footer">
-            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
-            </div>
-            
-        </div>
-    </div>
-    <div id="rtd-footer-container"></div>
-</div>
-
-
-          
-
-
-          
-<!-- A tiny helper pixel to detect if we've scrolled -->
-<div class="sbt-scroll-pixel-helper"></div>
-<!-- Main content -->
-<div class="col py-0 content-container">
-    
-    <div class="header-article row sticky-top noprint">
-        
-
-
-
-<div class="col py-1 d-flex header-article-main">
-    <div class="header-article__left">
-        
-        <label for="__navigation"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="right"
-title="Toggle navigation"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-bars"></i>
-  </span>
-
-</label>
-
-        
-    </div>
-    <div class="header-article__right">
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-expand"></i>
-  </span>
-
-</button>
-<a href="https://github.com/lucasdavid/keras-explainable"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="bottom"
-title="Source repository"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-
+<a href="#" id="js-navigation-toggle" class="navigation-toggle">
+    <i class="mdi mdi-menu"></i><i class="mdi mdi-close"></i>
 </a>
 
-<div class="menu-dropdown menu-dropdown-download-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="../_sources/api/keras_explainable.rst.txt"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download source file"
->
-  
+<section class="site-sidebar">
 
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="headerbtn__text-container">.rst</span>
-</a>
+<nav>
 
-      </li>
-      
-      <li>
+
+    <a href="../index.html" class="branding-link">
+    
+        keras-explainable
+    
+    
+    
         
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="left"
-title="Print to PDF"
->
-  
+        
+            <span class="branding-link__version">
+                0.0.2
+            </span>
+        
+    
+    </a>
 
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
-  </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
+    
+<section role="search">
+    <form action="../search.html" method="get" class="site-searchform">
+        <input type="text" name="q" placeholder="Search docs" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+</section>
 
-      </li>
-      
+
+
+    <section class="site-nav">
+    
+    
+        <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explaining.html">Explaining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exposure.html">Exposure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../methods/index.html">Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wsol.html">WSSL &amp; WSSS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Module Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">keras_explainable package</a></li>
+</ul>
+</li>
+</ul>
+
+    
+    </section>
+
+</nav>
+
+</section>
+
+    <main class="site-main" role="main">
+        
+
+
+
+
+
+
+
+
+
+
+
+<nav class="site-breadcrumbs">
+    <ul>
+    
+        <li>
+            <a href="../index.html">Docs</a> /
+        </li>
+        
+        <li>
+            <a href="modules.html">keras_explainable</a> /
+        </li>
+        
+        <li class="site-breadcrumbs__leaf">keras_explainable package</li>
+    
     </ul>
-  </div>
-</div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
-
-    </div>
-</div>
-
-<!-- Table of contents -->
-<div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
-    </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#subpackages">
-   Subpackages
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#submodules">
-   Submodules
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keras_explainable.filters">
-   keras_explainable.filters module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keras_explainable.inspection">
-   keras_explainable.inspection module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keras_explainable.utils">
-   keras_explainable.utils module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keras_explainable">
-   Module contents
-  </a>
- </li>
-</ul>
-
-    </nav>
-</div>
-    </div>
-    <div class="article row">
-        <div class="col pl-md-3 pl-lg-5 content-container">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>keras_explainable package</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#subpackages">
-   Subpackages
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#submodules">
-   Submodules
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keras_explainable.filters">
-   keras_explainable.filters module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keras_explainable.inspection">
-   keras_explainable.inspection module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keras_explainable.utils">
-   keras_explainable.utils module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keras_explainable">
-   Module contents
-  </a>
- </li>
-</ul>
-
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            <main id="main-content" role="main">
-                
-              <div>
+</nav>
+        <section class="site-content">
+            <div class="container">
                 
   <section id="keras-explainable-package">
-<h1>keras_explainable package<a class="headerlink" href="#keras-explainable-package" title="Permalink to this headline">#</a></h1>
+<h1>keras_explainable package<a class="headerlink" href="#keras-explainable-package" title="Permalink to this heading">¶</a></h1>
 <section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">#</a></h2>
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="keras_explainable.engine.html">keras_explainable.engine package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="keras_explainable.engine.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="keras_explainable.engine.html#module-keras_explainable.engine.explaining">keras_explainable.engine.explaining module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keras_explainable.engine.html#module-keras_explainable.engine.explaining">keras_explainable.engine.explaining module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="keras_explainable.engine.html#keras_explainable.engine.explaining.explain"><code class="docutils literal notranslate"><span class="pre">explain()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keras_explainable.engine.html#keras_explainable.engine.explaining.explain_step"><code class="docutils literal notranslate"><span class="pre">explain_step()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keras_explainable.engine.html#keras_explainable.engine.explaining.make_data_handler"><code class="docutils literal notranslate"><span class="pre">make_data_handler()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keras_explainable.engine.html#keras_explainable.engine.explaining.make_explain_function"><code class="docutils literal notranslate"><span class="pre">make_explain_function()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keras_explainable.engine.html#keras_explainable.engine.explaining.partial_explain"><code class="docutils literal notranslate"><span class="pre">partial_explain()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="keras_explainable.engine.html#module-keras_explainable.engine">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="keras_explainable.methods.html">keras_explainable.methods package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="keras_explainable.methods.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="keras_explainable.methods.html#module-keras_explainable.methods.cams">keras_explainable.methods.cams module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="keras_explainable.methods.html#module-keras_explainable.methods.gradient">keras_explainable.methods.gradient module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="keras_explainable.methods.html#module-keras_explainable.methods.meta">keras_explainable.methods.meta module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keras_explainable.methods.html#module-keras_explainable.methods.cams">keras_explainable.methods.cams module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.cams.cam"><code class="docutils literal notranslate"><span class="pre">cam()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.cams.gradcam"><code class="docutils literal notranslate"><span class="pre">gradcam()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.cams.gradcampp"><code class="docutils literal notranslate"><span class="pre">gradcampp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.cams.scorecam"><code class="docutils literal notranslate"><span class="pre">scorecam()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="keras_explainable.methods.html#module-keras_explainable.methods.gradient">keras_explainable.methods.gradient module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.gradient.full_gradients"><code class="docutils literal notranslate"><span class="pre">full_gradients()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.gradient.gradients"><code class="docutils literal notranslate"><span class="pre">gradients()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="keras_explainable.methods.html#module-keras_explainable.methods.meta">keras_explainable.methods.meta module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.meta.smooth"><code class="docutils literal notranslate"><span class="pre">smooth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.meta.tta"><code class="docutils literal notranslate"><span class="pre">tta()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="keras_explainable.methods.html#module-keras_explainable.methods">Module contents</a></li>
 </ul>
 </li>
@@ -458,49 +172,33 @@ title="Print to PDF"
 </div>
 </section>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">#</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
 </section>
 <section id="module-keras_explainable.filters">
-<span id="keras-explainable-filters-module"></span><h2>keras_explainable.filters module<a class="headerlink" href="#module-keras_explainable.filters" title="Permalink to this headline">#</a></h2>
+<span id="keras-explainable-filters-module"></span><h2>keras_explainable.filters module<a class="headerlink" href="#module-keras_explainable.filters" title="Permalink to this heading">¶</a></h2>
 <p>Shortcuts for commonly used signal filters used in literature.</p>
 <p>These filters can be used as post or mid processing for explaining
-methods and techniques. For example, to account for the absolute
-pixel contribution, when computing the gradient of a score unit
-with respect to the input image:</p>
+methods and techniques.</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
 </div>
 </div>
-<div class="jupyter_cell jupyter_container docutils container">
-<div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">absolute_normalize</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">] -&gt; [</span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[-16.783103309391393, 16.71996528372701] -&gt; [0.0, 1.0]
-</pre></div>
-</div>
-</div>
-</div>
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.filters.absolute_normalize">
-<span class="sig-name descname"><span class="pre">absolute_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">3,</span> <span class="pre">-</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#absolute_normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.absolute_normalize" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">absolute_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-3,</span> <span class="pre">-2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#absolute_normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.absolute_normalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Absolute values of the input signal and normalize it between 0 and 1.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>tf.Tensor</em>) – the input signal.</p></li>
 <li><p><strong>axis</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the dimensions containing positional
 information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the filtered signal.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tf.Tensor</p>
 </dd>
 </dl>
@@ -508,20 +206,35 @@ information. Defaults to <code class="docutils literal notranslate"><span class=
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.filters.negative">
-<span class="sig-name descname"><span class="pre">negative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">3,</span> <span class="pre">-</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#negative"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.negative" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">negative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-3,</span> <span class="pre">-2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#negative"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.negative" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retain only negative values of the input signal.</p>
+<p>Usage:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">negative</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[ 0 -1  2 -3] -&gt; [0 0 2 0]
+</pre></div>
+</div>
+</div>
+</div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>tf.Tensor</em>) – the input</p></li>
 <li><p><strong>axis</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the dimensions containing positional
 information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the filtered signal.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tf.Tensor</p>
 </dd>
 </dl>
@@ -529,20 +242,20 @@ information. Defaults to <code class="docutils literal notranslate"><span class=
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.filters.negative_normalize">
-<span class="sig-name descname"><span class="pre">negative_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">3,</span> <span class="pre">-</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#negative_normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.negative_normalize" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">negative_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-3,</span> <span class="pre">-2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#negative_normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.negative_normalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retain only negative values of the input signal and normalize it between 0 and 1.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>tf.Tensor</em>) – the input signal.</p></li>
 <li><p><strong>axis</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the dimensions containing positional
 information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the filtered signal.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tf.Tensor</p>
 </dd>
 </dl>
@@ -550,20 +263,35 @@ information. Defaults to <code class="docutils literal notranslate"><span class=
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.filters.normalize">
-<span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">3,</span> <span class="pre">-</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.normalize" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-3,</span> <span class="pre">-2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.normalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalize the signal into the interval [0, 1].</p>
+<p>Usage:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">absolute_normalize</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">] -&gt; [</span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[-15.0, 18.5] -&gt; [0.0, 1.0]
+</pre></div>
+</div>
+</div>
+</div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>tf.Tensor</em>) – the input signal to be normalized.</p></li>
 <li><p><strong>axis</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the dimensions containing positional
 information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the normalized signal.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tf.Tensor</p>
 </dd>
 </dl>
@@ -571,20 +299,35 @@ information. Defaults to <code class="docutils literal notranslate"><span class=
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.filters.positive">
-<span class="sig-name descname"><span class="pre">positive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">3,</span> <span class="pre">-</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#positive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.positive" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">positive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-3,</span> <span class="pre">-2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#positive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.positive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retain only positive values of the input signal.</p>
+<p>Usage:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">positive</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[ 0 -1  2 -3] -&gt; [0 0 2 0]
+</pre></div>
+</div>
+</div>
+</div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>tf.Tensor</em>) – the input signal.</p></li>
 <li><p><strong>axis</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the dimensions containing positional
 information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the filtered signal.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tf.Tensor</p>
 </dd>
 </dl>
@@ -592,20 +335,20 @@ information. Defaults to <code class="docutils literal notranslate"><span class=
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.filters.positive_normalize">
-<span class="sig-name descname"><span class="pre">positive_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">3,</span> <span class="pre">-</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#positive_normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.positive_normalize" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">positive_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-3,</span> <span class="pre">-2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/filters.html#positive_normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.filters.positive_normalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retain only positive values of the input signal and normalize it between 0 and 1.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>tf.Tensor</em>) – the input signal.</p></li>
 <li><p><strong>axis</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the dimensions containing positional
 information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the filtered signal.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tf.Tensor</p>
 </dd>
 </dl>
@@ -613,11 +356,11 @@ information. Defaults to <code class="docutils literal notranslate"><span class=
 
 </section>
 <section id="module-keras_explainable.inspection">
-<span id="keras-explainable-inspection-module"></span><h2>keras_explainable.inspection module<a class="headerlink" href="#module-keras_explainable.inspection" title="Permalink to this headline">#</a></h2>
+<span id="keras-explainable-inspection-module"></span><h2>keras_explainable.inspection module<a class="headerlink" href="#module-keras_explainable.inspection" title="Permalink to this heading">¶</a></h2>
 <p>Inspection utils for models and layers.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.biases">
-<span class="sig-name descname"><span class="pre">biases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layers</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#biases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.biases" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">biases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layers</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#biases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.biases" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recursively retrieve the biases from layers.</p>
 <p>Layers containing implicit bias are unrolled before returned. For
 instance, the Batch Normalization layer, whose equation is defined by
@@ -625,14 +368,14 @@ instance, the Batch Normalization layer, whose equation is defined by
 <div class="math notranslate nohighlight">
 \[\frac{-\mu w}{s} + b\]</div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>layers</strong> (<em>List</em><em>[</em><em>Layer</em><em>]</em>) – a list of layers from which
 biases should be extracted.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a list of all biases retrieved.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List[tf.Tensor]</p>
 </dd>
 </dl>
@@ -640,23 +383,23 @@ biases should be extracted.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.endpoints">
-<span class="sig-name descname"><span class="pre">endpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#endpoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.endpoints" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">endpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#endpoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.endpoints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collect intermediate endpoints in a model based on structured descriptors.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>Model</em>) – the model containing the endpoints to be collected.</p></li>
 <li><p><strong>endpoints</strong> (<em>List</em><em>[</em><em>E</em><em>]</em>) – descriptors of endpoints that should be collected.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.10/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – raised whenever one of the endpoint descriptors is invalid
     or it does not describe a nested layer in the <cite>model</cite>.</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a list containing the endpoints of interest.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>List[KerasTensor]</p>
 </dd>
 </dl>
@@ -664,13 +407,11 @@ biases should be extracted.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.expose">
-<span class="sig-name descname"><span class="pre">expose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#expose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.expose" title="Permalink to this definition">#</a></dt>
-<dd><dl class="simple">
-<dt>Creates a new model that exposes all endpoints described by</dt><dd><p><cite>arguments</cite> and <cite>outputs</cite>.</p>
-</dd>
-</dl>
+<span class="sig-name descname"><span class="pre">expose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#expose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.expose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new model that exposes all endpoints described by
+<code class="docutils literal notranslate"><span class="pre">arguments</span></code> and <code class="docutils literal notranslate"><span class="pre">outputs</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>Model</em>) – The model being explained.</p></li>
 <li><p><strong>arguments</strong> (<em>Optional</em><em>[</em><em>E</em><em>]</em><em>, </em><em>optional</em>) – Name of the argument layer/tensor in
@@ -686,11 +427,11 @@ the output signal and the logits layer itself. If None is passed,
 the last layer is assumed to be the logits layer. Defaults to None.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the exposed model, whose outputs contain the intermediate and
 output tensors.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Model</p>
 </dd>
 </dl>
@@ -698,10 +439,10 @@ output tensors.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.find_layer_with">
-<span class="sig-name descname"><span class="pre">find_layer_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">klass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_reversed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#find_layer_with"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.find_layer_with" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">find_layer_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">klass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_reversed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#find_layer_with"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.find_layer_with" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find a layer within a model that satisfies all required properties.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>Model</em>) – the container model.</p></li>
 <li><p><strong>name</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – the name of the layer, if known.
@@ -714,17 +455,17 @@ allowed for the searched layer. Defaults to None.</p></li>
 Defaults to True.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference external" href="https://docs.python.org/3.10/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if no search parameters are passed.</p></li>
 <li><p><a class="reference external" href="https://docs.python.org/3.10/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if no valid layer can be found with the specified search
     parameters.</p></li>
 </ul>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the layer satisfying all search parameters.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>Layer</p>
 </dd>
 </dl>
@@ -732,10 +473,10 @@ Defaults to True.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.gather_units">
-<span class="sig-name descname"><span class="pre">gather_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#gather_units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.gather_units" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">gather_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#gather_units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.gather_units" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gather units (in the last axis) from a tensor.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tensor</strong> (<em>tf.Tensor</em>) – the input tensor.</p></li>
 <li><p><strong>indices</strong> (<em>tf.Tensor</em><em>, </em><em>optional</em>) – the indices that should be gathered.</p></li>
@@ -745,10 +486,10 @@ used to fine control gathering. Defaults to -1.</p></li>
 fine control gathering. Defaults to -1.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the gathered units</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tf.Tensor</p>
 </dd>
 </dl>
@@ -756,22 +497,22 @@ fine control gathering. Defaults to -1.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.get_global_pooling_layer">
-<span class="sig-name descname"><span class="pre">get_global_pooling_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#get_global_pooling_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.get_global_pooling_layer" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_global_pooling_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#get_global_pooling_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.get_global_pooling_layer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the last global pooling layer.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>Model</em>) – the model containing the pooling layer.</p></li>
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – the name of the layer, if known. Defaults to None.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.10/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if a pooling layer cannot be found</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the retrieved pooling layer</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>Layer</p>
 </dd>
 </dl>
@@ -779,22 +520,22 @@ fine control gathering. Defaults to -1.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.get_logits_layer">
-<span class="sig-name descname"><span class="pre">get_logits_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#get_logits_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.get_logits_layer" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_logits_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#get_logits_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.get_logits_layer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the “logits” layer.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>Model</em>) – the model containing the logits layer.</p></li>
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – the name of the layer, if known. Defaults to None.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.10/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if a logits layer cannot be found</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the retrieved logits layer</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>Layer</p>
 </dd>
 </dl>
@@ -802,10 +543,10 @@ fine control gathering. Defaults to -1.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.get_nested_layer">
-<span class="sig-name descname"><span class="pre">get_nested_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#get_nested_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.get_nested_layer" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_nested_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#get_nested_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.get_nested_layer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve a nested layer in the model.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>Model</em>) – the model containing the nested layer.</p></li>
 <li><p><strong>name</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em><em>]</em>) – a string (or list of string) containing
@@ -824,13 +565,13 @@ a recursively nested module up to the layer of interest).</p></li>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.10/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if <code class="docutils literal notranslate"><span class="pre">name</span></code> is not a nested member of <code class="docutils literal notranslate"><span class="pre">model</span></code>.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the retrieved layer.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tf.keras.layer.Layer</p>
 </dd>
 </dl>
@@ -838,10 +579,10 @@ a recursively nested module up to the layer of interest).</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.inspection.layers_with_biases">
-<span class="sig-name descname"><span class="pre">layers_with_biases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_biases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#layers_with_biases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.layers_with_biases" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">layers_with_biases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_biases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/inspection.html#layers_with_biases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.inspection.layers_with_biases" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract layers containing biases from a model.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>Model</em>) – the model inspected.</p></li>
 <li><p><strong>exclude</strong> (<em>Tuple</em><em>[</em><em>Layer</em><em>]</em><em>, </em><em>optional</em>) – a list of layers to ignore. Defaults to ().</p></li>
@@ -849,11 +590,11 @@ a recursively nested module up to the layer of interest).</p></li>
 Defaults to True.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a list of layers.
 List[Layer], List[tf.Tensor]: a list of layers and biases.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List[Layer]</p>
 </dd>
 </dl>
@@ -861,41 +602,54 @@ List[Layer], List[tf.Tensor]: a list of layers and biases.</p>
 
 </section>
 <section id="module-keras_explainable.utils">
-<span id="keras-explainable-utils-module"></span><h2>keras_explainable.utils module<a class="headerlink" href="#module-keras_explainable.utils" title="Permalink to this headline">#</a></h2>
+<span id="keras-explainable-utils-module"></span><h2>keras_explainable.utils module<a class="headerlink" href="#module-keras_explainable.utils" title="Permalink to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.utils.get_dims">
-<span class="sig-name descname"><span class="pre">get_dims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/utils.html#get_dims"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.utils.get_dims" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_dims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/utils.html#get_dims"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.utils.get_dims" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.utils.tolist">
-<span class="sig-name descname"><span class="pre">tolist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/utils.html#tolist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.utils.tolist" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">tolist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/utils.html#tolist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.utils.tolist" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.utils.visualize">
-<span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay_cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_buffer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplots_ws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplots_hs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/utils.html#visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.utils.visualize" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay_cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_buffer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplots_ws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplots_hs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/utils.html#visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.utils.visualize" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </section>
 <section id="module-keras_explainable">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-keras_explainable" title="Permalink to this headline">#</a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-keras_explainable" title="Permalink to this heading">¶</a></h2>
 <p>Keras Explainable Library.</p>
 <p>Efficient explaining AI algorithms for Keras models.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.cam">
-<span class="sig-name descname"><span class="pre">cam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keras_explainable.cam" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">cam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keras_explainable.cam" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shortcut for <a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.cams.cam" title="keras_explainable.methods.cams.cam"><code class="xref py py-func docutils literal notranslate"><span class="pre">methods.cams.cam()</span></code></a>,
-filtering positively contributing regions</p>
+filtering positively contributing regions.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.explain">
-<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_queue_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiprocessing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">method_params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/engine/explaining.html#explain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.explain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_queue_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiprocessing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">method_params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/engine/explaining.html#explain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.explain" title="Permalink to this definition">¶</a></dt>
 <dd><p>Explain the outputs of <code class="docutils literal notranslate"><span class="pre">model</span></code> with respect to the inputs or an intermediate
 signal, using an AI explaining method.</p>
+<p>Usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">]])</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">ResNet50V2</span><span class="p">(</span><span class="n">classifier_activation</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="n">scores</span><span class="p">,</span> <span class="n">maps</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span>
+    <span class="n">ke</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">gradients</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+    <span class="n">postprocessing</span><span class="o">=</span><span class="n">filters</span><span class="o">.</span><span class="n">absolute_normalize</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>method</strong> (<em>Callable</em>) – An AI explaining function, as the ones contained in
 <cite>methods</cite> module.</p></li>
@@ -929,103 +683,140 @@ avoiding retracing. Defaults to True.</p></li>
 will be collected into <code class="docutils literal notranslate"><span class="pre">methods_params</span></code> and passed onto the <code class="xref py py-func docutils literal notranslate"><span class="pre">explain_step()</span></code>
 and <code class="docutils literal notranslate"><span class="pre">method</span></code> functions. The most common ones are:</p>
 <ul class="simple">
-<li><p>indices_batch_dims (int): The dimensions marked as <code class="docutils literal notranslate"><span class="pre">batch</span></code> when gathering
+<li><p><strong>indices_batch_dims</strong> (int): The dimensions marked as <code class="docutils literal notranslate"><span class="pre">batch</span></code> when gathering
 units described by <code class="docutils literal notranslate"><span class="pre">y</span></code>. Ignore if <code class="docutils literal notranslate"><span class="pre">y</span></code> is None.</p></li>
-<li><p>indices_axis: The axes from which to gather units described by <code class="docutils literal notranslate"><span class="pre">y</span></code>.
+<li><p><strong>indices_axis</strong> (int): The axes from which to gather units described by <code class="docutils literal notranslate"><span class="pre">y</span></code>.
 Ignore if <code class="docutils literal notranslate"><span class="pre">y</span></code> is None.</p></li>
-<li><p>spatial_axis: The axes containing the positional visual info. We assume <cite>inputs</cite>
-to contain 2D images or videos in the shape <cite>(B1, B2, …, BN, H, W, 3)</cite>.
+<li><p><strong>spatial_axis</strong> (Tuple[int]): The axes containing the positional visual info.
+We assume <cite>inputs</cite> to contain 2D images or videos in the shape
+<cite>(B1, B2, …, BN, H, W, 3)</cite>.
 For 3D image data, set <cite>spatial_axis</cite> to <cite>(1, 2, 3)</cite> or <cite>(-4, -3, -2)</cite>.</p></li>
-<li><p>postprocessing: A function to process the activation maps before normalization
-(most commonly adopted being <cite>maximum(x, 0)</cite> and <cite>abs</cite>).</p></li>
+<li><p><strong>postprocessing</strong> (Callable): A function to process the activation maps before
+normalization (most commonly adopted being <cite>maximum(x, 0)</cite> and <cite>abs</cite>).</p></li>
 </ul>
 <dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.10/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – the explaining method produced in an unexpected.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>logits and explaining maps tensors.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Tuple[np.ndarray, np.ndarray]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="keras_explainable.full_gradients">
+<span class="sig-name descname"><span class="pre">full_gradients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keras_explainable.full_gradients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shortcut for <a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.gradient.full_gradients" title="keras_explainable.methods.gradient.full_gradients"><code class="xref py py-func docutils literal notranslate"><span class="pre">methods.gradient.full_gradients()</span></code></a>,
+filtering absolutely contributing regions.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.gradcam">
-<span class="sig-name descname"><span class="pre">gradcam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keras_explainable.gradcam" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">gradcam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keras_explainable.gradcam" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shortcut for <a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.cams.gradcam" title="keras_explainable.methods.cams.gradcam"><code class="xref py py-func docutils literal notranslate"><span class="pre">methods.cams.gradcam()</span></code></a>,
-filtering positively contributing regions</p>
+filtering positively contributing regions.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.gradcampp">
-<span class="sig-name descname"><span class="pre">gradcampp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keras_explainable.gradcampp" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">gradcampp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keras_explainable.gradcampp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shortcut for <a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.cams.gradcampp" title="keras_explainable.methods.cams.gradcampp"><code class="xref py py-func docutils literal notranslate"><span class="pre">methods.cams.gradcampp()</span></code></a>,
-filtering positively contributing regions</p>
+filtering positively contributing regions.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.gradients">
-<span class="sig-name descname"><span class="pre">gradients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keras_explainable.gradients" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">gradients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keras_explainable.gradients" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shortcut for <a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.gradient.gradients" title="keras_explainable.methods.gradient.gradients"><code class="xref py py-func docutils literal notranslate"><span class="pre">methods.gradient.gradients()</span></code></a>,
-filtering absolutely contributing regions</p>
+filtering absolutely contributing regions.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.scorecam">
-<span class="sig-name descname"><span class="pre">scorecam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keras_explainable.scorecam" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">scorecam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keras_explainable.scorecam" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shortcut for <a class="reference internal" href="keras_explainable.methods.html#keras_explainable.methods.cams.scorecam" title="keras_explainable.methods.cams.scorecam"><code class="xref py py-func docutils literal notranslate"><span class="pre">methods.cams.scorecam()</span></code></a>,
-filtering positively contributing regions</p>
+filtering positively contributing regions.</p>
 </dd></dl>
 
 </section>
 </section>
 
 
-              </div>
-              
-            </main>
-            <footer class="footer-article noprint">
+            </div>
+
+        </section>
+
+        
+            <nav class="site-bottom-navigation" role="navigation">
+            
+                <a href="keras_explainable.engine.html" class="btn btn--primary btn--next right"
+                    title="keras_explainable.engine package" accesskey="n">
+                    Next
+                </a>
+            
+            
+                <a href="modules.html" class="btn btn--primary btn--prev"
+                    title="keras_explainable" accesskey="p">
+                    Previous
+                </a>
+            
+            </nav>
+        
+
+        
+            <div class="source-link">
+            
                 
-    <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="modules.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">keras_explainable</p>
-        </div>
-    </a>
-    <a class='right-next' id="next-link" href="keras_explainable.engine.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">keras_explainable.engine package</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
-    </a>
+                    <a href="../_sources/api/keras_explainable.rst.txt" rel="nofollow">
+                        <i class="mdi mdi-code-tags"></i>
+                        View page source
+                    </a>
+                
+            
+            </div>
+        
+
+
+
+    </main>
+
+    <footer class="site-footer">
+<div class="container">
+
+    <div role="contentinfo">
+        <p>
+                &copy; Copyright 2022, Lucas David.
+        </p>
+    </div> 
+
 </div>
-            </footer>
-        </div>
-    </div>
-    <div class="footer-content row">
-        <footer class="col footer"><p>
-  
-      &copy; Copyright 2022, Lucas David.<br/>
-</p>
-        </footer>
-    </div>
+</footer>
+
     
-</div>
 
-
-      </div>
-    </div>
-  
-  <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-
-
-  </body>
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'',
+            VERSION:'0.0.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
+    <script type="text/javascript" src="../_static/thebelab-helper.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/javascript" src="../_static/js/theme-min.js"></script> 
+</body>
 </html>

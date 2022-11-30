@@ -8,13 +8,12 @@ in this case) using the Full Gradients AI explaining method.
 Said maps can be used to explain the model's predictions, determining regions
 which most contributed to its effective output. 
 
-FullGrad (short for Full Gradients) extends Gradient Back-propagation by
-adding the individual biases contributions to the gradient signal,
-forming the "full" explaining maps. This fully described in the paper
-
-Srinivas, S., & Fleuret, F. (2019). Full-gradient representation for
-neural network visualization. Advances in neural information processing
-systems, 32. `arxiv.org/1905.00780v4 <https://arxiv.org/abs/1905.00780v4>`_.
+FullGrad (short for Full Gradients) extends Gradient Back-propagation by adding the
+individual biases contributions to the gradient signal, forming the "full" explaining
+maps. This technique is fully described in the paper "Full-gradient representation for
+neural network visualization", published in Advances in neural information processing
+systems, 32 by Srinivas, S., & Fleuret, F. (2019),
+`arxiv.org/1905.00780v4 <https://arxiv.org/abs/1905.00780v4>`_.
 
 Briefly, this can be achieved with the following template snippet:
 
@@ -27,7 +26,7 @@ Briefly, this can be achieved with the following template snippet:
 
   logits = ke.inspection.get_logits_layer(model)
   inters, biases = ke.inspection.layers_with_biases(model, exclude=[logits])
-  model_exposed = ke.inspection.expose(model, inters, logits)
+  model = ke.inspection.expose(model, inters, logits)
 
   x, y = (
     np.random.rand(32, 512, 512, 3),
@@ -35,16 +34,15 @@ Briefly, this can be achieved with the following template snippet:
   )
 
   logits, maps = ke.full_gradients(
-    model_exposed,
+    model,
     x,
     y,
     biases=biases,
   )
 
 We describe bellow these lines in detail.
-Firstly, we employ the :class:`ResNet50V2` network pre-trained over the
+Firstly, we employ the :class:`Xception` network pre-trained over the
 ImageNet dataset:
-
 
 .. jupyter-execute::
   :hide-code:
@@ -60,7 +58,7 @@ ImageNet dataset:
 
   SOURCE_DIRECTORY = 'docs/_static/images/singleton/'
   SAMPLES = 8
-  SIZES = (224, 224)
+  SIZES = (299, 299)
 
   file_names = os.listdir(SOURCE_DIRECTORY)
   image_paths = [os.path.join(SOURCE_DIRECTORY, f) for f in file_names if f != '_links.txt']
@@ -69,13 +67,13 @@ ImageNet dataset:
 
 .. jupyter-execute::
 
-  rn50 = tf.keras.applications.ResNet50V2(
+  model = tf.keras.applications.Xception(
     classifier_activation=None,
     weights="imagenet",
   )
 
-  print(f'ResNet50 pretrained over ImageNet was loaded.')
-  print(f"Spatial map sizes: {rn50.get_layer('avg_pool').input.shape}")
+  print(f'Xception pretrained over ImageNet was loaded.')
+  print(f"Spatial map sizes: {model.get_layer('avg_pool').input.shape}")
 
 We can feed-forward the samples once and get the predicted classes for each sample.
 Besides making sure the model is outputting the expected classes, this step is
@@ -87,7 +85,7 @@ which improves performance of the explaining methods.
   from tensorflow.keras.applications.imagenet_utils import preprocess_input
 
   inputs = preprocess_input(images.astype("float").copy(), mode="tf")
-  logits = rn50.predict(inputs, verbose=0)
+  logits = model.predict(inputs, verbose=0)
   indices = np.argsort(logits, axis=-1)[:, ::-1]
   explaining_units = indices[:, :1]  # First-most likely classes.
 
@@ -99,27 +97,28 @@ by collecting the layers directly:
 
 .. jupyter-execute::
 
-  logits = ke.inspection.get_logits_layer(rn50)
-  inters, biases = ke.inspection.layers_with_biases(rn50, exclude=[logits])
-  model_exposed = ke.inspection.expose(rn50, inters, logits)
+  logits = ke.inspection.get_logits_layer(model)
+  inters, biases = ke.inspection.layers_with_biases(model, exclude=[logits])
+  model = ke.inspection.expose(model, inters, logits)
 
 Now we can obtain FullGrad by simply calling to the :func:`explain` function:
 
 .. jupyter-execute::
 
   _, maps = ke.full_gradients(
-    model_exposed,
+    model,
     inputs,
     explaining_units,
     biases=biases,
-    postprocessing=ke.filters.normalize,
   )
 
-  ke.utils.visualize(sum(zip(images, maps), ()), cols=4)
+  ke.utils.visualize(
+    images=[*images, *maps, *images],
+    overlays=[None] * (2 * len(images)) + [*maps],
+  )
 
 .. note::
 
-  The parameter ``biases`` is not required, and will be inferred if not passed.
-  Of course, you should pass it to the :func:`full_gradients` function,
-  if it is known, as it avoids unnecessary digging/assumptions over the
-  model's topology.
+  Passing the list of ``biases`` as a parameter to the
+  :func:`~keras_explainable.full_gradients` function is not required, but it
+  is generally a good idea, as it avoids unnecessary recollection of those.

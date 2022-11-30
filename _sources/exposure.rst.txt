@@ -43,9 +43,12 @@ to contain the :class:`KerasTensor`'s objects that reference both
   activations_tensor = rn50.get_layer("post_relu").output
 
   model = Model(rn50.input, [rn50.output, activations_tensor])
-  print("Network's outputs:")
+
+  print(model.name)
+  print(f"  input: {model.input}")
+  print("  outputs:")
   for o in model.outputs:
-    print(f"  {o}")
+    print(f"    {o}")
 
 Which can be simplified with:
 
@@ -97,14 +100,14 @@ Exposing Nested Models
 ----------------------
 
 Unfortunately, some model's topologies can make exposition a little tricky.
-
-Empty Activation and Explaining Maps
-""""""""""""""""""""""""""""""""""""
-
-Collecting loose endpoints from nested models can inadvertently result in
-constant being used as arguments, producing in a zero gradient signal:
+An example of this is when nesting multiple models, producing more than one
+``Input`` object and multiple conceptual graphs at once.
+Then, if one naively collects ``KerasTensor``'s from the model, disconnected
+nodes may be retrieved, resulting in the exception ``ValueError: Graph disconnected``
+being raised:
 
 .. jupyter-execute::
+  :raises: ValueError
 
   rn50 = ResNet50V2(weights=None, include_top=False)
 
@@ -114,24 +117,37 @@ constant being used as arguments, producing in a zero gradient signal:
   y = Dense(10, name="logits")(y)
   y = Activation("softmax", name="predictions", dtype="float32")(y)
 
-  rn50_clf = Model(x, y, name='resnet50v2_clf')
+  rn50_clf = Model(x, y, name="resnet50v2_clf")
   rn50_clf.summary()
 
-  model = ke.inspection.expose(rn50_clf, "resnet50v2", "predictions")
+  logits = rn50_clf.get_layer("logits").output
+  activations = rn50_clf.get_layer("resnet50v2").output
+
+  model = tf.keras.Model(rn50_clf.input, [logits, activations])
   scores, cams = ke.gradcam(model, inputs, indices)
   
   print(f"scores:{scores.shape} in [{scores.min()}, {scores.max()}]")
   print(f"cams:{cams.shape} in [{cams.min()}, {cams.max()}]")
 
-Notice all pixels in the ``cams`` variable are equal to zero. This can be
-fixed by accessing the actual input node from the global pooling layer:
+The operations in ``rn50`` appear in two conceptual graphs. The first, defined
+when ``ResNet50V2(...)`` was invoked, contains all operations associated with the layers
+in the ResNet50 architecture. The second one, on the other hand, is defined when
+invoking :meth:`Layer.__call__` of each layer (``rn50``, ``GAP``, ``Dense`` and
+``Activation``).
+
+When calling ``rn50_clf.get_layer("resnet50v2").output`` (which is equivalent
+to ``rn50_clf.get_layer("resnet50v2").get_output_at(0)``), the :class:`Node`
+from the first graph is retrieved.
+This ``Node`` is not associated with ``rn50_clf.input`` or ``logits``, and thus
+the error is raised.
+
+There are multiple ways to correctly access the Node from the second graph. One of them
+is to retrieve the input from the ``GAP`` layer, as it only appeared in one graph:
 
 .. jupyter-execute::
 
   model = ke.inspection.expose(
-    rn50_clf,
-    {"name": "avg_pool", "link": "input"},
-    "predictions"
+    rn50_clf, {"name": "avg_pool", "link": "input"}, "predictions"
   )
   scores, cams = ke.gradcam(model, inputs, indices)
 
@@ -145,16 +161,27 @@ fixed by accessing the actual input node from the global pooling layer:
   del rn50, rn50_clf, model
 
 .. note::
-  
-  Looking for the *input* the *Global Pooling* layer is the default
-  behavior of the :func:`~keras_explainable.inspection.expose` function.
+
+  The alternatives ``ke.inspection.expose(rn50_clf, "resnet50v2", "predictions")``
+  and ``ke.inspection.expose(rn50_clf)`` would work as well.
+  In the former, the **last** output node is retrieved.
+  In the latter, the **last** input node (there's only one) associated
+  with the ``GAP`` layer is retrieved.
 
 Access Nested Layer Signals
 """""""""""""""""""""""""""
 
 Another problem occurs when the global pooling layer is not part of layers set
 of the out-most model. While you can still collect its output using a name 
-composition, we get a ``ValueError: Graph disconnected``:
+composition, we get a ``ValueError: Graph disconnected``.
+
+This problem occurs because Keras does not create ``Nodes`` for inner layers in a nested
+model, when that model is reused. Instead, the model is treated as a single operation
+in the conceptual graph, with a single new ``Node`` being created to represent it.
+Calling :func:`keras_explainable.inspection.expose` over the model will expand the
+parameter ``arguments`` into ``{"name": ("ResNet50V2", "avg_pool"), "link": "input", "node": "last"}``,
+but because no new nodes were created for the ``GAP`` layer, the :class:`KerasTensor`
+associated with the first conceptual graph is retrieved, and the error ensues.
 
 .. jupyter-execute::
   :raises: ValueError
@@ -167,34 +194,12 @@ composition, we get a ``ValueError: Graph disconnected``:
     Activation("softmax", name="predictions", dtype="float32"),
   ])
 
-  model = ke.inspection.expose(
-    rn50_clf,
-    {"name": ("resnet50v2", "avg_pool"), "link": "input"},
-    "predictions"
-  )
+  model = ke.inspection.expose(rn50_clf)
   scores, cams = ke.gradcam(model, inputs, indices)
 
   print(f"scores:{scores.shape} in [{scores.min()}, {scores.max()}]")
   print(f"cams:{cams.shape} in [{cams.min()}, {cams.max()}]")
 
-This problem occurs because the identifier ``"ResNet50V2"`` passed
-in the function parameter ``arguments`` will be expanded into
-``{"name": "ResNet50V2", "link": "output", "node": 0}``, and
-result in the collection of the :class:`KerasTensor`
-``rn50_clf.get_layer("resnet50v2").get_output_at(0)``, or, equivalently,
-``rn50_clf.get_layer("resnet50v2").output``.
-
-As ``rn50_clf``'s layers are associated to two execution graphs at once
-(the one created when invoking ``ResNet50V2(...)``, and the other created
-when instantiating ``Sequential([...])``), they contain two output nodes. At
-the same time, the GAP, Dense and Activation layers are associated with
-exactly one :class:`Node` (these layers did not appear in the first model, and
-thus, are not included in the first execution graph).
-
-By exposing the first :class:`Node` associated with the *ResNet50V2* layer and
-the first :class:`Node` associated with the *logits* layer, we redefined the
-model to output an :class:`KerasTensor` which is not connected to the input
-``rn50_clf.input``. Thus, the exception is raised.
 
 .. warning::
 
@@ -204,79 +209,24 @@ model to output an :class:`KerasTensor` which is not connected to the input
   document obsolete.
   To avoid this problem, it is recommended to "flat out" the model before
   explaining it, or avoiding nesting models altogether.
-  
+
   For more information, see the GitHub issue
   `#16123 <https://github.com/keras-team/keras/issues/16123>`_.
 
-To solve this problem, we must collect the second node:
+If you are using TensorFlow < 2.0, nodes are created for each operation
+in the inner model, and you may collect their internal signal by simply:
 
-.. jupyter-execute::
-  :raises: ValueError
+.. code-block:: python
 
-  model = ke.inspection.expose(
-    rn50_clf,
-    {"name": ("resnet50v2", "avg_pool"), "link": "input", "node": 1},
-    "predictions"
-  )
-  scores, cams = ke.gradcam(model, inputs, indices)
-
-  print(f"scores:{scores.shape} in [{scores.min()}, {scores.max()}]")
-  print(f"cams:{cams.shape} in [{cams.min()}, {cams.max()}]")
-
-Another example, this time using the functional API:
-
-.. jupyter-execute::
-  :raises: ValueError
-
-  rn50 = ResNet50V2(weights=None, include_top=False, pooling="avg")
-
-  x = Input([224, 224, 3], name="input_images")
-  y = rn50(x)
-  y = Dense(10, name="logits")(y)
-  y = Activation("softmax", name="predictions", dtype="float32")(y)
-
-  rn50_clf = Model(x, y, name='resnet50v2_clf')
-  rn50_clf.summary()
-
-  model = ke.inspection.expose(rn50_clf, ("resnet50v2", "post_relu"), "predictions")
-  scores, cams = ke.gradcam(model, inputs, indices)
+  model = ke.inspection.expose(rn50_clf)
+  # ... or: ke.inspection.expose(rn50_clf, ("resnet50v2", "post_relu"))
+  # ... or: ke.inspection.expose(
+  #  rn50_clf, {"name": ("resnet50v2", "avg_pool"), "link": "input"}
+  # )
   
-  print(f"scores:{scores.shape} in [{scores.min()}, {scores.max()}]")
-  print(f"cams:{cams.shape} in [{cams.min()}, {cams.max()}]")
-
-Which can be correctly accessed with:
-
-.. jupyter-execute::
-  :raises: ValueError
-
-  rn50 = ResNet50V2(weights=None, include_top=False, pooling="avg")
-
-  x = Input([224, 224, 3], name="input_images")
-  y = rn50(x)
-  y = Dense(10, name="logits")(y)
-  y = Activation("softmax", name="predictions", dtype="float32")(y)
-
-  rn50_clf = Model(x, y, name='resnet50v2_clf')
-  rn50_clf.summary()
-
-  model = ke.inspection.expose(
-    rn50_clf,
-    {"name": ("resnet50v2", "post_relu"), "node": 1},
-    "predictions"
-  )
   scores, cams = ke.gradcam(model, inputs, indices)
-  
-  print(f"scores:{scores.shape} in [{scores.min()}, {scores.max()}]")
-  print(f"cams:{cams.shape} in [{cams.min()}, {cams.max()}]")
 
 .. note::
 
-  The following would also have worked:
-
-  .. code-block:: python
-
-    model = ke.inspection.expose(
-      rn50_clf,
-      {"name": ("resnet50v2", "avg_pool"), "link": "input", "node": 1},
-      "predictions"
-    )
+  The above works because :func:`~keras_explainable.inspection.expose`
+  will recursively seek for a ``GAP`` layer within the nested models.

@@ -29,7 +29,8 @@ Briefly, this can be achieved with the following template snippet:
 
   logits, maps = ke.gradients(model, x, y, batch_size=32)
 
-We describe bellow these lines in detail.
+We detail each of the necessary steps bellow. Firstly, we employ the
+:class:`Xception` network pre-trained over the ImageNet dataset:
 
 .. jupyter-execute::
   :hide-code:
@@ -45,25 +46,22 @@ We describe bellow these lines in detail.
 
   SOURCE_DIRECTORY = 'docs/_static/images/singleton/'
   SAMPLES = 8
-  SIZES = (224, 224)
+  SIZES = (299, 299)
 
   file_names = os.listdir(SOURCE_DIRECTORY)
   image_paths = [os.path.join(SOURCE_DIRECTORY, f) for f in file_names if f != '_links.txt']
   images = np.stack([img_to_array(load_img(ip).resize(SIZES)) for ip in image_paths])
   images = images.astype("uint8")[:SAMPLES]
 
-Firstly, we employ the :class:`ResNet50V2` network pre-trained over the
-ImageNet dataset:
-
 .. jupyter-execute::
 
-  rn50 = tf.keras.applications.ResNet50V2(
+  model = tf.keras.applications.Xception(
     classifier_activation=None,
     weights='imagenet',
   )
 
-  print(f'ResNet50 pretrained over ImageNet was loaded.')
-  print(f"Spatial map sizes: {rn50.get_layer('avg_pool').input.shape}")
+  print(f'Xception pretrained over ImageNet was loaded.')
+  print(f"Spatial map sizes: {model.get_layer('avg_pool').input.shape}")
 
 We can feed-forward the samples once and get the predicted classes for each sample.
 Besides making sure the model is outputting the expected classes, this step is
@@ -75,7 +73,7 @@ which improves performance of the explaining methods.
   from tensorflow.keras.applications.imagenet_utils import preprocess_input
 
   inputs = images / 127.5 - 1
-  logits = rn50.predict(inputs, verbose=0)
+  logits = model.predict(inputs, verbose=0)
   indices = np.argsort(logits, axis=-1)[:, ::-1]
   explaining_units = indices[:, :1]  # First most likely class.
 
@@ -85,9 +83,9 @@ contained in the input signal (usually expressing an image):
 
 .. jupyter-execute::
 
-  logits, maps = ke.gradients(rn50, inputs, explaining_units)
+  logits, maps = ke.gradients(model, inputs, explaining_units)
 
-  ke.utils.visualize(sum(zip(images, maps), ()), cols=4)
+  ke.utils.visualize([*images, *maps])
 
 .. note::
 
@@ -107,7 +105,7 @@ executing the following call to the
 
   logits, maps = ke.explain(
     methods.gradient.gradients,
-    rn50,
+    model,
     inputs,
     explaining_units,
     postprocessing=filters.absolute_normalize,
@@ -131,11 +129,13 @@ and data optimizations implemented in :func:`~keras_explainable.explain`):
 
 .. jupyter-execute::
 
-  gradients = tf.function(ke.methods.gradient.gradients, jit_compile=True, reduce_retracing=True)
-  _, direct_maps = gradients(rn50, inputs, explaining_units)
+  gradients = tf.function(
+    ke.methods.gradient.gradients, jit_compile=True, reduce_retracing=True
+  )
+  _, direct_maps = gradients(model, inputs, explaining_units)
 
   direct_maps = ke.filters.absolute_normalize(maps)
-  direct_maps = tf.image.resize(direct_maps, inputs.shape[1:-1])
+  direct_maps = tf.image.resize(direct_maps, (299, 299))
   direct_maps = direct_maps.numpy()
 
   np.testing.assert_array_almost_equal(maps, direct_maps)

@@ -1,511 +1,145 @@
-
 <!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="utf-8">
+    <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>Contributing &#8212; Keras Explainable</title>
-    
-  <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     
-  <link rel="stylesheet"
-    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
-    
-  <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/thebelab-helper.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="License" href="license.html" />
-    <link rel="prev" title="Weakly Supervised Object Localization and Semantic Segmentation" href="wsol.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
+    <title>Contributing</title>
     
 
-    <!-- Google Analytics -->
+    <link rel="stylesheet" href="_static/css/redactor.css" type="text/css" />
     
-  </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay overlay-navbar" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<!-- Checkboxes to toggle the in-page toc -->
-<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
-<label class="overlay overlay-pagetoc" for="__page-toc">
-    <div class="visually-hidden">Toggle in-page Table of Contents</div>
-</label>
-<!-- Headers at the top -->
-<div class="announcement header-item noprint"></div>
-<div class="header header-item noprint"></div>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <link rel="stylesheet" href="_static/css/redactor.css" type="text/css" />
+    
+    <link rel="stylesheet" href="_static/jupyter-sphinx.css" type="text/css" />
+    
+    <link rel="stylesheet" href="_static/thebelab.css" type="text/css" />
+    
+    <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    
+    
+    <link rel="index" title="Index" href="genindex.html"/>
+    <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="Keras Explainable" href="index.html"/>
+    <link rel="next" title="License" href="license.html"/>
+    <link rel="prev" title="Weakly Supervised Object Localization and Semantic Segmentation" href="wsol.html"/> 
+</head>
+
+<body role="document">
+     
 
     
-    <div class="container-fluid" id="banner"></div>
-
-    
-
-    <div class="container-xl">
-      <div class="row">
-          
-<!-- Sidebar -->
-<div class="bd-sidebar noprint" id="site-navigation">
-    <div class="bd-sidebar__content">
-        <div class="bd-sidebar__top"><div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="index.html">
-      
-      
-      
-      <h1 class="site-logo" id="site-title">Keras Explainable</h1>
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
-        <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="readme.html">
-   Overview
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="explaining.html">
-   Explaining
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="exposure.html">
-   Exposure
-  </a>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="methods/index.html">
-   Methods
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="methods/saliency/gradients.html">
-     Gradient Back-propagation
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="methods/saliency/smoothgrad.html">
-     SmoothGrad
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="methods/saliency/fullgrad.html">
-     Full-Gradient
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="methods/cams/gradcam.html">
-     Grad-CAM
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="methods/cams/tta_gradcam.html">
-     TTA Grad-CAM
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="wsol.html">
-   WSSL &amp; WSSS
-  </a>
- </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Contributions &amp; Help
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="license.html">
-   License
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="authors.html">
-   Authors
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="api/modules.html">
-   Module Reference
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2 has-children">
-    <a class="reference internal" href="api/keras_explainable.html">
-     keras_explainable package
-    </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-    <label for="toctree-checkbox-3">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="api/keras_explainable.engine.html">
-       keras_explainable.engine package
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="api/keras_explainable.methods.html">
-       keras_explainable.methods package
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
-</ul>
-
-    </div>
-</nav></div>
-        <div class="bd-sidebar__bottom">
-             <!-- To handle the deprecated key -->
-            
-            <div class="navbar_extra_footer">
-            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
-            </div>
-            
-        </div>
-    </div>
-    <div id="rtd-footer-container"></div>
-</div>
-
-
-          
-
-
-          
-<!-- A tiny helper pixel to detect if we've scrolled -->
-<div class="sbt-scroll-pixel-helper"></div>
-<!-- Main content -->
-<div class="col py-0 content-container">
-    
-    <div class="header-article row sticky-top noprint">
-        
-
-
-
-<div class="col py-1 d-flex header-article-main">
-    <div class="header-article__left">
-        
-        <label for="__navigation"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="right"
-title="Toggle navigation"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-bars"></i>
-  </span>
-
-</label>
-
-        
-    </div>
-    <div class="header-article__right">
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-expand"></i>
-  </span>
-
-</button>
-<a href="https://github.com/lucasdavid/keras-explainable"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="bottom"
-title="Source repository"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-
+<a href="#" id="js-navigation-toggle" class="navigation-toggle">
+    <i class="mdi mdi-menu"></i><i class="mdi mdi-close"></i>
 </a>
 
-<div class="menu-dropdown menu-dropdown-download-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="_sources/contributing.rst.txt"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download source file"
->
-  
+<section class="site-sidebar">
 
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="headerbtn__text-container">.rst</span>
-</a>
+<nav>
 
-      </li>
-      
-      <li>
+
+    <a href="index.html" class="branding-link">
+    
+        keras-explainable
+    
+    
+    
         
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="left"
-title="Print to PDF"
->
-  
+        
+            <span class="branding-link__version">
+                0.0.2
+            </span>
+        
+    
+    </a>
 
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
-  </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
+    
+<section role="search">
+    <form action="search.html" method="get" class="site-searchform">
+        <input type="text" name="q" placeholder="Search docs" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+</section>
 
-      </li>
-      
+
+
+    <section class="site-nav">
+    
+    
+        <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explaining.html">Explaining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exposure.html">Exposure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="methods/index.html">Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wsol.html">WSSL &amp; WSSS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributions &amp; Help</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#issue-reports">Issue Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation-improvements">Documentation Improvements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#code-contributions">Code Contributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#maintainer-tasks">Maintainer tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">Module Reference</a></li>
+</ul>
+
+    
+    </section>
+
+</nav>
+
+</section>
+
+    <main class="site-main" role="main">
+        
+
+
+
+
+
+
+
+
+
+
+
+<nav class="site-breadcrumbs">
+    <ul>
+    
+        <li>
+            <a href="index.html">Docs</a> /
+        </li>
+        
+        <li class="site-breadcrumbs__leaf">Contributing</li>
+    
     </ul>
-  </div>
-</div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
-
-    </div>
-</div>
-
-<!-- Table of contents -->
-<div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
-    </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#issue-reports">
-   Issue Reports
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#documentation-improvements">
-   Documentation Improvements
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#code-contributions">
-   Code Contributions
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#submit-an-issue">
-     Submit an issue
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#create-an-environment">
-     Create an environment
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#clone-the-repository">
-     Clone the repository
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#implement-your-changes">
-     Implement your changes
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#submit-your-contribution">
-     Submit your contribution
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#troubleshooting">
-     Troubleshooting
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#maintainer-tasks">
-   Maintainer tasks
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#releases">
-     Releases
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-
-    </nav>
-</div>
-    </div>
-    <div class="article row">
-        <div class="col pl-md-3 pl-lg-5 content-container">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Contributing</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#issue-reports">
-   Issue Reports
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#documentation-improvements">
-   Documentation Improvements
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#code-contributions">
-   Code Contributions
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#submit-an-issue">
-     Submit an issue
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#create-an-environment">
-     Create an environment
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#clone-the-repository">
-     Clone the repository
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#implement-your-changes">
-     Implement your changes
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#submit-your-contribution">
-     Submit your contribution
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#troubleshooting">
-     Troubleshooting
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#maintainer-tasks">
-   Maintainer tasks
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#releases">
-     Releases
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            <main id="main-content" role="main">
-                
-              <div>
+</nav>
+        <section class="site-content">
+            <div class="container">
                 
   <section id="contributing">
-<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">#</a></h1>
+<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this heading">¶</a></h1>
 <p>Welcome to <code class="docutils literal notranslate"><span class="pre">keras-explainable</span></code> contributor’s guide.</p>
 <p>This document focuses on getting any potential contributor familiarized
 with the development processes, but <a class="reference external" href="https://opensource.guide/how-to-contribute">other kinds of contributions</a> are also
 appreciated.</p>
 <p>If you are new to using <a class="reference external" href="https://git-scm.com">git</a> or have never collaborated in a project previously,
 please have a look at <a class="reference external" href="https://www.contribution-guide.org/">contribution-guide.org</a>. Other resources are also
-listed in the excellent <a class="reference external" href="https://github.com/FreeCodeCamp/how-to-contribute-to-open-source">guide created by FreeCodeCamp</a> <a class="footnote-reference brackets" href="#contrib1" id="id1">1</a>.</p>
+listed in the excellent <a class="reference external" href="https://github.com/FreeCodeCamp/how-to-contribute-to-open-source">guide created by FreeCodeCamp</a> <a class="footnote-reference brackets" href="#contrib1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p>Please notice, all users and contributors are expected to be <strong>open,
 considerate, reasonable, and respectful</strong>. When in doubt, <a class="reference external" href="https://www.python.org/psf/conduct/">Python Software
 Foundation’s Code of Conduct</a> is a good reference in terms of behavior
 guidelines.</p>
 <section id="issue-reports">
-<h2>Issue Reports<a class="headerlink" href="#issue-reports" title="Permalink to this headline">#</a></h2>
+<h2>Issue Reports<a class="headerlink" href="#issue-reports" title="Permalink to this heading">¶</a></h2>
 <p>If you experience bugs or general issues with <code class="docutils literal notranslate"><span class="pre">keras-explainable</span></code>, please have a look
 on the <a class="reference external" href="https://github.com/lucasdavid/keras-explainable/issues">issue tracker</a>. If you don’t see anything useful there, please feel
 free to fire an issue report.</p>
@@ -522,7 +156,7 @@ that still illustrates the problem you are facing. By removing other factors,
 you help us to identify the root cause of the issue.</p>
 </section>
 <section id="documentation-improvements">
-<h2>Documentation Improvements<a class="headerlink" href="#documentation-improvements" title="Permalink to this headline">#</a></h2>
+<h2>Documentation Improvements<a class="headerlink" href="#documentation-improvements" title="Permalink to this heading">¶</a></h2>
 <p>You can help improve <code class="docutils literal notranslate"><span class="pre">keras-explainable</span></code> docs by making them more readable and coherent, or
 by adding missing information and correcting mistakes.</p>
 <p><code class="docutils literal notranslate"><span class="pre">keras-explainable</span></code> documentation uses <a class="reference external" href="https://www.sphinx-doc.org/en/master/">Sphinx</a> as its main documentation compiler.
@@ -540,15 +174,15 @@ compile them using <a class="reference external" href="https://tox.wiki/en/stabl
 </div>
 </section>
 <section id="code-contributions">
-<h2>Code Contributions<a class="headerlink" href="#code-contributions" title="Permalink to this headline">#</a></h2>
+<h2>Code Contributions<a class="headerlink" href="#code-contributions" title="Permalink to this heading">¶</a></h2>
 <section id="submit-an-issue">
-<h3>Submit an issue<a class="headerlink" href="#submit-an-issue" title="Permalink to this headline">#</a></h3>
+<h3>Submit an issue<a class="headerlink" href="#submit-an-issue" title="Permalink to this heading">¶</a></h3>
 <p>Before you work on any non-trivial code contribution it’s best to first create
 a report in the <a class="reference external" href="https://github.com/lucasdavid/keras-explainable/issues">issue tracker</a> to start a discussion on the subject.
 This often provides additional considerations and avoids unnecessary work.</p>
 </section>
 <section id="create-an-environment">
-<h3>Create an environment<a class="headerlink" href="#create-an-environment" title="Permalink to this headline">#</a></h3>
+<h3>Create an environment<a class="headerlink" href="#create-an-environment" title="Permalink to this heading">¶</a></h3>
 <p>Before you start coding, we recommend creating an isolated <a class="reference external" href="https://realpython.com/python-virtual-environments-a-primer/">virtual
 environment</a> to avoid any problems with your installed Python packages.
 This can easily be done via either <a class="reference external" href="https://virtualenv.pypa.io/en/stable/"><code class="docutils literal notranslate"><span class="pre">virtualenv</span></code></a>:</p>
@@ -563,7 +197,7 @@ This can easily be done via either <a class="reference external" href="https://v
 </div>
 </section>
 <section id="clone-the-repository">
-<h3>Clone the repository<a class="headerlink" href="#clone-the-repository" title="Permalink to this headline">#</a></h3>
+<h3>Clone the repository<a class="headerlink" href="#clone-the-repository" title="Permalink to this heading">¶</a></h3>
 <ol class="arabic">
 <li><p>Create an user account on GitHub if you do not already have one.</p></li>
 <li><p>Fork the project <a class="reference external" href="https://github.com/lucasdavid/keras-explainable">repository</a>: click on the <em>Fork</em> button near the top of the
@@ -591,7 +225,7 @@ developer to check the code being written.</p>
 </ol>
 </section>
 <section id="implement-your-changes">
-<h3>Implement your changes<a class="headerlink" href="#implement-your-changes" title="Permalink to this headline">#</a></h3>
+<h3>Implement your changes<a class="headerlink" href="#implement-your-changes" title="Permalink to this heading">¶</a></h3>
 <ol class="arabic">
 <li><p>Create a branch to hold your changes:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">my</span><span class="o">-</span><span class="n">feature</span>
@@ -635,7 +269,7 @@ repository. Try <code class="docutils literal notranslate"><span class="pre">tox
 </ol>
 </section>
 <section id="submit-your-contribution">
-<h3>Submit your contribution<a class="headerlink" href="#submit-your-contribution" title="Permalink to this headline">#</a></h3>
+<h3>Submit your contribution<a class="headerlink" href="#submit-your-contribution" title="Permalink to this heading">¶</a></h3>
 <ol class="arabic">
 <li><p>If everything works fine, push your local branch to GitHub with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="o">-</span><span class="n">u</span> <span class="n">origin</span> <span class="n">my</span><span class="o">-</span><span class="n">feature</span>
@@ -648,7 +282,7 @@ to send your changes for review.</p>
 </ol>
 </section>
 <section id="troubleshooting">
-<h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">#</a></h3>
+<h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this heading">¶</a></h3>
 <p>The following tips can be used when facing problems to build or test the
 package:</p>
 <ol class="arabic">
@@ -696,9 +330,9 @@ You can also setup breakpoints manually instead of using the <code class="docuti
 </section>
 </section>
 <section id="maintainer-tasks">
-<h2>Maintainer tasks<a class="headerlink" href="#maintainer-tasks" title="Permalink to this headline">#</a></h2>
+<h2>Maintainer tasks<a class="headerlink" href="#maintainer-tasks" title="Permalink to this heading">¶</a></h2>
 <section id="releases">
-<h3>Releases<a class="headerlink" href="#releases" title="Permalink to this headline">#</a></h3>
+<h3>Releases<a class="headerlink" href="#releases" title="Permalink to this heading">¶</a></h3>
 <p>If you are part of the group of maintainers and have correct user permissions
 on <a class="reference external" href="https://pypi.org/">PyPI</a>, the following steps can be used to release a new version for
 <code class="docutils literal notranslate"><span class="pre">keras-explainable</span></code>:</p>
@@ -716,61 +350,90 @@ Also check the sizes of the distributions, if they are too big (e.g., &gt;
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">publish</span> <span class="pre">--</span> <span class="pre">--repository</span> <span class="pre">pypi</span></code> and check that everything was
 uploaded to <a class="reference external" href="https://pypi.org/">PyPI</a> correctly.</p></li>
 </ol>
-<dl class="footnote brackets">
-<dt class="label" id="contrib1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
-<dd><p>Even though, these resources focus on open source projects and
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="contrib1" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Even though, these resources focus on open source projects and
 communities, the general ideas behind collaborating with other developers
 to collectively create software are general and can be applied to all sorts
 of environments, including private companies and proprietary code bases.</p>
-</dd>
-</dl>
+</aside>
+</aside>
 </section>
 </section>
 </section>
 
 
-              </div>
-              
-            </main>
-            <footer class="footer-article noprint">
+            </div>
+
+        </section>
+
+        
+            <nav class="site-bottom-navigation" role="navigation">
+            
+                <a href="license.html" class="btn btn--primary btn--next right"
+                    title="License" accesskey="n">
+                    Next
+                </a>
+            
+            
+                <a href="wsol.html" class="btn btn--primary btn--prev"
+                    title="Weakly Supervised Object Localization and Semantic Segmentation" accesskey="p">
+                    Previous
+                </a>
+            
+            </nav>
+        
+
+        
+            <div class="source-link">
+            
                 
-    <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="wsol.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Weakly Supervised Object Localization and Semantic Segmentation</p>
-        </div>
-    </a>
-    <a class='right-next' id="next-link" href="license.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">License</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
-    </a>
+                    <a href="_sources/contributing.rst.txt" rel="nofollow">
+                        <i class="mdi mdi-code-tags"></i>
+                        View page source
+                    </a>
+                
+            
+            </div>
+        
+
+
+
+    </main>
+
+    <footer class="site-footer">
+<div class="container">
+
+    <div role="contentinfo">
+        <p>
+                &copy; Copyright 2022, Lucas David.
+        </p>
+    </div> 
+
 </div>
-            </footer>
-        </div>
-    </div>
-    <div class="footer-content row">
-        <footer class="col footer"><p>
-  
-      &copy; Copyright 2022, Lucas David.<br/>
-</p>
-        </footer>
-    </div>
+</footer>
+
     
-</div>
 
-
-      </div>
-    </div>
-  
-  <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-
-
-  </body>
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'',
+            VERSION:'0.0.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/sphinx_highlight.js"></script>
+    <script type="text/javascript" src="_static/thebelab-helper.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script type="text/javascript" src="_static/js/theme-min.js"></script> 
+</body>
 </html>

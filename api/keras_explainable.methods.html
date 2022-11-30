@@ -1,447 +1,146 @@
-
 <!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="utf-8">
+    <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>keras_explainable.methods package &#8212; Keras Explainable</title>
-    
-  <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     
-  <link rel="stylesheet"
-    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
-    
-  <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/thebelab-helper.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="keras_explainable.engine package" href="keras_explainable.engine.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
+    <title>keras_explainable.methods package</title>
     
 
-    <!-- Google Analytics -->
+    <link rel="stylesheet" href="../_static/css/redactor.css" type="text/css" />
     
-  </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay overlay-navbar" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<!-- Checkboxes to toggle the in-page toc -->
-<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
-<label class="overlay overlay-pagetoc" for="__page-toc">
-    <div class="visually-hidden">Toggle in-page Table of Contents</div>
-</label>
-<!-- Headers at the top -->
-<div class="announcement header-item noprint"></div>
-<div class="header header-item noprint"></div>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <link rel="stylesheet" href="../_static/css/redactor.css" type="text/css" />
+    
+    <link rel="stylesheet" href="../_static/jupyter-sphinx.css" type="text/css" />
+    
+    <link rel="stylesheet" href="../_static/thebelab.css" type="text/css" />
+    
+    <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    
+    
+    <link rel="index" title="Index" href="../genindex.html"/>
+    <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="Keras Explainable" href="../index.html"/>
+    <link rel="up" title="keras_explainable package" href="keras_explainable.html"/>
+    <link rel="prev" title="keras_explainable.engine package" href="keras_explainable.engine.html"/> 
+</head>
+
+<body role="document">
+     
 
     
-    <div class="container-fluid" id="banner"></div>
-
-    
-
-    <div class="container-xl">
-      <div class="row">
-          
-<!-- Sidebar -->
-<div class="bd-sidebar noprint" id="site-navigation">
-    <div class="bd-sidebar__content">
-        <div class="bd-sidebar__top"><div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="../index.html">
-      
-      
-      
-      <h1 class="site-logo" id="site-title">Keras Explainable</h1>
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
-        <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../readme.html">
-   Overview
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../explaining.html">
-   Explaining
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../exposure.html">
-   Exposure
-  </a>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../methods/index.html">
-   Methods
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../methods/saliency/gradients.html">
-     Gradient Back-propagation
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../methods/saliency/smoothgrad.html">
-     SmoothGrad
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../methods/saliency/fullgrad.html">
-     Full-Gradient
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../methods/cams/gradcam.html">
-     Grad-CAM
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../methods/cams/tta_gradcam.html">
-     TTA Grad-CAM
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../wsol.html">
-   WSSL &amp; WSSS
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../contributing.html">
-   Contributions &amp; Help
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../license.html">
-   License
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../authors.html">
-   Authors
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="modules.html">
-   Module Reference
-  </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2 current active has-children">
-    <a class="reference internal" href="keras_explainable.html">
-     keras_explainable package
-    </a>
-    <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-    <label for="toctree-checkbox-3">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul class="current">
-     <li class="toctree-l3">
-      <a class="reference internal" href="keras_explainable.engine.html">
-       keras_explainable.engine package
-      </a>
-     </li>
-     <li class="toctree-l3 current active">
-      <a class="current reference internal" href="#">
-       keras_explainable.methods package
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
-</ul>
-
-    </div>
-</nav></div>
-        <div class="bd-sidebar__bottom">
-             <!-- To handle the deprecated key -->
-            
-            <div class="navbar_extra_footer">
-            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
-            </div>
-            
-        </div>
-    </div>
-    <div id="rtd-footer-container"></div>
-</div>
-
-
-          
-
-
-          
-<!-- A tiny helper pixel to detect if we've scrolled -->
-<div class="sbt-scroll-pixel-helper"></div>
-<!-- Main content -->
-<div class="col py-0 content-container">
-    
-    <div class="header-article row sticky-top noprint">
-        
-
-
-
-<div class="col py-1 d-flex header-article-main">
-    <div class="header-article__left">
-        
-        <label for="__navigation"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="right"
-title="Toggle navigation"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-bars"></i>
-  </span>
-
-</label>
-
-        
-    </div>
-    <div class="header-article__right">
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-expand"></i>
-  </span>
-
-</button>
-<a href="https://github.com/lucasdavid/keras-explainable"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="bottom"
-title="Source repository"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-
+<a href="#" id="js-navigation-toggle" class="navigation-toggle">
+    <i class="mdi mdi-menu"></i><i class="mdi mdi-close"></i>
 </a>
 
-<div class="menu-dropdown menu-dropdown-download-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
-  </button>
-  <div class="menu-dropdown__content">
+<section class="site-sidebar">
+
+<nav>
+
+
+    <a href="../index.html" class="branding-link">
+    
+        keras-explainable
+    
+    
+    
+        
+        
+            <span class="branding-link__version">
+                0.0.2
+            </span>
+        
+    
+    </a>
+
+    
+<section role="search">
+    <form action="../search.html" method="get" class="site-searchform">
+        <input type="text" name="q" placeholder="Search docs" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+</section>
+
+
+
+    <section class="site-nav">
+    
+    
+        <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explaining.html">Explaining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exposure.html">Exposure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../methods/index.html">Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wsol.html">WSSL &amp; WSSS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Module Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="keras_explainable.html">keras_explainable package</a></li>
+</ul>
+</li>
+</ul>
+
+    
+    </section>
+
+</nav>
+
+</section>
+
+    <main class="site-main" role="main">
+        
+
+
+
+
+
+
+
+
+
+
+
+<nav class="site-breadcrumbs">
     <ul>
-      <li>
-        <a href="../_sources/api/keras_explainable.methods.rst.txt"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download source file"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="headerbtn__text-container">.rst</span>
-</a>
-
-      </li>
-      
-      <li>
+    
+        <li>
+            <a href="../index.html">Docs</a> /
+        </li>
         
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="left"
-title="Print to PDF"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
-  </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
-
-      </li>
-      
+        <li>
+            <a href="modules.html">keras_explainable</a> /
+        </li>
+        
+        <li>
+            <a href="keras_explainable.html">keras_explainable package</a> /
+        </li>
+        
+        <li class="site-breadcrumbs__leaf">keras_explainable.methods package</li>
+    
     </ul>
-  </div>
-</div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
-
-    </div>
-</div>
-
-<!-- Table of contents -->
-<div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
-    </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#submodules">
-   Submodules
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keras_explainable.methods.cams">
-   keras_explainable.methods.cams module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keras_explainable.methods.gradient">
-   keras_explainable.methods.gradient module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keras_explainable.methods.meta">
-   keras_explainable.methods.meta module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keras_explainable.methods">
-   Module contents
-  </a>
- </li>
-</ul>
-
-    </nav>
-</div>
-    </div>
-    <div class="article row">
-        <div class="col pl-md-3 pl-lg-5 content-container">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>keras_explainable.methods package</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#submodules">
-   Submodules
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keras_explainable.methods.cams">
-   keras_explainable.methods.cams module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keras_explainable.methods.gradient">
-   keras_explainable.methods.gradient module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keras_explainable.methods.meta">
-   keras_explainable.methods.meta module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keras_explainable.methods">
-   Module contents
-  </a>
- </li>
-</ul>
-
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            <main id="main-content" role="main">
-                
-              <div>
+</nav>
+        <section class="site-content">
+            <div class="container">
                 
   <section id="keras-explainable-methods-package">
-<h1>keras_explainable.methods package<a class="headerlink" href="#keras-explainable-methods-package" title="Permalink to this headline">#</a></h1>
+<h1>keras_explainable.methods package<a class="headerlink" href="#keras-explainable-methods-package" title="Permalink to this heading">¶</a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">#</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
 </section>
 <section id="module-keras_explainable.methods.cams">
-<span id="keras-explainable-methods-cams-module"></span><h2>keras_explainable.methods.cams module<a class="headerlink" href="#module-keras_explainable.methods.cams" title="Permalink to this headline">#</a></h2>
+<span id="keras-explainable-methods-cams-module"></span><h2>keras_explainable.methods.cams module<a class="headerlink" href="#module-keras_explainable.methods.cams" title="Permalink to this heading">¶</a></h2>
 <p>Implementation of various CAM-based AI explaining methods and techniques.</p>
-<dl class="py data">
-<dt class="sig sig-object py" id="keras_explainable.methods.cams.METHODS">
-<span class="sig-name descname"><span class="pre">METHODS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[&lt;function</span> <span class="pre">cam&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">gradcam&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">gradcampp&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">scorecam&gt;]</span></em><a class="headerlink" href="#keras_explainable.methods.cams.METHODS" title="Permalink to this definition">#</a></dt>
-<dd><p>Available CAM-based AI Explaining methods.</p>
-<p>This list contains all available methods implemented in this module,
-and it is kept and used for introspection and validation purposes.</p>
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.methods.cams.cam">
-<span class="sig-name descname"><span class="pre">cam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_batch_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">3,</span> <span class="pre">-</span> <span class="pre">2)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logits_layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/cams.html#cam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.cams.cam" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">cam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_batch_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-3,</span> <span class="pre">-2)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logits_layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/cams.html#cam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.cams.cam" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the CAM Visualization Method.</p>
 <p>This method expects <cite>inputs</cite> to be a batch of positional signals of
 shape <code class="docutils literal notranslate"><span class="pre">BHW...C</span></code>, and will return a tensor of shape <code class="docutils literal notranslate"><span class="pre">BH'W'...L</span></code>,
@@ -453,23 +152,25 @@ this tensor are selected before the gradients are computed,
 effectively reducing the columns in the jacobian, and the size of
 the output explaining map.</p>
 <p>Usage:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">keras_explainable</span> <span class="k">as</span> <span class="nn">ke</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">]])</span>
 
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span>
-    <span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
-    <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">],</span>
-<span class="p">])</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">ResNet50V2</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_top</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">ResNet50V2</span><span class="p">(</span><span class="n">classifier_activation</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 
 <span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">cams</span><span class="o">.</span><span class="n">cam</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 </pre></div>
 </div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Zhou, B., Khosla, A., Lapedriza, A., Oliva, A., &amp; Torralba, A. (2016).
+Learning deep features for discriminative localization. In Proceedings
+of the IEEE conference on computer vision and pattern
+recognition (pp. 2921-2929). Available at:
+<a class="reference external" href="https://arxiv.org/pdf/1512.04150.pdf">arxiv/1512.04150</a>.</p></li>
+</ul>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>tf.keras.Model</em>) – the model being explained</p></li>
 <li><p><strong>inputs</strong> (<em>tf.Tensor</em>) – the input data</p></li>
@@ -485,26 +186,18 @@ information. Defaults to <code class="docutils literal notranslate"><span class=
 Defaults to tf.abs.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the logits and Class Activation Maps (CAMs).</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Tuple[tf.Tensor, tf.Tensor]</p>
 </dd>
 </dl>
-<p class="rubric">References</p>
-<ul class="simple">
-<li><p>Zhou, B., Khosla, A., Lapedriza, A., Oliva, A., &amp; Torralba, A. (2016).
-Learning deep features for discriminative localization. In Proceedings
-of the IEEE conference on computer vision and pattern
-recognition (pp. 2921-2929). Available at:
-<a class="reference external" href="https://arxiv.org/pdf/1512.04150.pdf">arxiv/1512.04150</a>.</p></li>
-</ul>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.methods.cams.gradcam">
-<span class="sig-name descname"><span class="pre">gradcam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_batch_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">3,</span> <span class="pre">-</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/cams.html#gradcam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.cams.gradcam" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">gradcam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_batch_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-3,</span> <span class="pre">-2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/cams.html#gradcam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.cams.gradcam" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the Grad-CAM Visualization Method.</p>
 <p>This method expects <cite>inputs</cite> to be a batch of positional signals of
 shape <code class="docutils literal notranslate"><span class="pre">BHW...C</span></code>, and will return a tensor of shape <code class="docutils literal notranslate"><span class="pre">BH'W'...L</span></code>,
@@ -514,8 +207,26 @@ represented within the model’s output logits.</p>
 <p>If <cite>indices</cite> is passed, the specific logits indexed by elements in this
 tensor are selected before the gradients are computed, effectively
 reducing the columns in the jacobian, and the size of the output explaining map.</p>
+<p>Usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">]])</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">ResNet50V2</span><span class="p">(</span><span class="n">classifier_activation</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">cams</span><span class="o">.</span><span class="n">gradcam</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Selvaraju, R. R., Cogswell, M., Das, A., Vedantam, R., Parikh, D., &amp; Batra, D.
+(2017). Grad-CAM: Visual explanations from deep networks via gradient-based
+localization. In Proceedings of the IEEE international conference on computer
+vision (pp. 618-626).
+Available at: <a class="reference external" href="https://arxiv.org/abs/1610.02391">arxiv/1610.02391</a>.</p></li>
+</ul>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>tf.keras.Model</em>) – the model being explained</p></li>
 <li><p><strong>inputs</strong> (<em>tf.Tensor</em>) – the input data</p></li>
@@ -529,26 +240,18 @@ in the <code class="docutils literal notranslate"><span class="pre">tf.gather</s
 information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the logits and Class Activation Maps (CAMs).</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Tuple[tf.Tensor, tf.Tensor]</p>
 </dd>
 </dl>
-<p class="rubric">References</p>
-<ul class="simple">
-<li><p>Selvaraju, R. R., Cogswell, M., Das, A., Vedantam, R., Parikh, D., &amp; Batra, D.
-(2017). Grad-CAM: Visual explanations from deep networks via gradient-based
-localization. In Proceedings of the IEEE international conference on computer
-vision (pp. 618-626).
-Available at: <a class="reference external" href="https://arxiv.org/abs/1610.02391">arxiv/1610.02391</a>.</p></li>
-</ul>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.methods.cams.gradcampp">
-<span class="sig-name descname"><span class="pre">gradcampp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_batch_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">3,</span> <span class="pre">-</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/cams.html#gradcampp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.cams.gradcampp" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">gradcampp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_batch_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-3,</span> <span class="pre">-2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/cams.html#gradcampp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.cams.gradcampp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the Grad-CAM++ Visualization Method.</p>
 <p>This method expects <cite>inputs</cite> to be a batch of positional signals of
 shape <code class="docutils literal notranslate"><span class="pre">BHW...C</span></code>, and will return a tensor of shape <code class="docutils literal notranslate"><span class="pre">BH'W'...L</span></code>,
@@ -558,28 +261,16 @@ represented within the model’s output logits.</p>
 <p>If <cite>indices</cite> is passed, the specific logits indexed by elements in this
 tensor are selected before the gradients are computed, effectively
 reducing the columns in the jacobian, and the size of the output explaining map.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<em>tf.keras.Model</em>) – the model being explained</p></li>
-<li><p><strong>inputs</strong> (<em>tf.Tensor</em>) – the input data</p></li>
-<li><p><strong>indices</strong> (<em>Optional</em><em>[</em><em>tf.Tensor</em><em>]</em><em>, </em><em>optional</em>) – indices that should be gathered
-from <code class="docutils literal notranslate"><span class="pre">outputs</span></code>. Defaults to None.</p></li>
-<li><p><strong>indices_axis</strong> (<a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – the axis containing the indices to gather.
-Defaults to <code class="docutils literal notranslate"><span class="pre">KERNEL_AXIS</span></code>.</p></li>
-<li><p><strong>indices_batch_dims</strong> (<a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – the number of dimensions to broadcast
-in the <code class="docutils literal notranslate"><span class="pre">tf.gather</span></code> operation. Defaults to <code class="docutils literal notranslate"><span class="pre">-1</span></code>.</p></li>
-<li><p><strong>spatial_axis</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the dimensions containing positional
-information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the logits and Class Activation Maps (CAMs).</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Tuple[tf.Tensor, tf.Tensor]</p>
-</dd>
-</dl>
+<p>Usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">]])</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">ResNet50V2</span><span class="p">(</span><span class="n">classifier_activation</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">cams</span><span class="o">.</span><span class="n">gradcampp</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Chattopadhay, A., Sarkar, A., Howlader, P., &amp; Balasubramanian, V. N.
@@ -589,22 +280,8 @@ applications of computer vision (WACV) (pp. 839-847). IEEE.</p></li>
 <li><p>Grad-CAM++’s official implementation. Github. Available at:
 <a class="reference external" href="github.com/adityac94/Grad_CAM_plus_plus">adityac94/Grad-CAM++</a></p></li>
 </ul>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="keras_explainable.methods.cams.scorecam">
-<span class="sig-name descname"><span class="pre">scorecam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_batch_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">3,</span> <span class="pre">-</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/cams.html#scorecam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.cams.scorecam" title="Permalink to this definition">#</a></dt>
-<dd><p>Computes the Score-CAM Visualization Method.</p>
-<p>This method expects <cite>inputs</cite> to be a batch of positional signals of
-shape <code class="docutils literal notranslate"><span class="pre">BHW...C</span></code>, and will return a tensor of shape <code class="docutils literal notranslate"><span class="pre">BH'W'...L</span></code>,
-where <code class="docutils literal notranslate"><span class="pre">(H',</span> <span class="pre">W',</span> <span class="pre">...)</span></code> are the sizes of the visual receptive field
-in the explained activation layer and <cite>L</cite> is the number of labels
-represented within the model’s output logits.</p>
-<p>If <cite>indices</cite> is passed, the specific logits indexed by elements in this
-tensor are selected before the gradients are computed, effectively
-reducing the columns in the jacobian, and the size of the output explaining map.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>tf.keras.Model</em>) – the model being explained</p></li>
 <li><p><strong>inputs</strong> (<em>tf.Tensor</em>) – the input data</p></li>
@@ -618,35 +295,74 @@ in the <code class="docutils literal notranslate"><span class="pre">tf.gather</s
 information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the logits and Class Activation Maps (CAMs).</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Tuple[tf.Tensor, tf.Tensor]</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="keras_explainable.methods.cams.scorecam">
+<span class="sig-name descname"><span class="pre">scorecam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_batch_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-3,</span> <span class="pre">-2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/cams.html#scorecam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.cams.scorecam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the Score-CAM Visualization Method.</p>
+<p>This method expects <cite>inputs</cite> to be a batch of positional signals of
+shape <code class="docutils literal notranslate"><span class="pre">BHW...C</span></code>, and will return a tensor of shape <code class="docutils literal notranslate"><span class="pre">BH'W'...L</span></code>,
+where <code class="docutils literal notranslate"><span class="pre">(H',</span> <span class="pre">W',</span> <span class="pre">...)</span></code> are the sizes of the visual receptive field
+in the explained activation layer and <cite>L</cite> is the number of labels
+represented within the model’s output logits.</p>
+<p>If <cite>indices</cite> is passed, the specific logits indexed by elements in this
+tensor are selected before the gradients are computed, effectively
+reducing the columns in the jacobian, and the size of the output explaining map.</p>
+<p>Usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">]])</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">ResNet50V2</span><span class="p">(</span><span class="n">classifier_activation</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">cams</span><span class="o">.</span><span class="n">scorecam</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Score-CAM: Score-Weighted Visual Explanations for Convolutional
 Neural Networks. Available at:
 <a class="reference external" href="https://arxiv.org/abs/1910.01279">arxiv/1910.01279</a></p></li>
 </ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>tf.keras.Model</em>) – the model being explained</p></li>
+<li><p><strong>inputs</strong> (<em>tf.Tensor</em>) – the input data</p></li>
+<li><p><strong>indices</strong> (<em>Optional</em><em>[</em><em>tf.Tensor</em><em>]</em><em>, </em><em>optional</em>) – indices that should be gathered
+from <code class="docutils literal notranslate"><span class="pre">outputs</span></code>. Defaults to None.</p></li>
+<li><p><strong>indices_axis</strong> (<a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – the axis containing the indices to gather.
+Defaults to <code class="docutils literal notranslate"><span class="pre">KERNEL_AXIS</span></code>.</p></li>
+<li><p><strong>indices_batch_dims</strong> (<a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – the number of dimensions to broadcast
+in the <code class="docutils literal notranslate"><span class="pre">tf.gather</span></code> operation. Defaults to <code class="docutils literal notranslate"><span class="pre">-1</span></code>.</p></li>
+<li><p><strong>spatial_axis</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the dimensions containing positional
+information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the logits and Class Activation Maps (CAMs).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[tf.Tensor, tf.Tensor]</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
 <section id="module-keras_explainable.methods.gradient">
-<span id="keras-explainable-methods-gradient-module"></span><h2>keras_explainable.methods.gradient module<a class="headerlink" href="#module-keras_explainable.methods.gradient" title="Permalink to this headline">#</a></h2>
-<dl class="py data">
-<dt class="sig sig-object py" id="keras_explainable.methods.gradient.METHODS">
-<span class="sig-name descname"><span class="pre">METHODS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[&lt;function</span> <span class="pre">gradients&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">full_gradients&gt;]</span></em><a class="headerlink" href="#keras_explainable.methods.gradient.METHODS" title="Permalink to this definition">#</a></dt>
-<dd><p>Available Gradient-based AI Explaining methods.</p>
-<p>This list contains all available methods implemented in this module,
-and it is kept and used for introspection and validation purposes.</p>
-</dd></dl>
-
+<span id="keras-explainable-methods-gradient-module"></span><h2>keras_explainable.methods.gradient module<a class="headerlink" href="#module-keras_explainable.methods.gradient" title="Permalink to this heading">¶</a></h2>
+<p>Implementation of various Gradient-based AI explaining methods and techniques.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.methods.gradient.full_gradients">
-<span class="sig-name descname"><span class="pre">full_gradients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_axis=-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_batch_dims=-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_axis=(-3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-2)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psi=&lt;function</span> <span class="pre">absolute_normalize&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">biases=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/gradient.html#full_gradients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.gradient.full_gradients" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">full_gradients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_axis=-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_batch_dims=-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_axis=(-3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-2)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psi=&lt;function</span> <span class="pre">absolute_normalize&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">biases=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/gradient.html#full_gradients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.gradient.full_gradients" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the Full-Grad Visualization Method.</p>
 <p>This technique adds the individual contributions of each bias factor
 in the model to the extracted gradient, forming the “full gradient”
@@ -661,8 +377,30 @@ represented within the model’s output logits.</p>
 <p>If <cite>indices</cite> is passed, the specific logits indexed by elements in this
 tensor are selected before the gradients are computed, effectively
 reducing the columns in the jacobian, and the size of the output explaining map.</p>
+<p>Furthermore, the cached list of <code class="docutils literal notranslate"><span class="pre">biases</span></code> can be passed as a parameter for this
+method. If none is passed, it will be inferred at runtime, implying on a marginal
+increase in execution overhead during tracing.</p>
+<p>Usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">]])</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">ResNet50V2</span><span class="p">(</span><span class="n">classifier_activation</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="n">logits</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">get_logits_layer</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="n">inters</span><span class="p">,</span> <span class="n">biases</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">layers_with_biases</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">[</span><span class="n">logits</span><span class="p">])</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">inspection</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inters</span><span class="p">,</span> <span class="n">logits</span><span class="p">)</span>
+
+<span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">full_gradients</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">biases</span><span class="o">=</span><span class="n">biases</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Srinivas S, Fleuret F. Full-gradient representation for neural network
+visualization. <a class="reference external" href="https://arxiv.org/pdf/1905.00780.pdf">arxiv.org/1905.00780</a>,
+2019.</p></li>
+</ul>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>tf.keras.Model</em>) – the model being explained</p></li>
 <li><p><strong>inputs</strong> (<em>tf.Tensor</em>) – the input data</p></li>
@@ -678,28 +416,28 @@ information. Defaults to <code class="docutils literal notranslate"><span class=
 signals. Defaults to <code class="docutils literal notranslate"><span class="pre">filters.absolute_normalize</span></code>.</p></li>
 <li><p><strong>biases</strong> (<a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.10/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]]) – (List[tf.Tensor], optional): list of biases associated with each
 intermediate signal exposed by the model. If none is passed, it will
-be infered from the endpoints (nodes) outputed by the model.</p></li>
+be inferred from the endpoints (nodes) outputed by the model.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the logits and saliency maps.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Tuple[tf.Tensor, tf.Tensor]</p>
 </dd>
 </dl>
-<p class="rubric">References</p>
-<ul class="simple">
-<li><p>Srinivas S, Fleuret F. Full-gradient representation for neural network
-visualization. <a class="reference external" href="https://arxiv.org/pdf/1905.00780.pdf">arxiv.org/1905.00780</a>,
-2019.</p></li>
-</ul>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.methods.gradient.gradients">
-<span class="sig-name descname"><span class="pre">gradients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_axis=-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_batch_dims=-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_axis=(-3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-2)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient_filter=&lt;function</span> <span class="pre">abs&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/gradient.html#gradients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.gradient.gradients" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">gradients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_axis=-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices_batch_dims=-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_axis=(-3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">-2)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient_filter=&lt;function</span> <span class="pre">abs&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/gradient.html#gradients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.gradient.gradients" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the Gradient Back-propagation Visualization Method.</p>
+<p>This technique computes the gradient of the output activation unit being explained
+with respect to each unit in the input signal.
+Features (channels) in each pixel of the input sinal are absolutely averaged,
+following the original implementation:</p>
+<div class="math notranslate nohighlight">
+\[f(x) = ψ(∇_xf(x))\]</div>
 <p>This method expects <cite>inputs</cite> to be a batch of positional signals of
 shape <code class="docutils literal notranslate"><span class="pre">BHW...C</span></code>, and will return a tensor of shape <code class="docutils literal notranslate"><span class="pre">BH'W'...L</span></code>,
 where <code class="docutils literal notranslate"><span class="pre">(H',</span> <span class="pre">W',</span> <span class="pre">...)</span></code> are the sizes of the visual receptive field
@@ -708,8 +446,23 @@ represented within the model’s output logits.</p>
 <p>If <cite>indices</cite> is passed, the specific logits indexed by elements in this
 tensor are selected before the gradients are computed, effectively
 reducing the columns in the jacobian, and the size of the output explaining map.</p>
+<p>Usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">]])</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">ResNet50V2</span><span class="p">(</span><span class="n">classifier_activation</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">scores</span><span class="p">,</span> <span class="n">cams</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">gradients</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Simonyan, K., Vedaldi, A., &amp; Zisserman, A. (2013).
+Deep inside convolutional networks: Visualising image classification
+models and saliency maps. arXiv preprint
+<a class="reference external" href="https://arxiv.org/abs/1312.6034">arXiv:1312.6034</a>.</p></li>
+</ul>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>tf.keras.Model</em>) – the model being explained</p></li>
 <li><p><strong>inputs</strong> (<em>tf.Tensor</em>) – the input data</p></li>
@@ -722,55 +475,53 @@ in the <code class="docutils literal notranslate"><span class="pre">tf.gather</s
 <li><p><strong>spatial_axis</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the dimensions containing positional
 information. Defaults to <code class="docutils literal notranslate"><span class="pre">SPATIAL_AXIS</span></code>.</p></li>
 <li><p><strong>gradient_filter</strong> (<em>Callable</em><em>, </em><em>optional</em>) – filter before channel combining.
-Defaults to tf.abs.</p></li>
+Defaults to <code class="docutils literal notranslate"><span class="pre">tf.abs</span></code>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the logits and saliency maps.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Tuple[tf.Tensor, tf.Tensor]</p>
-</dd>
-</dl>
-<p class="rubric">References</p>
-<ul class="simple">
-<li><p>Simonyan, K., Vedaldi, A., &amp; Zisserman, A. (2013).
-Deep inside convolutional networks: Visualising image classification
-models and saliency maps. arXiv preprint
-<a class="reference external" href="https://arxiv.org/abs/1312.6034">arXiv:1312.6034</a>.</p></li>
-</ul>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="keras_explainable.methods.gradient.transpose_jacobian">
-<span class="sig-name descname"><span class="pre">transpose_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_rank</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/gradient.html#transpose_jacobian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.gradient.transpose_jacobian" title="Permalink to this definition">#</a></dt>
-<dd><p>Transpose the Jacobian of shape (b,g,…) into (b,…,g).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>tf.Tensor</em>) – the jacobian tensor.</p></li>
-<li><p><strong>spatial_rank</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – the spatial rank of <code class="docutils literal notranslate"><span class="pre">x</span></code>.
-Defaults to <code class="docutils literal notranslate"><span class="pre">len(SPATIAL_AXIS)</span></code>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the transposed jacobian.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tf.Tensor</p>
 </dd>
 </dl>
 </dd></dl>
 
 </section>
 <section id="module-keras_explainable.methods.meta">
-<span id="keras-explainable-methods-meta-module"></span><h2>keras_explainable.methods.meta module<a class="headerlink" href="#module-keras_explainable.methods.meta" title="Permalink to this headline">#</a></h2>
+<span id="keras-explainable-methods-meta-module"></span><h2>keras_explainable.methods.meta module<a class="headerlink" href="#module-keras_explainable.methods.meta" title="Permalink to this heading">¶</a></h2>
+<p>Implementation of various Meta techniques.</p>
+<p>These can be used conjointly with CAM and Gradient-based methods,
+providing cleaner and more robust results.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.methods.meta.smooth">
-<span class="sig-name descname"><span class="pre">smooth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repetitions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/meta.html#smooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.meta.smooth" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">smooth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repetitions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/meta.html#smooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.meta.smooth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Smooth Meta Explaining Method.</p>
+<p>This technique consists of repeatedly applying an AI explaining method, considering
+small variations of the input signal each time (tempered with gaussian noise).</p>
+<p>Usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">]])</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">ResNet50V2</span><span class="p">(</span><span class="n">classifier_activation</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="n">smoothgrad</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span>
+    <span class="n">ke</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">gradients</span><span class="p">,</span>
+    <span class="n">repetitions</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">scores</span><span class="p">,</span> <span class="n">maps</span> <span class="o">=</span> <span class="n">smoothgrad</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Smilkov, D., Thorat, N., Kim, B., Viégas, F., &amp; Wattenberg, M. (2017).
+SmoothGrad: removing noise by adding noise. arXiv preprint arXiv:1706.03825.
+Available at: [arxiv/1706.03825](https://arxiv.org/abs/1706.03825)</p></li>
+</ul>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>method</strong> (<em>Callable</em>) – the explaining method to be smoothed</p></li>
 <li><p><strong>repetitions</strong> (<a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – number of repetitions. Defaults to 20.</p></li>
@@ -778,63 +529,127 @@ Defaults to <code class="docutils literal notranslate"><span class="pre">len(SPA
 added to the input signal. Defaults to 0.1.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the logits and explaining maps.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[tf.Tensor, tf.Tensor]</p>
+</dd>
 </dl>
-<p class="rubric">References</p>
-<ul class="simple">
-<li><p>Smilkov, D., Thorat, N., Kim, B., Viégas, F., &amp; Wattenberg, M. (2017).
-SmoothGrad: removing noise by adding noise. arXiv preprint arXiv:1706.03825.
-Available at: [arxiv/1706.03825](https://arxiv.org/abs/1706.03825)</p></li>
-</ul>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="keras_explainable.methods.meta.tta">
-<span class="sig-name descname"><span class="pre">tta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scales</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.5,</span> <span class="pre">1.5,</span> <span class="pre">2.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hflip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resize_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bilinear'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/meta.html#tta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.meta.tta" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">tta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scales</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.5,</span> <span class="pre">1.5,</span> <span class="pre">2.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hflip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resize_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bilinear'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/keras_explainable/methods/meta.html#tta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#keras_explainable.methods.meta.tta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the TTA version of a visualization method.</p>
+<p>Usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">]])</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">ResNet50V2</span><span class="p">(</span><span class="n">classifier_activation</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="n">scores</span><span class="p">,</span> <span class="n">maps</span> <span class="o">=</span> <span class="n">ke</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span>
+    <span class="n">methods</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">gradients</span><span class="p">,</span>
+    <span class="n">rn50</span><span class="p">,</span>
+    <span class="n">inputs</span><span class="p">,</span>
+    <span class="n">explaining_units</span><span class="p">,</span>
+    <span class="n">postprocessing</span><span class="o">=</span><span class="n">filters</span><span class="o">.</span><span class="n">absolute_normalize</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>method</strong> (<em>Callable</em>) – the explaining method to be augmented</p></li>
+<li><p><strong>scales</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3.10/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>]</em><em>, </em><em>optional</em>) – a list of coefs to scale the inputs by.
+Defaults to [0.5, 1.5, 2.0].</p></li>
+<li><p><strong>hflip</strong> (<a class="reference external" href="https://docs.python.org/3.10/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – wether or not to flip horizontally the inputs.
+Defaults to True.</p></li>
+<li><p><strong>resize_method</strong> (<a class="reference external" href="https://docs.python.org/3.10/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – the resizing method used. Defaults to “bilinear”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the logits and explaining maps.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[tf.Tensor, tf.Tensor]</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
 <section id="module-keras_explainable.methods">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-keras_explainable.methods" title="Permalink to this headline">#</a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-keras_explainable.methods" title="Permalink to this heading">¶</a></h2>
 </section>
 </section>
 
 
-              </div>
-              
-            </main>
-            <footer class="footer-article noprint">
+            </div>
+
+        </section>
+
+        
+            <nav class="site-bottom-navigation" role="navigation">
+            
+            
+                <a href="keras_explainable.engine.html" class="btn btn--primary btn--prev"
+                    title="keras_explainable.engine package" accesskey="p">
+                    Previous
+                </a>
+            
+            </nav>
+        
+
+        
+            <div class="source-link">
+            
                 
-    <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="keras_explainable.engine.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">keras_explainable.engine package</p>
-        </div>
-    </a>
+                    <a href="../_sources/api/keras_explainable.methods.rst.txt" rel="nofollow">
+                        <i class="mdi mdi-code-tags"></i>
+                        View page source
+                    </a>
+                
+            
+            </div>
+        
+
+
+
+    </main>
+
+    <footer class="site-footer">
+<div class="container">
+
+    <div role="contentinfo">
+        <p>
+                &copy; Copyright 2022, Lucas David.
+        </p>
+    </div> 
+
 </div>
-            </footer>
-        </div>
-    </div>
-    <div class="footer-content row">
-        <footer class="col footer"><p>
-  
-      &copy; Copyright 2022, Lucas David.<br/>
-</p>
-        </footer>
-    </div>
+</footer>
+
     
-</div>
 
-
-      </div>
-    </div>
-  
-  <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-
-
-  </body>
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'',
+            VERSION:'0.0.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
+    <script type="text/javascript" src="../_static/thebelab-helper.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/javascript" src="../_static/js/theme-min.js"></script> 
+</body>
 </html>
